@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id          Int          @id @default(autoincrement())
+  name        String
+  cedula      String       @unique
+  cargo       String
+  salary      Float
+  riskClass   String       @default("I") // I, II, III, IV, V
+  status      String       @default("ACTIVE") // ACTIVE, INACTIVE
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  attendances Attendance[]
+  absences    Absence[]
+}
+
+model Attendance {
+  id         Int       @id @default(autoincrement())
+  employeeId Int
+  employee   Employee  @relation(fields: [employeeId], references: [id])
+  date       DateTime  // The date of the shift (without time)
+  entryTime  DateTime? // Full timestamp
+  exitTime   DateTime? // Full timestamp
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([employeeId])
+  @@index([date])
+  @@unique([employeeId, date])
+}
+
+model Absence {
+  id          Int      @id @default(autoincrement())
+  employeeId  Int
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  date        DateTime
+  reason      String   // e.g., "Incapacidad médica", "Vacaciones"
+  paidPercentage Float @default(0) // 0.0 to 1.0 (e.g. 0.6667)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([employeeId, date])
+}
+
+model Holiday {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @unique
+  name      String
+}
+
+model PayrollConfig {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique // e.g., "AUX_TRANSPORTE", "SMLV"
+  value       String   // e.g., "162000"
+  description String?
+}

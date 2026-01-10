@@ -1,0 +1,42 @@
+--- SHEETS ---
+['HOJA_BASE', 'REGISTRO_HORAS', 'REGISTRO_TRABAJADOR', 'CESAR TAPIAS _98648155', 'FESTIVOS', 'LAURA_1035229101', 'KENDERSON_1017232685', 'ELDER_1064066339', 'DIEGO_3440784', 'MAYKEL_29718843', 'ANGEL_173899058']
+
+--- HOJA_BASE (BE2:BH20) ---
+Headers: ['BE1: None', 'BF1: None', 'BG1: None', 'BH1: None']
+Row 2: BE2=, BF2=, BG2=, BH2=
+Row 3: BE3=NIVEL DE RIESGO, BF3=I, BG3=, BH3=
+Row 4: BE4=, BF4==VLOOKUP(BF3,FESTIVOS!V2:W6,2), BG4=, BH4=
+Row 5: BE5=, BF5=, BG5=, BH5=
+Row 6: BE6=Prestación, BF6=Valor, BG6=% del salario base, BH6=Pago / periodicidad
+Row 7: BE7=Cesantías, BF7==AW7*8.33%, BG7=8.33% (1 mes por año), BH7=Se consignan en el fondo en febrero
+Row 8: BE8=Intereses sobre cesantías, BF8==AW7*1%, BG8=1% mensual (12% anual), BH8=Se pagan en enero al trabajador
+Row 9: BE9=Prima de servicios, BF9==AW7*8.33%, BG9=8.33% (1 mes por año), BH9=Se paga en junio y diciembre
+Row 10: BE10=Vacaciones, BF10==AW7*4.17%, BG10=4.17% , BH10=Cuando se disfrutan o se liquidan
+Row 11: BE11=Total, BF11==SUM(BF7:BF10), BG11=, BH11=
+Row 12: BE12=, BF12=, BG12=, BH12=
+Row 13: BE13=Aporte, BF13=Valor, BG13=% del salario base de cotización, BH13=Destino
+Row 14: BE14=Salud, BF14==AW20*8.5%, BG14=8.5%, BH14=EPS
+Row 15: BE15=Pensión, BF15==AW20*12%, BG15=0.12, BH15=Fondo de pensiones
+Row 16: BE16=ARL, BF16==BB20*VLOOKUP(BF3,FESTIVOS!V2:W6,2), BG16=Depende del nivel de riesgo (0.522% a 6.96%), BH16=Aseguradora de riesgos laborales
+Row 17: BE17=Caja de compensación, BF17==AW20*4%, BG17=0.04, BH17=Caja (Comfama, Colsubsidio, etc.)
+Row 18: BE18=ICBF, BF18==AW20*3%, BG18=0.03, BH18=Instituto Colombiano de Bienestar Familiar
+Row 19: BE19=SENA, BF19==AW20*2%, BG19=0.02, BH19=Formación y capacitación laboral
+Row 20: BE20=Total, BF20==SUM(BF14:BF19), BG20=, BH20=
+
+--- HOJA_BASE (First 20 Columns) ---
+['A1=Nombre', 'B1=None', 'C1=None', 'D1=None', 'E1=None', 'F1=Cedula', 'G1=None', 'H1=None', 'I1=None', 'J1=None', 'K1=None', 'L1=None', 'M1=None', 'N1=None', 'O1=None', 'P1=None', 'Q1=None', 'R1=None', 'S1=None', 'T1=None']
+['A2=Fecha', 'B2=Día', 'C2=Mes', 'D2=Quincena', 'E2=Festivo', 'F2=Hora_Entrada', 'G2=Hora_Salida', 'H2=HD', 'I2=HN', 'J2=HED', 'K2=HEN', 'L2=HDD', 'M2=HND', 'N2=HEDD', 'O2=HEND', 'P2=None', 'Q2=None', 'R2=None', 'S2=None', 'T2=None']
+['A3=2025-01-01 00:00:00', 'B3==TEXT(A3,"DDDD")', 'C3==TEXT(A3,"MMMM")', 'D3==IF(DAY(A3)<=15,"1era Quincena","2da Quincena")', 'E3==IF(ISNUMBER(MATCH(A3,FESTIVOS!$A$2:$A$19,0)),"SI","NO")', 'F3=None', 'G3=None', 'H3=None', 'I3=None', 'J3=None', 'K3=None', 'L3=None', 'M3=None', 'N3=None', 'O3=None', 'P3=None', 'Q3=None', 'R3=None', 'S3=Mes', 'T3=enero']
+['A4=2025-01-02 00:00:00', 'B4==TEXT(A4,"DDDD")', 'C4==TEXT(A4,"MMMM")', 'D4==IF(DAY(A4)<=15,"1era Quincena","2da Quincena")', 'E4==IF(ISNUMBER(MATCH(A4,FESTIVOS!$A$2:$A$19,0)),"SI","NO")', 'F4=None', 'G4=None', 'H4=None', 'I4=None', 'J4=None', 'K4=None', 'L4=None', 'M4=None', 'N4=None', 'O4=None', 'P4=None', 'Q4=None', 'R4=None', 'S4=Quincena', 'T4=(Todas)']
+
+--- FESTIVOS ---
+('Fecha', 'Día', 'Motivo', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+(datetime.datetime(2025, 1, 1, 0, 0), 'Miércoles', 'Año Nuevo', None, None, 'Enero', None, '1era Quincena', None, datetime.time(0, 0), None, 'Razón de ausencia', '% Pago del día', None, None, None, None, '=100%-HOJA_BASE!AQ13', None, None, None, 'I', 0.00522)
+(datetime.datetime(2025, 1, 6, 0, 0), 'Lunes', 'Reyes Magos', None, None, 'Febrero', None, '2da Quincena', None, None, None, 'Incapacidad médica común (día 1-2)', 0.6667, None, None, None, None, '=100%-HOJA_BASE!AQ14', None, None, None, 'II', 0.01044)
+(datetime.datetime(2025, 3, 24, 0, 0), 'Lunes', 'Día de San José', None, None, 'Marzo', None, 'Mes', None, None, None, 'Incapacidad médica común (día 3 en adelante)', 0.6667, None, None, None, None, '=100%-HOJA_BASE!AQ15', None, None, None, 'III', 0.02436)
+(datetime.datetime(2025, 4, 17, 0, 0), 'Jueves', 'Jueves Santo', None, None, 'Abril', None, None, None, None, None, 'Incapacidad laboral (ARL)', 1, None, None, None, None, '=100%-HOJA_BASE!AQ16', None, None, None, 'IV', 0.0435)
+(datetime.datetime(2025, 4, 18, 0, 0), 'Viernes', 'Viernes Santo', None, None, 'Mayo', None, None, None, None, None, 'Licencia de maternidad', 1, None, None, None, None, '=100%-HOJA_BASE!AQ17', None, None, None, 'V', 0.0696)
+(datetime.datetime(2025, 5, 1, 0, 0), 'Jueves', 'Día del trabajo', None, None, 'Junio', None, None, None, None, None, 'Licencia de paternidad', 1, None, None, None, None, '=100%-HOJA_BASE!AQ18', None, None, None, None, None)
+(datetime.datetime(2025, 6, 2, 0, 0), 'Lunes', 'Ascensión de Jesús', None, None, 'Julio', None, None, None, None, None, 'Licencia remunerada (matrimonio, duelo, calamidad)', 1, None, None, None, None, '=100%-HOJA_BASE!AQ19', None, None, None, None, None)
+(datetime.datetime(2025, 6, 23, 0, 0), 'Lunes', 'Corpus Christi', None, None, 'Agosto', None, None, None, None, None, 'Vacaciones', 1, None, None, None, None, '=100%-HOJA_BASE!AQ20', None, None, None, None, None)
+(datetime.datetime(2025, 6, 30, 0, 0), 'Lunes', 'Sagrado Corazón de Jesús', None, None, 'Septiembre', None, None, None, None, None, 'Permiso no remunerado', 0, None, None, None, None, '=100%-HOJA_BASE!AQ21', None, None, None, None, None)

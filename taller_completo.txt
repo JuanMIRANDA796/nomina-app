@@ -1,0 +1,488 @@
+
+================================================================================
+PÁGINA 1
+================================================================================
+UNIVERSIDAD DE ANTIOQUIA
+FACULTAD DE CIENCIAS ECONÓMICAS
+GERENCIA FINANCIERA I
+TALLER 07: VALORACIÓN INTEGRAL DE EMPRESAS
+Análisis Financiero y Valoración por Flujos de Caja Descontados
+INFORMACIÓN GENERAL
+Curso: Gerencia Financiera I
+Actividad: Taller 07 - Valoración Integral de Empresas
+Peso evaluativo: 8% del seguimiento del curso
+Profesor: Luis Fernando Vásquez Villa
+Asistente académico: Juan Andrés
+OBJETIVOS DE APRENDIZAJE
+Objetivo General
+Desarrollar competencias avanzadas en valoración empresarial mediante el análisis integral de
+estados financieros reales de empresas colombianas, aplicando metodologías de flujos de caja
+descontados para determinar el valor intrínseco de organizaciones.
+Objetivos Específicos
+1. Análisis Financiero Estructural
+• Aplicar técnicas de análisis vertical para determinar la composición porcentual de estados
+financieros
+• Ejecutar análisis horizontal para identificar tendencias y variaciones interanuales
+significativas
+• Interpretar la evolución temporal de la estructura financiera empresarial
+2. Indicadores de Gestión Financiera
+• Calcular el EBITDA (Earnings Before Interest, Taxes, Depreciation and Amortization) como
+medida de generación operativa
+• Determinar el ΔKTNO (Variación del Capital de Trabajo Neto Operativo) y su impacto en la
+liquidez
+• Analizar el ANDEO (Activos Netos de Operación) como base de generación de valor
+• Evaluar el Ciclo de Conversión de Efectivo (CCE) y la productividad del capital de trabajo
+
+================================================================================
+PÁGINA 2
+================================================================================
+3. Construcción de Flujos de Caja
+• Estructurar el FCO (Flujo de Caja Operacional) a partir del EBITDA
+• Calcular el FCI (Flujo de Caja de Inversión) considerando CAPEX y variaciones de activos
+• Derivar el FCFF (Free Cash Flow to the Firm) como flujo disponible para todos los
+financiadores
+• Determinar el FCD (Flujo de Caja de la Deuda) con amortizaciones e intereses
+• Obtener el FCFE (Free Cash Flow to Equity) como flujo disponible para accionistas
+4. Costo de Capital y Tasas de Descuento
+• Calcular el costo de la deuda después de impuestos
+• Determinar el Beta desapalancado (Bu) y apalancado (BL) del sector
+• Estimar el costo del patrimonio (Ke) mediante el modelo CAPM
+• Calcular el WACC (Weighted Average Cost of Capital) como tasa de descuento apropiada
+5. Valoración por Flujos Descontados
+• Aplicar la metodología de flujos de caja descontados (DCF) para valoración empresarial
+• Calcular el valor presente de los flujos proyectados utilizando tasas apropiadas
+• Determinar el valor terminal o de continuidad de la empresa
+• Obtener el valor de operación y el valor patrimonial de la empresa
+• Realizar análisis de sensibilidad para variables críticas
+6. Criterio Financiero Profesional
+• Desarrollar capacidad de análisis crítico de resultados financieros
+• Emitir recomendaciones estratégicas fundamentadas en la valoración
+• Contextualizar hallazgos en el marco del mercado colombiano
+• Comunicar conclusiones de manera profesional y estructurada
+METODOLOGÍA DE EVALUACIÓN: EINSTEIN 3.0
+Esta metodología pedagógica, implementada exitosamente en Gerencia Financiera I desde 2020,
+estructura la evaluación en cuatro componentes fundamentales que reflejan el proceso real de solución
+de problemas financieros complejos.
+Estructura General de Evaluación
+E - ENTENDER (7% de cada ejercicio)
+Este componente evalúa la capacidad de comprender el contexto financiero, identificar los elementos
+relevantes del problema y reconocer los objetivos de análisis requeridos.
+Se evalúa específicamente:
+• Identificación correcta del sector económico y características de la empresa
+• Comprensión de la estructura financiera histórica y actual
+• Reconocimiento de los indicadores clave a calcular
+• Entendimiento de la metodología de valoración aplicable
+• Contextualización apropiada de los estados financieros proporcionados
+• Identificación de las relaciones entre diferentes componentes financieros
+
+================================================================================
+PÁGINA 3
+================================================================================
+Evidencia de evaluación: Este componente se evalúa principalmente a través de la correcta
+identificación de variables en el documento Word y la estructura inicial del archivo Excel.
+P - PLANTEAR (7% de cada ejercicio)
+Este componente evalúa la capacidad de estructurar la estrategia de solución ANTES de ejecutar los
+cálculos, demostrando planificación metodológica.
+Se evalúa específicamente:
+• Selección correcta de fórmulas financieras para cada indicador
+• Definición clara de la secuencia lógica de cálculos
+• Estructuración apropiada de las hojas de cálculo en Excel
+• Identificación de supuestos necesarios para proyecciones
+• Definición de variables de entrada y salida
+• Planificación de la integración entre diferentes análisis
+• Documentación de la metodología a seguir
+Evidencia de evaluación: Se evalúa a través de la estructura organizacional del archivo Excel, la
+secuencia lógica de las hojas de cálculo y la documentación de supuestos en el documento Word.
+R - RESOLVER (70% de cada ejercicio) COMPONENTE CRÍTICO
+ADVERTENCIA: Este es el componente de mayor peso y requiere que los archivos contengan
+fórmulas en Excel.
+Se evalúa específicamente:
+• CRÍTICO: Fórmulas en TODAS las celdas de cálculo
+• CRÍTICO: Referencias de celdas y funciones explícitamente mostradas
+• Cálculo correcto de análisis vertical y horizontal de estados financieros
+• Determinación precisa de EBITDA, KTNO, ANDEO y CCE
+• Construcción correcta de flujos de caja (FCO, FCI, FCFF, FCD, FCFE)
+• Cálculo apropiado del WACC y componentes del costo de capital
+• Ejecución correcta de la valoración por flujos descontados
+• Consistencia matemática entre diferentes secciones
+• Formato profesional de números y porcentajes
+Evidencia de evaluación: Se evalúa exclusivamente a través del archivo Excel.
+I - INTERPRETAR (16% de cada ejercicio)
+Este componente evalúa la capacidad de analizar los resultados obtenidos, extraer conclusiones
+significativas y emitir recomendaciones estratégicas fundamentadas.
+Se evalúa específicamente:
+• Análisis del significado financiero de los resultados de valoración obtenidos
+• Interpretación de la evolución temporal de indicadores financieros
+• Evaluación de la salud financiera de la empresa analizada
+• Identificación de fortalezas y debilidades en la estructura financiera
+• Comparación con empresas del mismo sector (benchmarking)
+
+================================================================================
+PÁGINA 4
+================================================================================
+• Análisis de sensibilidad para variables críticas de valoración
+• Emisión de recomendaciones estratégicas concretas y fundamentadas
+• Contextualización en el mercado colombiano actual
+• Identificación de riesgos y oportunidades de inversión
+• Conclusiones profesionales sobre la inversión en la empresa
+Evidencia de evaluación: Se evalúa a través del análisis escrito en el documento Word y/o celdas de
+interpretación en Excel.
+CONTENIDO DETALLADO DEL TALLER
+El Taller 07 requiere realizar un análisis financiero integral y valoración completa de una empresa
+colombiana, utilizando estados financieros históricos (2020-2024 + Sep 2025) y proyecciones para
+2035.
+ANÁLISIS VERTICAL Y HORIZONTAL (15 puntos)
+Balance General:
+Análisis Vertical:
+• Calcular la composición porcentual de cada cuenta respecto al total de activos (o total de
+pasivo + patrimonio)
+Análisis Horizontal:
+• Calcular variaciones absolutas y relativas año a año para identificar tendencias
+Estado de Resultados:
+Análisis Vertical:
+• Calcular la composición porcentual de cada rubro respecto a las ventas netas
+Análisis Horizontal:
+• Calcular variaciones absolutas y relativas año a año en cada cuenta del estado de resultados
+Interpretación Requerida:
+• Evolución de la estructura de activos (corrientes vs. no corrientes)
+• Cambios en la estructura de financiamiento (pasivos vs. patrimonio)
+• Tendencias en márgenes operativos y rentabilidad
+• Identificación de variaciones significativas que requieran explicación
+• Comparación con estándares del sector
+INDICADORES FINANCIEROS CLAVE (15 puntos)
+A. EBITDA (Earnings Before Interest, Taxes, Depreciation and Amortization)
+Fórmula:
+EBITDA = Utilidad Operativa + Depreciación + Amortización
+Interpretación: Mide la capacidad de generación de caja operativa antes de considerar estructura
+financiera y contabilidad.
+
+================================================================================
+PÁGINA 5
+================================================================================
+B. ΔKTNO (Variación del Capital de Trabajo Neto Operativo)
+Fórmulas:
+KTNO = (Activos Corrientes Operativos) - (Pasivos Corrientes Operativos)
+ΔKTNO = KTNO_año_actual - KTNO_año_anterior
+Interpretación: Muestra la inversión adicional requerida en capital de trabajo.
+C. ANDEO (Activos Netos de Operación)
+Fórmula:
+ANDEO = Activos Totales - Pasivos que no generan intereses
+Interpretación: Representa los activos financiados por fuentes que tienen costo financiero.
+D. Ciclo de Conversión de Efectivo (CCE)
+Fórmula:
+CCE = Días de Inventario + Días de Cartera - Días de Proveedores
+Componentes:
+Días de Inventario = (Inventario Promedio / Costo de Ventas) × 365
+Días de Cartera = (Cuentas por Cobrar Promedio / Ventas) × 365
+Días de Proveedores = (Cuentas por Pagar Promedio / Costo de Ventas) × 365
+E. Productividad del Capital de Trabajo
+Fórmula:
+PKT = Ventas / KTNO
+Interpretación: Mide cuántas veces las ventas cubren la inversión en capital de trabajo.
+CONSTRUCCIÓN DE FLUJOS DE CAJA (25 puntos)
+A. FCO - Flujo de Caja Operacional
+EBITDA
+(-) Impuestos operacionales
+(-) ΔKTNO (Variación del Capital de Trabajo Neto Operativo)
+(=) FCO - Flujo de Caja Operacional
+B. FCI - Flujo de Caja de Inversión
+CAPEX (Capital Expenditures) - Inversiones en activos fijos
+Variaciones en otros activos no corrientes
+(=) FCI - Flujo de Caja de Inversión (generalmente negativo)
+C. FCFF - Flujo de Caja Libre del Proyecto (Free Cash Flow to the Firm)
+FCO (Flujo de Caja Operacional)
+(+) FCI (Flujo de Caja de Inversión)
+(=) FCFF - Flujo disponible para TODOS los financiadores (acreedores + accionistas)
+D. FCD - Flujo de Caja de la Deuda
+Nuevos préstamos recibidos (entrada de efectivo)
+(-) Amortización de capital de préstamos
+(-) Intereses pagados × (1 - Tasa de Impuestos) [escudo fiscal]
+(=) FCD - Flujo de Caja de la Deuda
+E. FCFE - Flujo de Caja Libre del Accionista (Free Cash Flow to Equity)
+FCFF (Flujo de Caja Libre del Proyecto)
+(+) FCD (Flujo de Caja de la Deuda)
+(=) FCFE - Flujo disponible para los ACCIONISTAS
+Nota Crítica: Los flujos deben construirse para CADA año del período histórico y proyectado
+(2020-2035).
+
+================================================================================
+PÁGINA 6
+================================================================================
+CÁLCULO DEL COSTO DE CAPITAL Y WACC (15 puntos)
+A. Costo de la Deuda (Kd)
+1. Identificar las tasas de interés de los créditos actuales de la empresa
+2. Calcular el promedio ponderado si hay múltiples deudas
+3. Ajustar por el escudo fiscal:
+Kd_neto = Kd × (1 - Tasa_Impuestos)
+B. Beta Desapalancado del Sector (Bu)
+1. Investigar el Beta promedio de empresas comparables del mismo sector en Colombia
+2. Si se tiene Beta apalancado del sector, desapalancar usando:
+Bu = BL / [1 + (1 - T) × (D/E)]
+C. Beta Apalancado de la Empresa (BL)
+Reapalancar el Beta considerando la estructura de capital de la empresa específica:
+BL = Bu × [1 + (1 - T) × (D/E)]
+Donde D/E es la relación Deuda/Patrimonio de la empresa analizada.
+D. Costo del Patrimonio (Ke) - Modelo CAPM
+Ke = Rf + BL × (Rm - Rf) + Riesgo_País
+Componentes:
+• Rf (Tasa Libre de Riesgo): Usar TES a 10 años de Colombia (aproximadamente 10-12%
+anual)
+• Rm (Retorno del Mercado): Usar histórico del índice COLCAP (aproximadamente 15-18%
+anual)
+• (Rm - Rf): Prima de riesgo de mercado en Colombia
+• BL: Beta apalancado calculado anteriormente
+• Riesgo País: Prima de riesgo Colombia (aproximadamente 2-3% adicional)
+E. WACC (Weighted Average Cost of Capital)
+WACC = [Ke × (E / (D + E))] + [Kd × (1 - T) × (D / (D + E))]
+Componentes:
+• E: Valor de mercado del patrimonio
+• D: Valor de mercado de la deuda
+• Ke: Costo del patrimonio
+• Kd: Costo de la deuda (antes de impuestos)
+• T: Tasa de impuestos
+El WACC será la tasa de descuento utilizada para descontar los FCFF en la valoración.
+VALORACIÓN POR FLUJOS DE CAJA DESCONTADOS (20 puntos)
+A. Valoración FCFF - Valor de la Empresa
+Paso 1: Proyectar los FCFF para un horizonte de tiempo (10 años adicionales después de 2025)
+
+================================================================================
+PÁGINA 7
+================================================================================
+Paso 2: Calcular el Valor Terminal (TV) usando el modelo de crecimiento perpetuo:
+TV = FCFF_último_año × (1 + g) / (WACC - g)
+Donde g = tasa de crecimiento perpetuo (típicamente 3-4% para Colombia)
+Paso 3: Descontar los flujos al valor presente usando el WACC:
+Valor de Operación = Σ [FCFF_t / (1 + WACC)^t] + [TV / (1 + WACC)^n]
+Paso 4: Ajustar por activos no operacionales:
+Valor Total de la Empresa = Valor de Operación + Activos No Operacionales
+B. Valoración FCFE - Valor del Patrimonio
+Paso 1: Proyectar los FCFE para el mismo horizonte de tiempo
+Paso 2: Calcular el Valor Terminal del patrimonio:
+TV_Equity = FCFE_último_año × (1 + g) / (Ke - g)
+Paso 3: Descontar los flujos usando el Ke:
+Valor del Patrimonio = Σ [FCFE_t / (1 + Ke)^t] + [TV_Equity / (1 + Ke)^n]
+Paso 4: Verificación de consistencia:
+Valor del Patrimonio (FCFE) = Valor de la Empresa (FCFF) - Deuda Financiera Neta
+C. Análisis de Sensibilidad
+• Variación del WACC (±1%, ±2%)
+• Variación de la tasa de crecimiento perpetuo g (±0.5%, ±1%)
+• Impacto en el valor de la empresa
+• Interpretación de rangos de valoración
+D. Interpretación Final Requerida
+• ¿La empresa está sobrevalorada o subvalorada en el mercado actual?
+• ¿Cuál es el precio objetivo por acción (si aplica)?
+• ¿Es una buena oportunidad de inversión? ¿Por qué?
+• Riesgos identificados en la valoración
+• Recomendaciones estratégicas para la gerencia
+• Comparación con múltiplos del sector (si está disponible)
+ANÁLISIS E INTERPRETACIÓN INTEGRAL (10 puntos)
+Esta sección consolida todo el análisis realizado y requiere criterio profesional avanzado.
+Elementos que deben incluirse:
+1. Diagnóstico Financiero Integral
+Síntesis de la salud financiera de la empresa basada en todos los indicadores
+2. Evolución Histórica
+Análisis de tendencias 2020-2025 y su significado estratégico
+
+================================================================================
+PÁGINA 8
+================================================================================
+3. Estructura de Capital
+Evaluación de la composición de financiamiento y su impacto
+4. Generación de Valor
+Análisis de si la empresa está creando o destruyendo valor
+5. Benchmarking Sectorial
+Comparación con empresas similares del sector
+6. Riesgos y Oportunidades
+Identificación de factores que podrían afectar el valor
+7. Recomendaciones Estratégicas
+Sugerencias concretas para mejorar el valor empresarial
+8. Conclusión Profesional
+Dictamen final sobre la inversión en la empresa
+ENTREGABLES OBLIGATORIOS
+El grupo debe entregar DOS archivos:
+ARCHIVO EXCEL (.xlsx o .xlsm)
+CRÍTICO: Todas las hojas deben contener fórmulas.
+DOCUMENTO WORD (.docx)
+IMPORTANTE: El archivo de Word es un informe completo de valoración y el archivo de
+Excel es el soporte donde se presentan los cálculos realizados. No pegar imágenes, pegar texto
+y cuadros pero no imágenes.
+El documento Word debe contener el análisis cualitativo, interpretaciones y recomendaciones. No
+debe ser una simple copia de números del Excel.
+Estructura obligatoria del documento Word:
+1. Portada
+• Logo de la Universidad de Antioquia
+• Título del trabajo
+• Nombre de la empresa analizada
+• Nombres completos de los integrantes del grupo
+• Código de cada estudiante
+• Fecha de entrega
+2. Tabla de Contenido
+• Generada automáticamente con numeración de páginas
+3. Introducción
+• Presentación de la empresa analizada
+• Sector económico y contexto de mercado
+• Objetivos del análisis de valoración
+• Alcance del trabajo
+
+================================================================================
+PÁGINA 9
+================================================================================
+4. Metodología
+• Descripción de las técnicas de análisis utilizadas
+• Fuentes de información
+• Supuestos principales adoptados
+• Limitaciones del análisis
+5. Análisis Vertical y Horizontal
+• Interpretación de la evolución de la estructura financiera
+• Tendencias identificadas en Balance y Estado de Resultados
+• Variaciones más significativas y sus causas probables
+6. Indicadores Financieros
+• Análisis de EBITDA y su evolución
+• Interpretación del KTNO y su gestión
+• Evaluación del Ciclo de Conversión de Efectivo
+• Análisis de la productividad del capital de trabajo
+• Comparación con estándares del sector
+7. Análisis de Flujos de Caja
+• Interpretación de la generación operativa (FCO)
+• Análisis de las inversiones realizadas (FCI)
+• Evaluación de la capacidad de generación de valor (FCFF)
+• Análisis del flujo disponible para accionistas (FCFE)
+8. Costo de Capital
+• Justificación de los parámetros utilizados (Rf, Rm, Beta, etc.)
+• Interpretación del WACC calculado
+• Comparación con costos de capital del sector
+• Análisis de la estructura de capital
+9. Valoración de la Empresa
+• Presentación del valor de operación calculado
+• Presentación del valor patrimonial
+• Análisis de sensibilidad e interpretación
+• Comparación con valor de mercado (si está disponible)
+• Conclusión sobre si la empresa está sobrevalorada o subvalorada
+10. Diagnóstico Integral y Recomendaciones
+• Síntesis del diagnóstico financiero completo
+• Fortalezas y debilidades identificadas
+• Riesgos y oportunidades
+• Recomendaciones estratégicas para la gerencia
+• Recomendación de inversión (comprar, mantener, vender)
+11. Conclusiones
+• Síntesis de hallazgos principales
+• Respuesta a los objetivos planteados
+• Reflexiones finales sobre la valoración
+
+================================================================================
+PÁGINA 10
+================================================================================
+12. Referencias Bibliográficas
+• Fuentes de información utilizadas
+• Estados financieros consultados
+• Referencias teóricas y metodológicas
+• Formato APA o IEEE
+Formato del documento Word:
+• Fuente: Arial o Calibri, tamaño 11 puntos
+• Interlineado: 1.5
+• Márgenes: 2.5 cm por todos los lados
+• Numeración de páginas
+• Extensión mínima: 15 páginas (excluyendo portada y anexos)
+• Extensión máxima recomendada: 25 páginas
+RÚBRICA DE EVALUACIÓN DETALLADA
+Distribución de Puntaje Total: 100 puntos = 8% del curso
+Aplicación de la Metodología EINSTEIN 3.0 en cada componente:
+Componente Porcentaje Descripción
+ENTENDER 7% Comprensión del contexto de ese componente específico
+PLANTEAR 7% Estructuración metodológica apropiada
+RESOLVER 70% Cálculos con fórmulas - COMPONENTE CRÍTICO
+INTERPRETAR 16% Análisis de resultados de ese componente
+INSTRUCCIONES DE ENTREGA
+Formato de Nombres de Archivos:
+Excel:
+TALLER07_GRUPO[XX]_VALORACION_[NOMBRE_EMPRESA].xlsx
+Word:
+TALLER07_GRUPO[XX]_ANALISIS_[NOMBRE_EMPRESA].docx
+Ejemplo para Grupo 3 analizando ISAGEN:
+• TALLER07_GRUPO03_VALORACION_ISAGEN.xlsx
+• TALLER07_GRUPO03_ANALISIS_ISAGEN.docx
+El archivo de Word es un informe completo de valoración y el archivo de Excel es el soporte donde
+se presentan los cálculos realizados.
+Importante: Los archivos Excel deben contener fórmulas en todas las celdas de cálculo.
+Realice los supuestos que sean necesarios para completar el taller, documentándolos claramente.
+Fecha y Hora Límite:
+07 de diciembre de 2025, 23:59:59 horas
+No se aceptarán entregas tardías.
+
+================================================================================
+PÁGINA 11
+================================================================================
+CRITERIOS DE EXCELENCIA (Para obtener 95-100
+puntos)
+Los trabajos excepcionales que aspiran a la máxima calificación deben demostrar:
+Excelencia Técnica:
+Archivo Excel impecable con todas las fórmulas perfectamente visibles
+Cálculos 100% correctos sin errores matemáticos
+Uso avanzado de funciones financieras de Excel
+Estructura de hojas de cálculo profesional y bien organizada
+Validación cruzada de resultados entre diferentes métodos
+Análisis de sensibilidad robusto con múltiples escenarios
+Profundidad Analítica:
+Análisis que va más allá de lo obvio y muestra insights únicos
+Interpretaciones bien fundamentadas en teoría financiera
+Comparaciones significativas con empresas del sector
+Identificación de causas raíz de variaciones y tendencias
+Recomendaciones estratégicas concretas y accionables
+Consideración de múltiples perspectivas en la valoración
+Calidad de Presentación:
+Documento Word excepcionalmente bien redactado
+Argumentación lógica y fluida
+Uso apropiado de gráficos y tablas para apoyar el análisis
+Formato profesional consistente
+Cero errores ortográficos o gramaticales
+Referencias bibliográficas académicas de calidad
+Valor Agregado:
+Investigación adicional sobre la empresa y su contexto
+Benchmarking detallado con competidores
+Análisis de múltiplos complementarios (P/E, EV/EBITDA, etc.)
+Modelado de escenarios alternativos (optimista, pesimista)
+Visualizaciones avanzadas de datos financieros
+Aplicación de conceptos más allá de lo enseñado en clase
+
+================================================================================
+PÁGINA 12
+================================================================================
+REFERENCIAS BIBLIOGRÁFICAS RECOMENDADAS
+Textos Principales:
+1. García Serna, Oscar León. (2009).
+Valoración de Empresas, Gerencia del Valor y EVA.
+Medellín: Digital Express.
+→ Principal referencia para metodologías de valoración empresarial
+2. Meza Orozco, Jhonny de Jesús. (2017).
+Matemáticas Financieras Aplicadas (7ª ed.).
+Bogotá: ECOE Ediciones.
+→ Referencia para cálculos financieros y tasas de interés
+3. Ross, Stephen A.; Westerfield, Randolph W.; Jaffe, Jeffrey F. (2012).
+Finanzas Corporativas (9ª ed.).
+México: McGraw-Hill.
+→ Fundamentos de finanzas corporativas y WACC
+4. Damodaran, Aswath. (2012).
+Investment Valuation: Tools and Techniques for Determining the Value of Any Asset (3rd
+ed.).
+New York: Wiley.
+→ Referencia mundial en valoración de empresas
+5. Sapag Chain, Nassir. (2011).
+Proyectos de Inversión: Formulación y Evaluación (2ª ed.).
+Chile: Pearson.
+→ Metodología para flujos de caja y evaluación
+Recursos Online Recomendados:
+• Banco de la República (Colombia): www.banrep.gov.co - Tasas de interés TES
+• Bolsa de Valores de Colombia: www.bvc.com.co - Información de empresas cotizadas
+• Superintendencia Financiera de Colombia: www.superfinanciera.gov.co
+• Damodaran Online: pages.stern.nyu.edu/~adamodar - Betas sectoriales y datos de mercado
+• DANE: www.dane.gov.co - Indicadores económicos de Colombia
+INFORMACIÓN DE CONTACTO
+Profesor del Curso:
+Luis Fernando Vásquez Villa
+Correo institucional: luisf.vasquez@udea.edu.co
+Correo personal: vasquezvilla@gmail.com
+Horario de atención a estudiantes: Previa cita por correo electrónico
+Oficina: Bloque 13, Ciudad Universitaria
+Asistente Académico:
+Juan Andrés
+Contacto: A través de sesiones de monitoreo programadas
