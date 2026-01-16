@@ -19,8 +19,15 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Empleado no encontrado' }, { status: 404 });
         }
 
-        const today = startOfDay(new Date());
+        // TIMZONE FIX: Force Colombia Time (UTC-5) for "Day" calculation
+        // Vercel server is UTC. 9PM Colombia = 2AM Next Day UTC.
+        // This causes the shift to be saved as "Tomorrow", blocking the actual tomorrow shift.
         const now = new Date();
+        const colombiaOffset = 5;
+        const colombiaTime = subHours(now, colombiaOffset);
+
+        // "Today" is the start of the day in COLOMBIA time
+        const today = startOfDay(colombiaTime); // e.g. 2026-01-15 00:00:00 (Local)
 
         // 2. Find today's attendance record
         let attendance = await prisma.attendance.findFirst({
