@@ -31,6 +31,12 @@ export async function POST(request: Request) {
         });
 
         if (action === 'ENTRY') {
+            if (attendance && attendance.entryTime && !attendance.exitTime) {
+                // Already has an open entry?
+                // Technically this shouldn't happen if UI respects state, but if they click Entry again?
+                return NextResponse.json({ error: 'Ya tienes un turno abierto' }, { status: 400 });
+            }
+
             if (!attendance) {
                 // Create new record
                 attendance = await prisma.attendance.create({
@@ -42,10 +48,19 @@ export async function POST(request: Request) {
                 });
                 return NextResponse.json({ message: 'Hora de entrada registrada', time: now });
             } else {
-                if (attendance.entryTime) {
+                if (attendance.entryTime && attendance.exitTime) {
+                    // Shift already completed today. Blocking new entry?
+                    // User complaint: "le dice que ya existe una hora de entrada para hoy"
+                    // If they work doubled shifts (morning + night), we need to allow this.
+                    // But schema has UNIQUE(date). We cannot create a SECOND record for 'today'.
+                    // We must reuse the record? No, that overwrites.
+                    // LIMITATION: System supports 1 shift per day.
+                    // However, for the specific user complaint (Night Shift), the bug implies the "Day 12" record shouldn't exist yet.
+                    // If we fix the Exit logic below, this Entry logic might be fine as is (since attendance won't exist).
+                    // But if it DOES exist (e.g. they really worked morning), we warn.
                     return NextResponse.json({ error: 'Ya existe una hora de entrada para hoy' }, { status: 400 });
-                } else {
-                    // Update existing record (unlikely case unless manually messed up, but safe to handle)
+                } else if (!attendance.entryTime) {
+                    // Fix missing entry
                     attendance = await prisma.attendance.update({
                         where: { id: attendance.id },
                         data: { entryTime: now },
@@ -56,8 +71,33 @@ export async function POST(request: Request) {
         }
 
         else if (action === 'EXIT') {
+            // CRITICAL FIX: Check if we have an open shift from YESTERDAY (Overnight shift)
+            // Before checking 'today', check if we need to close 'yesterday'.
+            const yesterday = subHours(today, 24); // safely subtract 1 day
+
+            const yesterdayAttendance = await prisma.attendance.findFirst({
+                where: {
+                    employeeId: employee.id,
+                    date: yesterday,
+                }
+            });
+
+            // If yesterday has Entry but NO Exit, we stick the exit there!
+            if (yesterdayAttendance && yesterdayAttendance.entryTime && !yesterdayAttendance.exitTime) {
+                await prisma.attendance.update({
+                    where: { id: yesterdayAttendance.id },
+                    data: { exitTime: now },
+                });
+                return NextResponse.json({
+                    message: 'Salida registrada (Turno nocturno cerrado)',
+                    time: now,
+                    warning: 'Cierre de turno del día anterior.'
+                });
+            }
+
+            // Normal Logic (Same Day)
             if (!attendance) {
-                // Case: No record exists at all.
+                // Case: No record exists at all for today.
                 // VBA Logic: "Si no hay ninguna -> asigna salida actual y calcula entrada automática (Salida - 8h)"
                 const estimatedEntry = subHours(now, 8);
                 attendance = await prisma.attendance.create({
@@ -74,27 +114,9 @@ export async function POST(request: Request) {
                     warning: 'Se asumió turno de 8 horas por falta de registro de entrada.'
                 });
             } else {
-                // Record exists
-                if (!attendance.entryTime && !attendance.exitTime) {
-                    // Should not happen if record exists, but same logic as above
-                    const estimatedEntry = subHours(now, 8);
-                    attendance = await prisma.attendance.update({
-                        where: { id: attendance.id },
-                        data: {
-                            entryTime: estimatedEntry,
-                            exitTime: now
-                        },
-                    });
-                    return NextResponse.json({ message: 'Salida registrada', time: now });
-                }
-                else if (!attendance.entryTime && attendance.exitTime) {
-                    // VBA: "Si hay salida pero no entrada -> calcular entrada = salida - 8h"
-                    // This implies we are UPDATING the exit time? Or fixing the entry?
-                    // The VBA logic says: celdaFecha.Offset(0, 5).Value = celdaFecha.Offset(0, 6).Value - TimeSerial(8, 0, 0)
-                    // It seems to fix the missing entry based on the EXISTING exit? 
-                    // Or is it updating the exit to NOW and then fixing entry?
-                    // Let's assume we are registering a NEW exit, so we update exit to NOW, and if entry is missing, fix it.
-
+                // Record exists for today
+                if (!attendance.entryTime && attendance.exitTime) {
+                    // Already has exit, updating it?
                     const estimatedEntry = subHours(now, 8);
                     attendance = await prisma.attendance.update({
                         where: { id: attendance.id },
@@ -105,21 +127,13 @@ export async function POST(request: Request) {
                     });
                     return NextResponse.json({ message: 'Salida actualizada', time: now });
                 }
-                else if (attendance.entryTime && !attendance.exitTime) {
-                    // Normal case: Entry exists, no exit. Register exit.
+                else {
+                    // Normal case: Entry exists (or both), update Exit to NOW.
                     attendance = await prisma.attendance.update({
                         where: { id: attendance.id },
                         data: { exitTime: now },
                     });
                     return NextResponse.json({ message: 'Hora de salida registrada', time: now });
-                }
-                else {
-                    // Both exist. VBA: "Si ambas existen -> sobrescribe salida con la hora actual"
-                    attendance = await prisma.attendance.update({
-                        where: { id: attendance.id },
-                        data: { exitTime: now },
-                    });
-                    return NextResponse.json({ message: 'Hora de salida actualizada', time: now });
                 }
             }
         }

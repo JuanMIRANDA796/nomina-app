@@ -144,9 +144,17 @@ export async function PUT(
 
         const targetDate = parseISO(date);
 
-        const combineDateTime = (dateObj: Date, timeStr: string) => {
-            if (!timeStr || timeStr === '00:00') return null;
-            const [hours, minutes] = timeStr.split(':').map(Number);
+        const combineDateTime = (dateObj: Date, value: string) => {
+            if (!value) return null;
+
+            // Check if it's already an ISO string (contains 'T')
+            if (value.includes('T')) {
+                return new Date(value);
+            }
+
+            // Legacy HH:mm format
+            if (value === '00:00') return null;
+            const [hours, minutes] = value.split(':').map(Number);
             const newDate = new Date(dateObj);
             newDate.setHours(hours, minutes, 0, 0);
             return newDate;
@@ -156,6 +164,7 @@ export async function PUT(
         const updateData: any = {};
 
         if (entryTime !== undefined) {
+            // Handle empty string as null
             updateData.entryTime = entryTime ? combineDateTime(targetDate, entryTime) : null;
         }
 

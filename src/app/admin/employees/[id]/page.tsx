@@ -16,6 +16,17 @@ interface HistoryRecord {
     status: string;
 }
 
+// Helper to get formatted date string for input (YYYY-MM-DD)
+const getInputDate = (isoString: string | null, fallbackDate: string) => {
+    if (isoString) return format(parseISO(isoString), 'yyyy-MM-dd');
+    return format(parseISO(fallbackDate), 'yyyy-MM-dd');
+};
+
+const getInputTime = (isoString: string | null) => {
+    if (!isoString) return '';
+    return format(parseISO(isoString), 'HH:mm');
+};
+
 interface EmployeeData {
     id: number;
     name: string;
@@ -60,21 +71,29 @@ export default function EmployeeHistoryPage() {
         }
     };
 
-    const handleTimeUpdate = async (date: string, type: 'entryTime' | 'exitTime', value: string) => {
-        // value is "HH:mm"
+    const handleUpdate = async (date: string, type: 'entryTime' | 'exitTime', newDateValue: string, newTimeValue: string) => {
+        // Prepare Full ISO String
+        let fullISO = null;
+        if (newTimeValue && newDateValue) {
+            const datePart = parseISO(newDateValue);
+            const [hours, minutes] = newTimeValue.split(':').map(Number);
+            datePart.setHours(hours, minutes, 0, 0);
+            fullISO = datePart.toISOString();
+        }
+
         try {
             const res = await fetch(`/api/employees/${employeeId}/attendance`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    date, // The day to update
-                    [type]: value // 'entryTime': '08:00'
+                    date, // Original row date (Anchor)
+                    [type]: fullISO
                 })
             });
 
             if (res.ok) {
-                toast.success('Horario actualizado');
-                fetchHistory(); // Refresh to update status and consistency
+                toast.success('Registro actualizado');
+                fetchHistory();
             } else {
                 toast.error('Error al actualizar');
             }
@@ -159,32 +178,63 @@ export default function EmployeeHistoryPage() {
                                             </div>
                                         </td>
                                         <td className="py-4 px-6">
-                                            <input
-                                                type="time"
-                                                defaultValue={getTimeValue(record.entryTime) || "00:00"}
-                                                onBlur={(e) => {
-                                                    const val = e.target.value;
-                                                    if (val !== getTimeValue(record.entryTime) && val !== "00:00") {
-                                                        handleTimeUpdate(record.date, 'entryTime', val);
-                                                    }
-                                                }}
-                                                className={`p-2 border rounded-lg font-mono text-sm focus:ring-2 focus:ring-blue-500 outline-none w-32 text-center
-                                                    ${!record.entryTime ? 'text-gray-400 border-dashed border-gray-300' : 'text-gray-900 border-gray-200'}`}
-                                            />
+                                            <div className="flex flex-col gap-1">
+                                                <input
+                                                    type="date"
+                                                    defaultValue={getInputDate(record.entryTime, record.date)}
+                                                    className="p-1 text-xs border border-gray-100 rounded text-gray-500 w-32 focus:border-blue-500 outline-none"
+                                                    onChange={(e) => {
+                                                        const timeVal = (document.getElementById(`time-entry-${record.date}`) as HTMLInputElement)?.value;
+                                                        handleUpdate(record.date, 'entryTime', e.target.value, timeVal);
+                                                    }}
+                                                />
+                                                <input
+                                                    id={`time-entry-${record.date}`}
+                                                    type="time"
+                                                    defaultValue={getInputTime(record.entryTime)}
+                                                    onBlur={(e) => {
+                                                        const dateVal = (e.target.previousSibling as HTMLInputElement)?.value;
+                                                        // Fallback if sibling nav fails, use state or smarter query. 
+                                                        // Actually, keeping simple for now. 
+                                                        // Ideally we store state per row, but direct DOM value is fine for this prototype.
+                                                        const dateInput = e.target.parentElement?.querySelector('input[type="date"]') as HTMLInputElement;
+                                                        if (dateInput) {
+                                                            handleUpdate(record.date, 'entryTime', dateInput.value, e.target.value);
+                                                        }
+                                                    }}
+                                                    className={`p-2 border rounded-lg font-mono text-sm focus:ring-2 focus:ring-blue-500 outline-none w-32 text-center
+                                                        ${!record.entryTime ? 'text-gray-400 border-dashed border-gray-300' : 'text-gray-900 border-gray-200'}`}
+                                                />
+                                            </div>
                                         </td>
                                         <td className="py-4 px-6">
-                                            <input
-                                                type="time"
-                                                defaultValue={getTimeValue(record.exitTime) || "00:00"}
-                                                onBlur={(e) => {
-                                                    const val = e.target.value;
-                                                    if (val !== getTimeValue(record.exitTime) && val !== "00:00") {
-                                                        handleTimeUpdate(record.date, 'exitTime', val);
-                                                    }
-                                                }}
-                                                className={`p-2 border rounded-lg font-mono text-sm focus:ring-2 focus:ring-blue-500 outline-none w-32 text-center
-                                                    ${!record.exitTime ? 'text-gray-400 border-dashed border-gray-300' : 'text-gray-900 border-gray-200'}`}
-                                            />
+                                            <div className="flex flex-col gap-1">
+                                                <input
+                                                    type="date"
+                                                    defaultValue={getInputDate(record.exitTime, record.date)}
+                                                    className="p-1 text-xs border border-gray-100 rounded text-gray-500 w-32 focus:border-blue-500 outline-none"
+                                                    onChange={(e) => {
+                                                        const timeVal = (document.getElementById(`time-exit-${record.date}`) as HTMLInputElement)?.value;
+                                                        handleUpdate(record.date, 'exitTime', e.target.value, timeVal);
+                                                    }}
+                                                />
+                                                <input
+                                                    id={`time-exit-${record.date}`}
+                                                    type="time"
+                                                    defaultValue={getInputTime(record.exitTime)}
+                                                    onBlur={(e) => {
+                                                        const dateInput = e.target.parentElement?.querySelector('input[type="date"]') as HTMLInputElement;
+                                                        if (dateInput) {
+                                                            const val = e.target.value;
+                                                            // Logic: If user clears time, we might want to clear record? 
+                                                            // Current logic: sends null if empty.
+                                                            handleUpdate(record.date, 'exitTime', dateInput.value, val);
+                                                        }
+                                                    }}
+                                                    className={`p-2 border rounded-lg font-mono text-sm focus:ring-2 focus:ring-blue-500 outline-none w-32 text-center
+                                                        ${!record.exitTime ? 'text-gray-400 border-dashed border-gray-300' : 'text-gray-900 border-gray-200'}`}
+                                                />
+                                            </div>
                                         </td>
                                         <td className="py-4 px-6">
                                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
