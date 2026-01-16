@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { ArrowLeft, Calendar, Download, RefreshCw, Save } from 'lucide-react';
+import { ArrowLeft, Calendar, Download, RefreshCw, Save, Trash2 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import Link from 'next/link';
@@ -96,6 +96,26 @@ export default function EmployeeHistoryPage() {
                 fetchHistory();
             } else {
                 toast.error('Error al actualizar');
+            }
+        } catch (error) {
+            toast.error('Error de conexión');
+        }
+    };
+
+    const handleDelete = async (date: string) => {
+        if (!confirm('¿Estás seguro de eliminar este registro?')) return;
+        try {
+            const res = await fetch(`/api/employees/${employeeId}/attendance`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ date })
+            });
+
+            if (res.ok) {
+                toast.success('Registro eliminado');
+                fetchHistory();
+            } else {
+                toast.error('Error al eliminar');
             }
         } catch (error) {
             toast.error('Error de conexión');
@@ -237,10 +257,19 @@ export default function EmployeeHistoryPage() {
                                             </div>
                                         </td>
                                         <td className="py-4 px-6">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                ${isCompleted ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                                                {isCompleted ? 'Completado' : 'Incompleto'}
-                                            </span>
+                                            <div className="flex items-center gap-3">
+                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                                    ${isCompleted ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                                    {isCompleted ? 'Completado' : 'Incompleto'}
+                                                </span>
+                                                <button
+                                                    onClick={() => handleDelete(record.date)}
+                                                    className="p-1 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded transition-colors"
+                                                    title="Eliminar registro"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 );
