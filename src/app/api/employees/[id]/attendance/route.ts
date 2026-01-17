@@ -210,11 +210,24 @@ export async function DELETE(
             return NextResponse.json({ error: 'Invalid parameters' }, { status: 400 });
         }
 
-        await prisma.attendance.delete({
+        // ROBUST DELETE: Use Range instead of Exact Match
+        // This avoids timezone mismatches (00:00 UTC vs 05:00 UTC etc)
+        // We delete ANY record for this employee on this calendar day.
+
+        // Assuming 'date' param is YYYY-MM-DD from UI
+        // We use the same start/end logic as GET
+        const targetDay = parseISO(json.date); // or use the date object directly
+        const start = new Date(targetDay);
+        start.setHours(0, 0, 0, 0);
+        const end = new Date(targetDay);
+        end.setHours(23, 59, 59, 999);
+
+        await prisma.attendance.deleteMany({
             where: {
-                employeeId_date: {
-                    employeeId,
-                    date
+                employeeId,
+                date: {
+                    gte: start,
+                    lte: end
                 }
             }
         });

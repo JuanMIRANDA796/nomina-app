@@ -66,13 +66,29 @@ export function calculateShiftHours(
     let remainingOrdinaryMinutes = ordinaryMinutesLimit;
 
     // Iterate minute by minute
+    // Iterate minute by minute
     let current = new Date(entry);
     for (let i = 0; i < totalMinutes; i++) {
+        // TIMZONE FIX: Shift to Colombia Time (UTC-5) for classification
+        // Vercel is UTC. If current is 02:00 UTC (9PM COL), we need 21.0
+        // 2 - 5 = -3 ? No, simple subHours handles the date wrap correctly.
+
+        // We use a virtual 'local' time just for the hour check
+        const localCurrent = new Date(current.getTime() - (5 * 60 * 60 * 1000));
+
         // Calculate decimal hour (e.g., 14.5 for 14:30)
-        const hour = current.getHours() + current.getMinutes() / 60;
+        const hour = localCurrent.getUTCHours() + localCurrent.getUTCMinutes() / 60; // Use UTC of the shifted time?
+        // Wait, new Date(timestamp) usually prints in Local Node env.
+        // Let's rely on getUTCHours() of the manually shifted timestamp to be safe 
+        // OR better: use date-fns subHours and getHours() if we trust the node env? 
+        // SAFEST: Manually shift by -5h and read getUTCHours().
+        // If current is 02:00Z. Shifted is 21:00 (prev day). getUTCHours() is 21. Correct.
+
+        // Calculate decimal hour based on the SHIFTED UTC time
+        const decimalHour = localCurrent.getUTCHours() + localCurrent.getUTCMinutes() / 60;
 
         // Check is Day (06:00 - 21:00)
-        const isDay = hour >= DAY_START && hour < NIGHT_START;
+        const isDay = decimalHour >= DAY_START && decimalHour < NIGHT_START;
 
         // Determine if this minute is Ordinary or Extra
         const isOrdinary = remainingOrdinaryMinutes > 0;

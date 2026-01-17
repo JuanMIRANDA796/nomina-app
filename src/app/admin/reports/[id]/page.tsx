@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { ArrowLeft, Save, AlertCircle, Calendar as CalendarIcon, Download } from 'lucide-react';
 import Link from 'next/link';
 
@@ -176,8 +177,12 @@ export default function PayrollDetailPage() {
                                     {dailyRecords.map((day) => (
                                         <tr key={day.date} className="hover:bg-gray-50/50">
                                             <td className="p-4 whitespace-nowrap">
-                                                <div className="font-medium text-gray-900">{format(parseISO(day.date), 'dd MMM')}</div>
-                                                <div className="text-xs text-gray-500">{format(parseISO(day.date), 'EEEE')}</div>
+                                                <div className="font-medium text-gray-900 capitalize">
+                                                    {format(parseISO(day.date), 'dd MMM', { locale: es })}
+                                                </div>
+                                                <div className="text-xs text-gray-500 capitalize">
+                                                    {format(parseISO(day.date), 'EEEE', { locale: es })}
+                                                </div>
                                             </td>
                                             <td className="p-4 whitespace-nowrap">
                                                 {day.status === 'ATTENDED' && (
@@ -209,8 +214,9 @@ export default function PayrollDetailPage() {
                                             <td className="p-4 whitespace-nowrap">
                                                 {day.status === 'ATTENDED' ? (
                                                     <div className="flex items-center gap-2">
-                                                        <div className="text-gray-600 text-xs font-mono">
-                                                            {format(parseISO(day.attendance!.entry), 'HH:mm')} - {format(parseISO(day.attendance!.exit), 'HH:mm')}
+                                                        <div className="text-gray-600 text-xs font-mono flex flex-col">
+                                                            <span>Entrada: {format(parseISO(day.attendance!.entry), 'd MMM HH:mm', { locale: es })}</span>
+                                                            <span>Salida: {format(parseISO(day.attendance!.exit), 'd MMM HH:mm', { locale: es })}</span>
                                                         </div>
                                                         <button
                                                             onClick={() => handleResetDay(day.date)}
