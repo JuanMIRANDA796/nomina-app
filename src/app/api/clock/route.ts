@@ -40,8 +40,12 @@ export async function POST(request: Request) {
         if (action === 'ENTRY') {
             if (attendance && attendance.entryTime && !attendance.exitTime) {
                 // Already has an open entry?
-                // Technically this shouldn't happen if UI respects state, but if they click Entry again?
-                return NextResponse.json({ error: 'Ya tienes un turno abierto' }, { status: 400 });
+                // Validation relaxed: Allow updating the entry time if they click again.
+                attendance = await prisma.attendance.update({
+                    where: { id: attendance.id },
+                    data: { entryTime: now }
+                });
+                return NextResponse.json({ message: 'Hora de entrada actualizada', time: now });
             }
 
             if (!attendance) {
@@ -55,128 +59,133 @@ export async function POST(request: Request) {
                 });
                 return NextResponse.json({ message: 'Hora de entrada registrada', time: now });
             } else {
-                if (attendance.entryTime && attendance.exitTime) {
-                    // Shift already completed today. Blocking new entry?
-                    // User complaint: "le dice que ya existe una hora de entrada para hoy"
-                    // If they work doubled shifts (morning + night), we need to allow this.
-                    // But schema has UNIQUE(date). We cannot create a SECOND record for 'today'.
-                    // We must reuse the record? No, that overwrites.
-                    // LIMITATION: System supports 1 shift per day.
-                    // However, for the specific user complaint (Night Shift), the bug implies the "Day 12" record shouldn't exist yet.
-                    // If we fix the Exit logic below, this Entry logic might be fine as is (since attendance won't exist).
-                    // But if it DOES exist (e.g. they really worked morning), we warn.
-                    return NextResponse.json({ error: 'Ya existe una hora de entrada para hoy' }, { status: 400 });
-                } else if (!attendance.entryTime) {
-                    // Fix missing entry
-                    attendance = await prisma.attendance.update({
-                        where: { id: attendance.id },
-                        data: { entryTime: now },
-                    });
-                    return NextResponse.json({ message: 'Hora de entrada registrada', time: now });
-                }
+                // Shift already completed today.
+                // USER REQUEST: "Quitar el bloqueo de ingresar la hora de entrada dos veces"
+                // Optimization: We overwrite the existing record to start a "new" shift (restarting the day).
+                // This handles cases where the first entry was a mistake or test.
+                attendance = await prisma.attendance.update({
+                    where: { id: attendance.id },
+                    data: {
+                        entryTime: now,
+                        exitTime: null // Re-open the shift
+                    },
+                });
+                return NextResponse.json({
+                    message: 'Hora de entrada actualizada (Turno reiniciado)',
+                    time: now,
+                    warning: 'Se sobreescribió el registro anterior de hoy.'
+                });
+            } else if (!attendance.entryTime) {
+                // Fix missing entry
+                attendance = await prisma.attendance.update({
+                    where: { id: attendance.id },
+                    data: { entryTime: now },
+                });
+                return NextResponse.json({ message: 'Hora de entrada registrada', time: now });
             }
         }
+    }
 
         else if (action === 'EXIT') {
-            // ------------------------------------------------------------------
-            // LOGIC PARITY: 14-HOUR RULE
-            // ------------------------------------------------------------------
+        // ------------------------------------------------------------------
+        // LOGIC PARITY: 14-HOUR RULE
+        // ------------------------------------------------------------------
 
-            // 1. Check Previous Day's Attendance
-            const yesterday = subHours(today, 24);
-            const yesterdayAttendance = await prisma.attendance.findFirst({
-                where: {
-                    employeeId: employee.id,
-                    date: yesterday,
-                }
-            });
-
-            // 2. Evaluate "Overnight Shift" (Entry Yesterday + No Exit Yesterday)
-            let isOvernightShift = false;
-
-            if (yesterdayAttendance && yesterdayAttendance.entryTime && !yesterdayAttendance.exitTime) {
-                const entryTime = new Date(yesterdayAttendance.entryTime);
-                const durationHours = (now.getTime() - entryTime.getTime()) / (1000 * 60 * 60);
-
-                // User Rule: "si la diferencia... es menor a 14 horas"
-                // Example: 9 PM (21:00) to 5 AM (05:00) = 8 hours. 8 < 14 -> TRUE.
-                if (durationHours < 14) {
-                    isOvernightShift = true;
-
-                    // Close YESTERDAY's record with TODAY's time
-                    // The 'date' of the record remains Yesterday (e.g., 16 Enero)
-                    // The 'exitTime' is Now (e.g., 17 Enero 05:00 AM)
-                    await prisma.attendance.update({
-                        where: { id: yesterdayAttendance.id },
-                        data: { exitTime: now },
-                    });
-
-                    return NextResponse.json({
-                        message: 'Salida registrada (Turno nocturno cerrado)',
-                        time: now,
-                        warning: 'Cierre de turno del día anterior (< 14h).'
-                    });
-                }
+        // 1. Check Previous Day's Attendance
+        const yesterday = subHours(today, 24);
+        const yesterdayAttendance = await prisma.attendance.findFirst({
+            where: {
+                employeeId: employee.id,
+                date: yesterday,
             }
+        });
 
-            // 3. If NOT Overnight (Duration > 14h OR No Entry Yesterday), Apply "Minus 8h" Logic to Today
-            if (!isOvernightShift) {
-                // Determine which 'attendance' record we are updating/creating
+        // 2. Evaluate "Overnight Shift" (Entry Yesterday + No Exit Yesterday)
+        let isOvernightShift = false;
 
-                if (!attendance) {
-                    // Start fresh for Today -> assume 8 hours shift
-                    const estimatedEntry = subHours(now, 8);
-                    attendance = await prisma.attendance.create({
-                        data: {
-                            employeeId: employee.id,
-                            date: today,
-                            entryTime: estimatedEntry,
-                            exitTime: now,
-                        },
-                    });
-                    return NextResponse.json({
-                        message: 'Salida registrada (Entrada estimada hace 8h)',
-                        time: now,
-                        warning: 'Se asumió turno de 8 horas.'
-                    });
-                } else {
-                    // Record exists for today
-                    if (!attendance.entryTime && attendance.exitTime) {
-                        // Already has exit? Update it.
-                        const estimatedEntry = subHours(now, 8);
-                        attendance = await prisma.attendance.update({
-                            where: { id: attendance.id },
-                            data: {
-                                entryTime: estimatedEntry,
-                                exitTime: now
-                            },
-                        });
-                        return NextResponse.json({ message: 'Salida actualizada', time: now });
-                    }
-                    else if (attendance.entryTime && !attendance.exitTime) {
-                        // Normal shift entered TODAY -> Close TODAY
-                        attendance = await prisma.attendance.update({
-                            where: { id: attendance.id },
-                            data: { exitTime: now },
-                        });
-                        return NextResponse.json({ message: 'Hora de salida registrada', time: now });
-                    }
-                    else {
-                        // Overwrite existing exit
-                        attendance = await prisma.attendance.update({
-                            where: { id: attendance.id },
-                            data: { exitTime: now },
-                        });
-                        return NextResponse.json({ message: 'Hora de salida actualizada', time: now });
-                    }
-                }
+        if (yesterdayAttendance && yesterdayAttendance.entryTime && !yesterdayAttendance.exitTime) {
+            const entryTime = new Date(yesterdayAttendance.entryTime);
+            const durationHours = (now.getTime() - entryTime.getTime()) / (1000 * 60 * 60);
+
+            // User Rule: "si la diferencia... es menor a 14 horas"
+            // Example: 9 PM (21:00) to 5 AM (05:00) = 8 hours. 8 < 14 -> TRUE.
+            if (durationHours < 14) {
+                isOvernightShift = true;
+
+                // Close YESTERDAY's record with TODAY's time
+                // The 'date' of the record remains Yesterday (e.g., 16 Enero)
+                // The 'exitTime' is Now (e.g., 17 Enero 05:00 AM)
+                await prisma.attendance.update({
+                    where: { id: yesterdayAttendance.id },
+                    data: { exitTime: now },
+                });
+
+                return NextResponse.json({
+                    message: 'Salida registrada (Turno nocturno cerrado)',
+                    time: now,
+                    warning: 'Cierre de turno del día anterior (< 14h).'
+                });
             }
         }
 
-        return NextResponse.json({ error: 'Acción no válida' }, { status: 400 });
+        // 3. If NOT Overnight (Duration > 14h OR No Entry Yesterday), Apply "Minus 8h" Logic to Today
+        if (!isOvernightShift) {
+            // Determine which 'attendance' record we are updating/creating
 
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
+            if (!attendance) {
+                // Start fresh for Today -> assume 8 hours shift
+                const estimatedEntry = subHours(now, 8);
+                attendance = await prisma.attendance.create({
+                    data: {
+                        employeeId: employee.id,
+                        date: today,
+                        entryTime: estimatedEntry,
+                        exitTime: now,
+                    },
+                });
+                return NextResponse.json({
+                    message: 'Salida registrada (Entrada estimada hace 8h)',
+                    time: now,
+                    warning: 'Se asumió turno de 8 horas.'
+                });
+            } else {
+                // Record exists for today
+                if (!attendance.entryTime && attendance.exitTime) {
+                    // Already has exit? Update it.
+                    const estimatedEntry = subHours(now, 8);
+                    attendance = await prisma.attendance.update({
+                        where: { id: attendance.id },
+                        data: {
+                            entryTime: estimatedEntry,
+                            exitTime: now
+                        },
+                    });
+                    return NextResponse.json({ message: 'Salida actualizada', time: now });
+                }
+                else if (attendance.entryTime && !attendance.exitTime) {
+                    // Normal shift entered TODAY -> Close TODAY
+                    attendance = await prisma.attendance.update({
+                        where: { id: attendance.id },
+                        data: { exitTime: now },
+                    });
+                    return NextResponse.json({ message: 'Hora de salida registrada', time: now });
+                }
+                else {
+                    // Overwrite existing exit
+                    attendance = await prisma.attendance.update({
+                        where: { id: attendance.id },
+                        data: { exitTime: now },
+                    });
+                    return NextResponse.json({ message: 'Hora de salida actualizada', time: now });
+                }
+            }
+        }
     }
+
+    return NextResponse.json({ error: 'Acción no válida' }, { status: 400 });
+
+} catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
+}
 }
