@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { usePresentation } from '@/context/PresentationContext';
 import ReferenceRatesChart from '@/components/presentation/ReferenceRatesChart';
 import InflationVsRepoChart from '@/components/presentation/InflationVsRepoChart';
 import PortfolioStockRatesChart from '@/components/presentation/PortfolioStockRatesChart';
@@ -31,63 +32,17 @@ import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabili
 import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
 
-import { usePresentation } from '@/context/PresentationContext';
-import { toast } from 'sonner';
-
 export default function PresentationPage() {
-  const { saveSnapshot, isLoading } = usePresentation();
-  const [isSharing, setIsSharing] = useState(false);
+  const { resetData, isLoading } = usePresentation();
 
-  const handleShare = async () => {
-    setIsSharing(true);
-    try {
-      const id = await saveSnapshot();
-      const url = `${window.location.origin}/?id=${id}`;
-      await navigator.clipboard.writeText(url);
-      toast.success('¡Enlace de compartir copiado al portapapeles!', {
-        description: 'Cualquier persona con este link verá la presentación con tus cambios actuales.',
-        duration: 5000,
-      });
-    } catch (error) {
-      toast.error('Error al generar el enlace');
-    } finally {
-      setIsSharing(false);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="h-screen w-full bg-slate-950 flex flex-col items-center justify-center text-white">
-        <div className="w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-slate-400 font-medium tracking-widest uppercase text-xs">Cargando datos personalizados...</p>
-      </div>
-    );
-  }
+  if (isLoading) return (
+    <div className="w-full h-screen bg-slate-950 flex items-center justify-center">
+      <div className="text-white text-2xl font-bold animate-pulse">Cargando Presentación...</div>
+    </div>
+  );
 
   return (
     <main className="snap-y snap-mandatory h-screen w-full overflow-y-scroll bg-slate-950 text-white scroll-smooth selection:bg-pink-500 selection:text-white">
-
-      {/* Share Button Floating */}
-      <div className="fixed bottom-8 right-8 z-[100]">
-        <button
-          onClick={handleShare}
-          disabled={isSharing}
-          className="group relative flex items-center gap-2 px-6 py-3 bg-white text-slate-950 rounded-full font-bold shadow-2xl hover:scale-105 transition-all active:scale-95 disabled:opacity-50"
-        >
-          {isSharing ? (
-            <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0-10.628a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5m0 0c.18-.324.283-.696.283-1.093s-.103-.77-.283-1.093m0 2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0-10.628a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0 4.5" />
-            </svg>
-          )}
-          <span>{isSharing ? 'Generando...' : 'Compartir con cambios'}</span>
-
-          <div className="absolute -top-12 right-0 bg-slate-800 text-white text-[10px] px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl">
-            Crea un link único con tus ediciones
-          </div>
-        </button>
-      </div>
 
       {/* COVER SLIDE */}
       <section className="snap-start w-full h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B]">
@@ -223,6 +178,19 @@ export default function PresentationPage() {
           <FSGProposalTable />
         </motion.div>
       </section>
+
+      {/* FLOATING RESET BUTTON */}
+      <div className="fixed bottom-8 right-8 z-[100]">
+        <button
+          onClick={resetData}
+          className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white rounded-lg border border-white/10 transition-colors text-xs font-medium backdrop-blur-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          Restablecer Datos
+        </button>
+      </div>
 
     </main>
   );

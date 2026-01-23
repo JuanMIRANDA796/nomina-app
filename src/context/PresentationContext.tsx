@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+
 
 // Import all default data
 import referenceRatesDefault from '@/data/reference_rates.json';
@@ -76,8 +76,6 @@ const PresentationContext = createContext<PresentationContextType | undefined>(u
 export function PresentationProvider({ children }: { children: React.ReactNode }) {
     const [data, setData] = useState<PresentationData>(ALL_DEFAULTS);
     const [isLoading, setIsLoading] = useState(true);
-    const searchParams = useSearchParams();
-    const router = useRouter();
 
     // Load initial state from LocalStorage
     useEffect(() => {
