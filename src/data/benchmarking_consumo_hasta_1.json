@@ -1,0 +1,38 @@
+[
+    {
+        "entity": "25 entidades",
+        "disbursements_num": 80130,
+        "amount": 54010,
+        "tpp": 45.64
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 39066,
+        "amount": 26085,
+        "tpp": 45.97
+    },
+    {
+        "entity": "Davivienda",
+        "disbursements_num": 16808,
+        "amount": 14568,
+        "tpp": 57.39
+    },
+    {
+        "entity": "Banco Bogota",
+        "disbursements_num": 3458,
+        "amount": 3196,
+        "tpp": null
+    },
+    {
+        "entity": "Tuya",
+        "disbursements_num": 11587,
+        "amount": 3083,
+        "tpp": 56.22
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 309,
+        "amount": 159,
+        "tpp": 22.59
+    }
+]

@@ -1,0 +1,76 @@
+{
+    "hoy": [
+        {
+            "rango": "0-1_SMMLV",
+            "namv": 6.78,
+            "mensual": 0.57
+        },
+        {
+            "rango": "1-1.1_SMMLV",
+            "namv": 6.78,
+            "mensual": 0.57
+        },
+        {
+            "rango": "1.1-1.5_SMMLV",
+            "namv": 6.48,
+            "mensual": 0.54
+        },
+        {
+            "rango": "1.5-4_SMMLV",
+            "namv": 5.21,
+            "mensual": 0.43
+        },
+        {
+            "rango": "4-8_SMMLV",
+            "namv": 2.86,
+            "mensual": 0.24
+        },
+        {
+            "rango": "8-12_SMMLV",
+            "namv": 2.00,
+            "mensual": 0.17
+        },
+        {
+            "rango": "Mayor o igual a 12_SMMLV",
+            "namv": 1.94,
+            "mensual": 0.16
+        }
+    ],
+    "propuesta": [
+        {
+            "rango": "0-1.5_SMMLV",
+            "namv": 7.50,
+            "mensual": 0.63
+        },
+        {
+            "rango": "1.5-2_SMMLV",
+            "namv": 7.00,
+            "mensual": 0.58
+        },
+        {
+            "rango": "2-3_SMMLV",
+            "namv": 5.50,
+            "mensual": 0.46
+        },
+        {
+            "rango": "3-4_SMMLV",
+            "namv": 2.00,
+            "mensual": 0.17
+        },
+        {
+            "rango": "4-8_SMMLV",
+            "namv": 0.80,
+            "mensual": 0.07
+        },
+        {
+            "rango": "8-12_SMMLV",
+            "namv": 0.80,
+            "mensual": 0.07
+        },
+        {
+            "rango": "Mayor o igual a 12_SMMLV",
+            "namv": 0.80,
+            "mensual": 0.07
+        }
+    ]
+}

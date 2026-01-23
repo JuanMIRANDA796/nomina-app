@@ -1,0 +1,93 @@
+[
+    {
+        "month": "dic-24",
+        "tarjeta": 5283,
+        "consumo": 7319,
+        "vivienda": 1563,
+        "total": 14166
+    },
+    {
+        "month": "ene-25",
+        "tarjeta": 13700,
+        "consumo": 6540,
+        "vivienda": 2080,
+        "total": 22320
+    },
+    {
+        "month": "feb-25",
+        "tarjeta": 9189,
+        "consumo": 8668,
+        "vivienda": 2515,
+        "total": 20373
+    },
+    {
+        "month": "mar-25",
+        "tarjeta": 7112,
+        "consumo": 9836,
+        "vivienda": 3239,
+        "total": 20187
+    },
+    {
+        "month": "abr-25",
+        "tarjeta": 6254,
+        "consumo": 7122,
+        "vivienda": 2487,
+        "total": 15863
+    },
+    {
+        "month": "may-25",
+        "tarjeta": 8623,
+        "consumo": 7724,
+        "vivienda": 2549,
+        "total": 18896
+    },
+    {
+        "month": "jun-25",
+        "tarjeta": 4258,
+        "consumo": 5344,
+        "vivienda": 3942,
+        "total": 13544
+    },
+    {
+        "month": "jul-25",
+        "tarjeta": 5447,
+        "consumo": 6872,
+        "vivienda": 4127,
+        "total": 16446
+    },
+    {
+        "month": "ago-25",
+        "tarjeta": 5250,
+        "consumo": 5683,
+        "vivienda": 2136,
+        "total": 13070
+    },
+    {
+        "month": "sep-25",
+        "tarjeta": 5937,
+        "consumo": 7440,
+        "vivienda": 1573,
+        "total": 14950
+    },
+    {
+        "month": "oct-25",
+        "tarjeta": 5479,
+        "consumo": 7312,
+        "vivienda": 553,
+        "total": 13344
+    },
+    {
+        "month": "nov-25",
+        "tarjeta": 5128,
+        "consumo": 5441,
+        "vivienda": 2087,
+        "total": 12655
+    },
+    {
+        "month": "dic-25",
+        "tarjeta": 5383,
+        "consumo": 4790,
+        "vivienda": 3054,
+        "total": 13227
+    }
+]

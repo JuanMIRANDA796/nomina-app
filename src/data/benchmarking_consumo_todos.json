@@ -1,0 +1,62 @@
+[
+    {
+        "entity": "34 entidades",
+        "disbursements_num": 313737,
+        "amount": 3420000,
+        "tpp": 21.69
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 116728,
+        "amount": 996314,
+        "tpp": 23.13
+    },
+    {
+        "entity": "Davivienda",
+        "disbursements_num": 54181,
+        "amount": 558904,
+        "tpp": 22.12
+    },
+    {
+        "entity": "Banco de Bogota",
+        "disbursements_num": 40966,
+        "amount": 488165,
+        "tpp": 20.63
+    },
+    {
+        "entity": "BBVA",
+        "disbursements_num": 15676,
+        "amount": 244693,
+        "tpp": 23.23
+    },
+    {
+        "entity": "Banco Falabella",
+        "disbursements_num": 20067,
+        "amount": 189954,
+        "tpp": 22.21
+    },
+    {
+        "entity": "Scotiabank",
+        "disbursements_num": 6953,
+        "amount": 178629,
+        "tpp": 20.95
+    },
+    {
+        "entity": "Banco de Occidente",
+        "disbursements_num": 4411,
+        "amount": 154328,
+        "tpp": 18.45
+    },
+    {
+        "entity": "AV Villas",
+        "disbursements_num": 3503,
+        "amount": 129450,
+        "tpp": 17.76
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 822,
+        "amount": 5441,
+        "tpp": 19.02
+    }
+]

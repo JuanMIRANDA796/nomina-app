@@ -1,0 +1,100 @@
+[
+    {
+        "month": "nov-24",
+        "saldo_cdat": 87723,
+        "saldo_cap": 207184,
+        "tpp_cdat": 10.83,
+        "tpp_cap": 7.69
+    },
+    {
+        "month": "dic-24",
+        "saldo_cdat": 89551,
+        "saldo_cap": 187707,
+        "tpp_cdat": 10.56,
+        "tpp_cap": 8.29
+    },
+    {
+        "month": "ene-25",
+        "saldo_cdat": 91352,
+        "saldo_cap": 189282,
+        "tpp_cdat": 10.37,
+        "tpp_cap": 8.23
+    },
+    {
+        "month": "feb-25",
+        "saldo_cdat": 92481,
+        "saldo_cap": 192419,
+        "tpp_cdat": 10.18,
+        "tpp_cap": 8.06
+    },
+    {
+        "month": "mar-25",
+        "saldo_cdat": 92823,
+        "saldo_cap": 191424,
+        "tpp_cdat": 10.13,
+        "tpp_cap": 8.31
+    },
+    {
+        "month": "abr-25",
+        "saldo_cdat": 92923,
+        "saldo_cap": 191983,
+        "tpp_cdat": 10.10,
+        "tpp_cap": 8.06
+    },
+    {
+        "month": "may-25",
+        "saldo_cdat": 93040,
+        "saldo_cap": 198131,
+        "tpp_cdat": 10.08,
+        "tpp_cap": 7.84
+    },
+    {
+        "month": "jun-25",
+        "saldo_cdat": 96740,
+        "saldo_cap": 195238,
+        "tpp_cdat": 10.21,
+        "tpp_cap": 8.18
+    },
+    {
+        "month": "jul-25",
+        "saldo_cdat": 100213,
+        "saldo_cap": 200243,
+        "tpp_cdat": 10.30,
+        "tpp_cap": 8.04
+    },
+    {
+        "month": "ago-25",
+        "saldo_cdat": 103031,
+        "saldo_cap": 203472,
+        "tpp_cdat": 10.40,
+        "tpp_cap": 8.47
+    },
+    {
+        "month": "sep-25",
+        "saldo_cdat": 107020,
+        "saldo_cap": 206136,
+        "tpp_cdat": 10.45,
+        "tpp_cap": 8.70
+    },
+    {
+        "month": "oct-25",
+        "saldo_cdat": 107712,
+        "saldo_cap": 210621,
+        "tpp_cdat": 10.52,
+        "tpp_cap": 8.60
+    },
+    {
+        "month": "nov-25",
+        "saldo_cdat": 110870,
+        "saldo_cap": 221894,
+        "tpp_cdat": 10.56,
+        "tpp_cap": 8.55
+    },
+    {
+        "month": "dic-25",
+        "saldo_cdat": 114965,
+        "saldo_cap": 214639,
+        "tpp_cdat": null,
+        "tpp_cap": null
+    }
+]

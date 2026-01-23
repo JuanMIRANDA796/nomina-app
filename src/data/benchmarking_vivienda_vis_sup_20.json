@@ -1,0 +1,38 @@
+[
+    {
+        "entity": "5 entidades",
+        "disbursements_num": 443,
+        "amount": 52690,
+        "tpp": 12.32
+    },
+    {
+        "entity": "Banco de Bogotá",
+        "disbursements_num": 308,
+        "amount": 35899,
+        "tpp": 12.96
+    },
+    {
+        "entity": "BBVA",
+        "disbursements_num": 102,
+        "amount": 12812,
+        "tpp": 10.95
+    },
+    {
+        "entity": "Colpatria",
+        "disbursements_num": 20,
+        "amount": 2577,
+        "tpp": 10.85
+    },
+    {
+        "entity": "Banagrio",
+        "disbursements_num": 11,
+        "amount": 1178,
+        "tpp": 10.50
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 0,
+        "amount": 0,
+        "tpp": null
+    }
+]

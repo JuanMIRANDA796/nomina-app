@@ -1,0 +1,26 @@
+[
+    {
+        "entity": "5 entidades",
+        "disbursements_num": 17,
+        "amount": 5840,
+        "tpp": 12.37
+    },
+    {
+        "entity": "Banco Davibank",
+        "disbursements_num": 7,
+        "amount": 2580,
+        "tpp": 11.52
+    },
+    {
+        "entity": "Scotiabank Colpatria",
+        "disbursements_num": 7,
+        "amount": 2580,
+        "tpp": 11.52
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 0,
+        "amount": 0,
+        "tpp": null
+    }
+]

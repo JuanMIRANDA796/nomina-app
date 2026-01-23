@@ -1,0 +1,26 @@
+[
+    {
+        "entity": "5 entidades",
+        "disbursements_num": 257,
+        "amount": 57300,
+        "tpp": 13.58
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 166,
+        "amount": 38127,
+        "tpp": 12.43
+    },
+    {
+        "entity": "FNA",
+        "disbursements_num": 71,
+        "amount": 14635,
+        "tpp": 0
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 0,
+        "amount": 0,
+        "tpp": null
+    }
+]

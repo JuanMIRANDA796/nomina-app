@@ -1,0 +1,93 @@
+[
+    {
+        "month": "dic-24",
+        "consumo": 21.63,
+        "rotativos": 26.22,
+        "vivienda": 11.21,
+        "total": 19.98
+    },
+    {
+        "month": "ene-25",
+        "consumo": 21.72,
+        "rotativos": 26.48,
+        "vivienda": 11.22,
+        "total": 20.19
+    },
+    {
+        "month": "feb-25",
+        "consumo": 21.71,
+        "rotativos": 26.51,
+        "vivienda": 11.21,
+        "total": 20.21
+    },
+    {
+        "month": "mar-25",
+        "consumo": 21.80,
+        "rotativos": 26.47,
+        "vivienda": 11.14,
+        "total": 20.18
+    },
+    {
+        "month": "abr-25",
+        "consumo": 21.81,
+        "rotativos": 26.44,
+        "vivienda": 11.08,
+        "total": 20.13
+    },
+    {
+        "month": "may-25",
+        "consumo": 21.43,
+        "rotativos": 26.37,
+        "vivienda": 11.05,
+        "total": 19.95
+    },
+    {
+        "month": "jun-25",
+        "consumo": 21.01,
+        "rotativos": 26.35,
+        "vivienda": 11.02,
+        "total": 19.65
+    },
+    {
+        "month": "jul-25",
+        "consumo": 20.77,
+        "rotativos": 26.31,
+        "vivienda": 10.97,
+        "total": 19.43
+    },
+    {
+        "month": "ago-25",
+        "consumo": 19.72,
+        "rotativos": 24.65,
+        "vivienda": 10.79,
+        "total": 18.47
+    },
+    {
+        "month": "sep-25",
+        "consumo": 18.86,
+        "rotativos": 24.63,
+        "vivienda": 10.82,
+        "total": 18.04
+    },
+    {
+        "month": "oct-25",
+        "consumo": 18.84,
+        "rotativos": 24.23,
+        "vivienda": 10.82,
+        "total": 17.93
+    },
+    {
+        "month": "nov-25",
+        "consumo": 18.98,
+        "rotativos": 24.42,
+        "vivienda": 10.83,
+        "total": 18.01
+    },
+    {
+        "month": "dic-25",
+        "consumo": 19.12,
+        "rotativos": 24.45,
+        "vivienda": 10.87,
+        "total": 18.04
+    }
+]

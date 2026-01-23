@@ -65,3 +65,19 @@ model PayrollConfig {
   value       String   // e.g., "162000"
   description String?
 }
+
+model PresentationSlide {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique // e.g. "slide-1-intro", "slide-2-history"
+  title     String
+  type      String   // "text", "chart-bar", "chart-line", "heatmap"
+  content   String?  // Markdown text for text slides
+  data      Json?    // Flexible JSON structure for charts: [{ name: "2020", value: 100 }]
+  order     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+model PresentationSnapshot {
+  id        String   @id @default(cuid())
+  data      Json     // Aggregated data for all slides
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,100 @@
+[
+    {
+        "month": "nov-24",
+        "cdat_val": 793,
+        "cdat_per": 0.9,
+        "ahorro_val": 123,
+        "ahorro_per": 1.3
+    },
+    {
+        "month": "dic-24",
+        "cdat_val": 208,
+        "cdat_per": 0.2,
+        "ahorro_val": 56,
+        "ahorro_per": 0.5
+    },
+    {
+        "month": "ene-25",
+        "cdat_val": 286,
+        "cdat_per": 0.3,
+        "ahorro_val": 37,
+        "ahorro_per": 0.3
+    },
+    {
+        "month": "feb-25",
+        "cdat_val": 620,
+        "cdat_per": 0.7,
+        "ahorro_val": 72,
+        "ahorro_per": 0.5
+    },
+    {
+        "month": "mar-25",
+        "cdat_val": 140,
+        "cdat_per": 0.2,
+        "ahorro_val": 55,
+        "ahorro_per": 0.3
+    },
+    {
+        "month": "abr-25",
+        "cdat_val": 363,
+        "cdat_per": 0.4,
+        "ahorro_val": 63,
+        "ahorro_per": 0.4
+    },
+    {
+        "month": "may-25",
+        "cdat_val": 861,
+        "cdat_per": 0.9,
+        "ahorro_val": 44,
+        "ahorro_per": 0.3
+    },
+    {
+        "month": "jun-25",
+        "cdat_val": 20,
+        "cdat_per": 0.0,
+        "ahorro_val": 65,
+        "ahorro_per": 0.4
+    },
+    {
+        "month": "jul-25",
+        "cdat_val": 215,
+        "cdat_per": 0.2,
+        "ahorro_val": 94,
+        "ahorro_per": 0.5
+    },
+    {
+        "month": "ago-25",
+        "cdat_val": 268,
+        "cdat_per": 0.3,
+        "ahorro_val": 84,
+        "ahorro_per": 0.4
+    },
+    {
+        "month": "sep-25",
+        "cdat_val": 272,
+        "cdat_per": 0.3,
+        "ahorro_val": 14,
+        "ahorro_per": 0.1
+    },
+    {
+        "month": "oct-25",
+        "cdat_val": 747,
+        "cdat_per": 0.7,
+        "ahorro_val": 13,
+        "ahorro_per": 0.1
+    },
+    {
+        "month": "nov-25",
+        "cdat_val": 632,
+        "cdat_per": 0.6,
+        "ahorro_val": 17,
+        "ahorro_per": 0.1
+    },
+    {
+        "month": "dic-25",
+        "cdat_val": 318,
+        "cdat_per": 0.3,
+        "ahorro_val": 10,
+        "ahorro_per": 0.1
+    }
+]

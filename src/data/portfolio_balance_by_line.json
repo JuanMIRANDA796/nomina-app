@@ -1,0 +1,93 @@
+[
+    {
+        "month": "dic-24",
+        "consumo": 189569,
+        "rotativos": 88516,
+        "vivienda": 93674,
+        "total": 371759
+    },
+    {
+        "month": "ene-25",
+        "consumo": 189702,
+        "rotativos": 95634,
+        "vivienda": 94328,
+        "total": 379664
+    },
+    {
+        "month": "feb-25",
+        "consumo": 191242,
+        "rotativos": 98525,
+        "vivienda": 95681,
+        "total": 385448
+    },
+    {
+        "month": "mar-25",
+        "consumo": 192311,
+        "rotativos": 98331,
+        "vivienda": 97434,
+        "total": 388076
+    },
+    {
+        "month": "abr-25",
+        "consumo": 191636,
+        "rotativos": 98553,
+        "vivienda": 98792,
+        "total": 388981
+    },
+    {
+        "month": "may-25",
+        "consumo": 194648,
+        "rotativos": 100246,
+        "vivienda": 99420,
+        "total": 394315
+    },
+    {
+        "month": "jun-25",
+        "consumo": 196456,
+        "rotativos": 98015,
+        "vivienda": 101269,
+        "total": 395740
+    },
+    {
+        "month": "jul-25",
+        "consumo": 197153,
+        "rotativos": 96715,
+        "vivienda": 104094,
+        "total": 397962
+    },
+    {
+        "month": "ago-25",
+        "consumo": 196139,
+        "rotativos": 96053,
+        "vivienda": 104160,
+        "total": 396352
+    },
+    {
+        "month": "sep-25",
+        "consumo": 203953,
+        "rotativos": 95524,
+        "vivienda": 104851,
+        "total": 404328
+    },
+    {
+        "month": "oct-25",
+        "consumo": 200214,
+        "rotativos": 94671,
+        "vivienda": 104382,
+        "total": 399267
+    },
+    {
+        "month": "nov-25",
+        "consumo": 197649,
+        "rotativos": 93873,
+        "vivienda": 105530,
+        "total": 397051
+    },
+    {
+        "month": "dic-25",
+        "consumo": 194798,
+        "rotativos": 91826,
+        "vivienda": 106129,
+        "total": 392753
+    }
+]

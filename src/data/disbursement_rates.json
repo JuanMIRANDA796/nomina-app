@@ -1,0 +1,93 @@
+[
+    {
+        "month": "dic-24",
+        "tarjeta": 26.08,
+        "tpp": 22.53,
+        "consumo": 22.32,
+        "vivienda": 11.488
+    },
+    {
+        "month": "ene-25",
+        "tarjeta": 24.59,
+        "tpp": 22.85,
+        "consumo": 22.85,
+        "vivienda": 11.383
+    },
+    {
+        "month": "feb-25",
+        "tarjeta": 24.59,
+        "tpp": 21.44,
+        "consumo": 21.28,
+        "vivienda": 10.500
+    },
+    {
+        "month": "mar-25",
+        "tarjeta": 24.59,
+        "tpp": 20.00,
+        "consumo": 19.96,
+        "vivienda": 10.030
+    },
+    {
+        "month": "abr-25",
+        "tarjeta": 24.59,
+        "tpp": 19.11,
+        "consumo": 17.95,
+        "vivienda": 8.641
+    },
+    {
+        "month": "may-25",
+        "tarjeta": 24.59,
+        "tpp": 19.97,
+        "consumo": 18.05,
+        "vivienda": 10.213
+    },
+    {
+        "month": "jun-25",
+        "tarjeta": 24.59,
+        "tpp": 18.01,
+        "consumo": 18.95,
+        "vivienda": 9.632
+    },
+    {
+        "month": "jul-25",
+        "tarjeta": 24.92,
+        "tpp": 18.53,
+        "consumo": 18.80,
+        "vivienda": 9.640
+    },
+    {
+        "month": "ago-25",
+        "tarjeta": 24.92,
+        "tpp": 20.22,
+        "consumo": 19.33,
+        "vivienda": 10.998
+    },
+    {
+        "month": "sep-25",
+        "tarjeta": 24.75,
+        "tpp": 20.35,
+        "consumo": 18.67,
+        "vivienda": 11.687
+    },
+    {
+        "month": "oct-25",
+        "tarjeta": 24.11,
+        "tpp": 20.67,
+        "consumo": 18.82,
+        "vivienda": 11.003
+    },
+    {
+        "month": "nov-25",
+        "tarjeta": 24.89,
+        "tpp": 20.14,
+        "consumo": 19.11,
+        "vivienda": 11.185
+    },
+    {
+        "month": "dic-25",
+        "tarjeta": 24.92,
+        "tpp": 19.73,
+        "consumo": 19.38,
+        "vivienda": 11.134
+    }
+]

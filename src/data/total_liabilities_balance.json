@@ -1,0 +1,114 @@
+[
+    {
+        "month": "nov-24",
+        "total": 207164,
+        "cdats": 87723,
+        "prog": 9513,
+        "fut": 53847,
+        "disp": 56101
+    },
+    {
+        "month": "dic-24",
+        "total": 187707,
+        "cdats": 89551,
+        "prog": 10493,
+        "fut": 53741,
+        "disp": 33922
+    },
+    {
+        "month": "ene-25",
+        "total": 189282,
+        "cdats": 91352,
+        "prog": 12226,
+        "fut": 53568,
+        "disp": 32135
+    },
+    {
+        "month": "feb-25",
+        "total": 192419,
+        "cdats": 92481,
+        "prog": 14315,
+        "fut": 52939,
+        "disp": 32684
+    },
+    {
+        "month": "mar-25",
+        "total": 191424,
+        "cdats": 92823,
+        "prog": 16034,
+        "fut": 52629,
+        "disp": 29937
+    },
+    {
+        "month": "abr-25",
+        "total": 191983,
+        "cdats": 92923,
+        "prog": 14963,
+        "fut": 52559,
+        "disp": 31538
+    },
+    {
+        "month": "may-25",
+        "total": 198131,
+        "cdats": 93040,
+        "prog": 16501,
+        "fut": 52530,
+        "disp": 36060
+    },
+    {
+        "month": "jun-25",
+        "total": 195238,
+        "cdats": 96740,
+        "prog": 18456,
+        "fut": 52529,
+        "disp": 27514
+    },
+    {
+        "month": "jul-25",
+        "total": 200243,
+        "cdats": 100213,
+        "prog": 20047,
+        "fut": 52497,
+        "disp": 27485
+    },
+    {
+        "month": "ago-25",
+        "total": 203472,
+        "cdats": 103031,
+        "prog": 21945,
+        "fut": 52650,
+        "disp": 25846
+    },
+    {
+        "month": "sep-25",
+        "total": 206136,
+        "cdats": 107020,
+        "prog": 24202,
+        "fut": 51734,
+        "disp": 23180
+    },
+    {
+        "month": "oct-25",
+        "total": 210621,
+        "cdats": 107712,
+        "prog": 25621,
+        "fut": 51647,
+        "disp": 25641
+    },
+    {
+        "month": "nov-25",
+        "total": 221894,
+        "cdats": 110870,
+        "prog": 11080,
+        "fut": 51680,
+        "disp": 48264
+    },
+    {
+        "month": "dic-25",
+        "total": 214639,
+        "cdats": 114965,
+        "prog": 12004,
+        "fut": 51957,
+        "disp": 35713
+    }
+]

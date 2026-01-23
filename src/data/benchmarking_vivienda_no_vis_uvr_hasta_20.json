@@ -1,0 +1,38 @@
+[
+    {
+        "entity": "9 entidades",
+        "disbursements_num": 108,
+        "amount": 22670,
+        "tpp": 13.31
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 41,
+        "amount": 9842,
+        "tpp": 14.01
+    },
+    {
+        "entity": "BBVA Colombia",
+        "disbursements_num": 25,
+        "amount": 4910,
+        "tpp": 12.09
+    },
+    {
+        "entity": "Banco Caja Social",
+        "disbursements_num": 18,
+        "amount": 3053,
+        "tpp": 12.03
+    },
+    {
+        "entity": "FNA",
+        "disbursements_num": 7,
+        "amount": 1588,
+        "tpp": 13.08
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 0,
+        "amount": 0,
+        "tpp": null
+    }
+]
