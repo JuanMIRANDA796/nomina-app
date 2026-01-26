@@ -93,6 +93,17 @@ export default function DisbursementRatesChart() {
                             activeDot={{ r: 6 }}
                         />
 
+                        <Line
+                            type="monotone"
+                            dataKey="tpp"
+                            name="TPP"
+                            stroke="#fbbf24"
+                            strokeWidth={3}
+                            strokeDasharray="5 5"
+                            dot={{ r: 4, fill: '#fbbf24' }}
+                            activeDot={{ r: 6 }}
+                        />
+
                     </LineChart>
                 </ResponsiveContainer>
             </div>
@@ -126,6 +137,7 @@ export default function DisbursementRatesChart() {
                                         <th className="px-6 py-3 text-sky-400">Tarjeta (%)</th>
                                         <th className="px-6 py-3 text-orange-400">Consumo (%)</th>
                                         <th className="px-6 py-3 text-emerald-400">Vivienda (%)</th>
+                                        <th className="px-6 py-3 text-yellow-400">TPP (%)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -156,6 +168,15 @@ export default function DisbursementRatesChart() {
                                                     value={row.vivienda ?? ''}
                                                     onChange={(e) => handleUpdate(index, 'vivienda', e.target.value)}
                                                     className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 focus:border-pink-500 outline-none text-white"
+                                                    step="0.01"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <input
+                                                    type="number"
+                                                    value={row.tpp ?? ''}
+                                                    onChange={(e) => handleUpdate(index, 'tpp', e.target.value)}
+                                                    className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 focus:border-pink-500 outline-none text-white font-bold text-yellow-500"
                                                     step="0.01"
                                                 />
                                             </td>
