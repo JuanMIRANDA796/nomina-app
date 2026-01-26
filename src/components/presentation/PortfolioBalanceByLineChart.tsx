@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import {
     AreaChart,
     Area,
+    Line,
     XAxis,
     YAxis,
     CartesianGrid,
@@ -79,9 +80,24 @@ export default function PortfolioBalanceByLineChart() {
                         />
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
                         <Tooltip
-                            contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }}
-                            itemStyle={{ color: '#fff' }}
-                            formatter={(value: any) => [`$${value.toLocaleString()} M`]}
+                            content={({ active, payload, label }) => {
+                                if (active && payload && payload.length) {
+                                    return (
+                                        <div className="bg-slate-900/95 backdrop-blur-sm p-4 border border-white/10 rounded-xl shadow-2xl">
+                                            <p className="text-white font-bold mb-2 border-b border-white/10 pb-1">{label}</p>
+                                            {[...payload]
+                                                .sort((a, b) => (Number(b.value) - Number(a.value)))
+                                                .map((item: any, idx: number) => (
+                                                    <div key={idx} className="flex justify-between items-center gap-4 text-sm mt-1">
+                                                        <span style={{ color: item.color || item.payload.fill }}>{item.name} :</span>
+                                                        <span className="text-white font-medium">${Number(item.value).toLocaleString()} M</span>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    );
+                                }
+                                return null;
+                            }}
                         />
                         <Legend iconType="circle" />
 
@@ -108,6 +124,15 @@ export default function PortfolioBalanceByLineChart() {
                             stroke="#0ea5e9"
                             fill="url(#colorConsumo)"
                             name="Consumo"
+                        />
+                        <Line
+                            type="monotone"
+                            dataKey="total"
+                            name="Total general"
+                            stroke="#ffffff"
+                            strokeWidth={2}
+                            strokeDasharray="5 5"
+                            dot={{ r: 4, fill: '#ffffff' }}
                         />
                     </AreaChart>
                 </ResponsiveContainer>
@@ -139,6 +164,7 @@ export default function PortfolioBalanceByLineChart() {
                                         <th className="px-4 py-3 text-emerald-400">Vivienda</th>
                                         <th className="px-4 py-3 text-orange-400">Rotativos</th>
                                         <th className="px-4 py-3 text-sky-400">Consumo</th>
+                                        <th className="px-4 py-3 text-white">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -167,6 +193,14 @@ export default function PortfolioBalanceByLineChart() {
                                                     value={row.consumo ?? ''}
                                                     onChange={(e) => handleUpdate(index, 'consumo', e.target.value)}
                                                     className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-sky-500"
+                                                />
+                                            </td>
+                                            <td className="px-4 py-2">
+                                                <input
+                                                    type="number"
+                                                    value={row.total ?? ''}
+                                                    onChange={(e) => handleUpdate(index, 'total', e.target.value)}
+                                                    className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-white"
                                                 />
                                             </td>
                                         </tr>

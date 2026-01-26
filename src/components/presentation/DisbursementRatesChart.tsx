@@ -57,9 +57,24 @@ export default function DisbursementRatesChart() {
                         />
                         <YAxis hide={true} domain={['auto', 'auto']} />
                         <Tooltip
-                            contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }}
-                            itemStyle={{ color: '#fff' }}
-                            formatter={(value: any) => [`${value}%`]}
+                            content={({ active, payload, label }) => {
+                                if (active && payload && payload.length) {
+                                    return (
+                                        <div className="bg-slate-900/95 backdrop-blur-sm p-4 border border-white/10 rounded-xl shadow-2xl">
+                                            <p className="text-white font-bold mb-2 border-b border-white/10 pb-1">{label}</p>
+                                            {[...payload]
+                                                .sort((a, b) => (Number(b.value) - Number(a.value)))
+                                                .map((item: any, idx: number) => (
+                                                    <div key={idx} className="flex justify-between items-center gap-4 text-sm mt-1">
+                                                        <span style={{ color: item.color }}>{item.name} :</span>
+                                                        <span className="text-white font-medium">{Number(item.value).toFixed(2)}%</span>
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    );
+                                }
+                                return null;
+                            }}
                         />
                         <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
 

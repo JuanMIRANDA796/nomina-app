@@ -82,11 +82,28 @@ export default function BenchmarkingViviendaVisSup20Chart() {
                             />
                             <YAxis hide={true} />
                             <Tooltip
-                                contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }}
-                                itemStyle={{ color: '#fff' }}
-                                formatter={(value: any, name: any) => {
-                                    if (name === "amount") return [`$${value.toLocaleString()}`, "Monto"];
-                                    return [value, "Desembolsos"];
+                                content={({ active, payload, label }) => {
+                                    if (active && payload && payload.length) {
+                                        return (
+                                            <div className="bg-slate-900/95 backdrop-blur-sm p-4 border border-white/10 rounded-xl shadow-2xl">
+                                                <p className="text-white font-bold mb-2 border-b border-white/10 pb-1">{label}</p>
+                                                {[...payload]
+                                                    .sort((a, b) => (Number(b.value) - Number(a.value)))
+                                                    .map((item: any, idx: number) => {
+                                                        const isAmount = item.dataKey === 'amount';
+                                                        return (
+                                                            <div key={idx} className="flex justify-between items-center gap-4 text-sm mt-1">
+                                                                <span style={{ color: item.color }}>{item.name} :</span>
+                                                                <span className="text-white font-medium">
+                                                                    {isAmount ? `$ ${Number(item.value).toLocaleString()}` : Number(item.value).toLocaleString()}
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    })}
+                                            </div>
+                                        );
+                                    }
+                                    return null;
                                 }}
                             />
                             <Legend verticalAlign="bottom" align="right" iconType="circle" />

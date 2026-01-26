@@ -79,8 +79,24 @@ export default function ReferenceRatesChart() {
                         ticks={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}
                     />
                     <Tooltip
-                        contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                        itemStyle={{ fontSize: '12px' }}
+                        content={({ active, payload, label }) => {
+                            if (active && payload && payload.length) {
+                                return (
+                                    <div className="bg-slate-900/95 backdrop-blur-sm p-4 border border-white/10 rounded-xl shadow-2xl">
+                                        <p className="text-white font-bold mb-2 border-b border-white/10 pb-1">{label}</p>
+                                        {[...payload]
+                                            .sort((a, b) => (Number(b.value) - Number(a.value)))
+                                            .map((item: any, idx: number) => (
+                                                <div key={idx} className="flex justify-between items-center gap-4 text-sm mt-1">
+                                                    <span style={{ color: item.color }}>{item.name} :</span>
+                                                    <span className="text-white font-medium">{Number(item.value).toFixed(2)}%</span>
+                                                </div>
+                                            ))}
+                                    </div>
+                                );
+                            }
+                            return null;
+                        }}
                     />
                     <Legend iconType="circle" />
 
