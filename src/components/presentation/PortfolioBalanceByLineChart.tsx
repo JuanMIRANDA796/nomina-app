@@ -2,15 +2,15 @@
 
 import React, { useState } from 'react';
 import {
-    AreaChart,
-    Area,
+    LineChart,
     Line,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
     Legend,
-    ResponsiveContainer
+    ResponsiveContainer,
+    LabelList
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
@@ -49,21 +49,7 @@ export default function PortfolioBalanceByLineChart() {
 
             <div className="flex-1 w-full min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                        <defs>
-                            <linearGradient id="colorConsumo" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
-                            </linearGradient>
-                            <linearGradient id="colorRotativos" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#f97316" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#f97316" stopOpacity={0} />
-                            </linearGradient>
-                            <linearGradient id="colorVivienda" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                            </linearGradient>
-                        </defs>
+                    <LineChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
                         <XAxis
                             dataKey="month"
                             stroke="#9CA3AF"
@@ -76,7 +62,8 @@ export default function PortfolioBalanceByLineChart() {
                             tick={{ fill: '#9CA3AF', fontSize: 12 }}
                             axisLine={false}
                             tickLine={false}
-                            tickFormatter={(val) => `$${(val / 1000).toFixed(0)}k`}
+                            domain={['auto', 'auto']}
+                            hide={true}
                         />
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
                         <Tooltip
@@ -89,7 +76,7 @@ export default function PortfolioBalanceByLineChart() {
                                                 .sort((a, b) => (Number(b.value) - Number(a.value)))
                                                 .map((item: any, idx: number) => (
                                                     <div key={idx} className="flex justify-between items-center gap-4 text-sm mt-1">
-                                                        <span style={{ color: item.color || item.payload.fill }}>{item.name} :</span>
+                                                        <span style={{ color: item.color }}>{item.name} :</span>
                                                         <span className="text-white font-medium">${Number(item.value).toLocaleString()} M</span>
                                                     </div>
                                                 ))}
@@ -101,40 +88,51 @@ export default function PortfolioBalanceByLineChart() {
                         />
                         <Legend iconType="circle" />
 
-                        <Area
+                        <Line
                             type="monotone"
                             dataKey="vivienda"
-                            stackId="1"
                             stroke="#10b981"
-                            fill="url(#colorVivienda)"
+                            strokeWidth={4}
+                            dot={{ r: 4, fill: '#10b981', strokeWidth: 0 }}
+                            activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Vivienda"
-                        />
-                        <Area
+                        >
+                            <LabelList dataKey="vivienda" position="top" style={{ fill: '#10b981', fontSize: 11, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
+                        </Line>
+                        <Line
                             type="monotone"
                             dataKey="rotativos"
-                            stackId="1"
                             stroke="#f97316"
-                            fill="url(#colorRotativos)"
+                            strokeWidth={4}
+                            dot={{ r: 4, fill: '#f97316', strokeWidth: 0 }}
+                            activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Rotativos"
-                        />
-                        <Area
+                        >
+                            <LabelList dataKey="rotativos" position="top" style={{ fill: '#f97316', fontSize: 11, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
+                        </Line>
+                        <Line
                             type="monotone"
                             dataKey="consumo"
-                            stackId="1"
                             stroke="#0ea5e9"
-                            fill="url(#colorConsumo)"
+                            strokeWidth={4}
+                            dot={{ r: 4, fill: '#0ea5e9', strokeWidth: 0 }}
+                            activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Consumo"
-                        />
+                        >
+                            <LabelList dataKey="consumo" position="top" style={{ fill: '#0ea5e9', fontSize: 11, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
+                        </Line>
                         <Line
                             type="monotone"
                             dataKey="total"
                             name="Total general"
                             stroke="#ffffff"
-                            strokeWidth={2}
+                            strokeWidth={3}
                             strokeDasharray="5 5"
-                            dot={{ r: 4, fill: '#ffffff' }}
-                        />
-                    </AreaChart>
+                            dot={{ r: 3, fill: '#ffffff' }}
+                        >
+                            <LabelList dataKey="total" position="top" style={{ fill: '#ffffff', fontSize: 12, fontWeight: 'bold' }} formatter={(v: any) => `$ ${v.toLocaleString()}`} />
+                        </Line>
+                    </LineChart>
                 </ResponsiveContainer>
             </div>
 
