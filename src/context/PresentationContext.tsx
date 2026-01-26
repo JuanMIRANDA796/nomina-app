@@ -79,7 +79,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
 
     // Load initial state from LocalStorage
     useEffect(() => {
-        const saved = localStorage.getItem('presentation_data_v1');
+        const saved = localStorage.getItem('presentation_data_v2');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
@@ -95,14 +95,14 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     const updateSection = useCallback((section: keyof PresentationData, newData: any) => {
         setData(prev => {
             const updated = { ...prev, [section]: newData };
-            localStorage.setItem('presentation_data_v1', JSON.stringify(updated));
+            localStorage.setItem('presentation_data_v2', JSON.stringify(updated));
             return updated;
         });
     }, []);
 
     const resetData = useCallback(() => {
         if (confirm('¿Estás seguro de restablecer todos los datos a los valores iniciales?')) {
-            localStorage.removeItem('presentation_data_v1');
+            localStorage.removeItem('presentation_data_v2');
             setData(ALL_DEFAULTS);
             window.location.reload();
         }
