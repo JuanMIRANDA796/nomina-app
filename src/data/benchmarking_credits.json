@@ -1,6 +1,54 @@
 {
     "banks": [
         {
+            "entity": "PRESENTE",
+            "vis_tasa": 10.95,
+            "vis_rank": 2,
+            "novis_tasa": 11.88,
+            "novis_rank": 1,
+            "vehiculo_tasa": 13.14,
+            "vehiculo_rank": 3,
+            "cc_desde": 15.00,
+            "cc_hasta": null,
+            "cc_rank": 6
+        },
+        {
+            "entity": "Banco Davivienda",
+            "vis_tasa": 12.60,
+            "vis_rank": 5,
+            "novis_tasa": 12.50,
+            "novis_rank": 4,
+            "vehiculo_tasa": 12.01,
+            "vehiculo_rank": 1,
+            "cc_desde": 15.38,
+            "cc_hasta": null,
+            "cc_rank": 4
+        },
+        {
+            "entity": "Banco de Occidente",
+            "vis_tasa": 10.76,
+            "vis_rank": 1,
+            "novis_tasa": 16.01,
+            "novis_rank": 7,
+            "vehiculo_tasa": 16.14,
+            "vehiculo_rank": 5,
+            "cc_desde": 15.12,
+            "cc_hasta": 24.86,
+            "cc_rank": 2
+        },
+        {
+            "entity": "Banco Caja Social S.A.",
+            "vis_tasa": 14.85,
+            "vis_rank": 8,
+            "novis_tasa": 16.10,
+            "novis_rank": 8,
+            "vehiculo_tasa": 16.07,
+            "vehiculo_rank": 4,
+            "cc_desde": 15.39,
+            "cc_hasta": null,
+            "cc_rank": 5
+        },
+        {
             "entity": "Bancolombia",
             "vis_tasa": 12.00,
             "vis_rank": 3,
@@ -76,13 +124,13 @@
     "cooperatives": [
         {
             "entity": "PRESENTE",
-            "vis_tasa": 11.01,
+            "vis_tasa": 10.95,
             "vis_rank": 2,
-            "novis_tasa": 11.83,
+            "novis_tasa": 11.88,
             "novis_rank": 2,
-            "vehiculo_tasa": 15.95,
+            "vehiculo_tasa": 13.14,
             "vehiculo_rank": 2,
-            "cc_desde": 16.00,
+            "cc_desde": 15.00,
             "cc_hasta": null,
             "cc_rank": 1
         },
