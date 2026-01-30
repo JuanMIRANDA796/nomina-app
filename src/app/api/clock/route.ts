@@ -27,13 +27,22 @@ export async function POST(request: Request) {
         const colombiaTime = subHours(now, colombiaOffset);
 
         // "Today" is the start of the day in COLOMBIA time
-        const today = startOfDay(colombiaTime); // e.g. 2026-01-15 00:00:00 (Local)
+        // FIX: Store the 'date' bucket at NOON UTC (12:00) instead of Midnight UTC (00:00)
+        // Midnight UTC (00:00) -> 7:00 PM Previous Day in Colombia (UTC-5), causing "Yesterday" display.
+        // Noon UTC (12:00) -> 7:00 AM Same Day in Colombia. Accurate display.
+        const todayStart = startOfDay(colombiaTime);
+        const today = addHours(todayStart, 12);
 
         // 2. Find today's attendance record
+        // We look for ANY record in this calendar day (to catch old 00:00 records and new 12:00 records)
+        // This prevents creating duplicates if a 00:00 record already exists.
         let attendance = await prisma.attendance.findFirst({
             where: {
                 employeeId: employee.id,
-                date: today,
+                date: {
+                    gte: todayStart,
+                    lt: endOfDay(colombiaTime)
+                }
             },
         });
 
