@@ -191,9 +191,18 @@ export default function EmployeeHistoryPage() {
                                                 <Calendar className="w-4 h-4 text-gray-400" />
                                                 <div className="flex flex-col">
                                                     <span className="text-gray-900 font-medium capitalize">
-                                                        {format(parseISO(record.date), 'EEEE, d MMMM', { locale: es })}
+                                                        {/* Force display of Entry Date if available, else use Bucket Date */}
+                                                        {record.entryTime
+                                                            ? format(parseISO(record.entryTime), 'EEEE, d MMMM', { locale: es })
+                                                            : format(parseISO(record.date), 'EEEE, d MMMM', { locale: es })
+                                                        }
                                                     </span>
-                                                    <span className="text-xs text-gray-400">{format(parseISO(record.date), 'yyyy')}</span>
+                                                    <span className="text-xs text-gray-400">
+                                                        {record.entryTime
+                                                            ? format(parseISO(record.entryTime), 'yyyy')
+                                                            : format(parseISO(record.date), 'yyyy')
+                                                        }
+                                                    </span>
                                                 </div>
                                             </div>
                                         </td>
