@@ -54,7 +54,60 @@ export default function PayrollDetailPage() {
         try {
             const res = await fetch(`/api/payroll/${employeeId}?date=${date}&period=${period}`);
             const json = await res.json();
-            if (res.ok) setData(json);
+
+            // CLIENT-SIDE ALIGNMENT FIX (Payroll Report):
+            // Re-map records based on Local Browser Timezone of Entry Time.
+            // This ensures "20 Ene 05:00" appears in row "20 Ene".
+
+            if (res.ok) {
+                const yearNum = parseInt(date.split('-')[0]);
+                const monthNum = parseInt(date.split('-')[1]) - 1; // 0-indexed
+                const daysInMonth = new Date(yearNum, monthNum + 1, 0).getDate();
+
+                const rawRecords: DailyRecord[] = json.dailyRecords;
+                const remappedRecords: DailyRecord[] = [];
+
+                // Helper to find existing record for a day
+                const findMatch = (d: number) => {
+                    return rawRecords.find(r => {
+                        let checkDate: Date;
+                        if (r.attendance && r.attendance.entry) {
+                            checkDate = parseISO(r.attendance.entry);
+                        } else if (r.date) {
+                            checkDate = parseISO(r.date);
+                        } else {
+                            return false;
+                        }
+
+                        return checkDate.getDate() === d &&
+                            checkDate.getMonth() === monthNum &&
+                            checkDate.getFullYear() === yearNum;
+                    });
+                };
+
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dayDate = new Date(yearNum, monthNum, d);
+                    const match = findMatch(d);
+
+                    if (match) {
+                        remappedRecords.push({
+                            ...match,
+                            date: dayDate.toISOString() // Sync row date
+                        });
+                    } else {
+                        // Empty Row
+                        remappedRecords.push({
+                            date: dayDate.toISOString(),
+                            status: 'MISSING',
+                            attendance: null,
+                            absence: null,
+                            hours: null
+                        });
+                    }
+                }
+
+                setData({ ...json, dailyRecords: remappedRecords });
+            }
         } catch (error) {
             console.error(error);
         } finally {
