@@ -95,16 +95,50 @@ export async function GET(
         // MERGE WITH FULL DAYS
         // ---------------------------------------------------------
 
+        // ---------------------------------------------------------
+        // MERGE WITH FULL DAYS (Visual Alignment Fix)
+        // ---------------------------------------------------------
+
+        // Helper: Get "Colombia Date String" (YYYY-MM-DD) from a UTC Date
+        const getColombiaDateStr = (date: Date) => {
+            // Shift UTC to -5
+            const colombiaTime = subHours(date, 5);
+            return format(colombiaTime, 'yyyy-MM-dd');
+        };
+
+        // Pre-process attendances to find their "Visual Date"
+        // Priority: EntryTime > Date Bucket
+        const mappedRecords = attendances.reduce((acc, att) => {
+            let sortDate = new Date(att.date);
+            if (att.entryTime) {
+                sortDate = new Date(att.entryTime);
+            } else {
+                // If only date bucket exists, shift it. 
+                // Our new buckets are Noon UTC, so -5h stays same day.
+                // Old buckets are Midnight UTC, so -5h becomes prev day.
+                // If we want to support old buckets appearing on the "Next" day (correct day)?
+                // Old Bucket: 00:00 UTC = 7PM Prev Day. 
+                // If it has NO entry time, safe to assume it belongs to the day it claims to be?
+                // Actually, if it has no entry time, it's just a placeholder. 
+                // Let's stick to simple shift.
+            }
+
+            const key = getColombiaDateStr(sortDate);
+            acc[key] = att;
+            return acc;
+        }, {} as Record<string, typeof attendances[0]>);
+
+
         const allDays = eachDayOfInterval({ start, end });
         const history = allDays.map(day => {
-            // Find record for this day
-            // Note: Attendance date is strict YYYY-MM-DDT00:00:00 usually.
-            // But we use isSameDay to be safe.
-            const record = attendances.find(a => isSameDay(a.date, day));
+            // 'day' is loop variable (e.g. 2026-01-01 00:00:00 Local/UTC)
+            const dayKey = format(day, 'yyyy-MM-dd');
+
+            const record = mappedRecords[dayKey];
 
             return {
                 date: day.toISOString(),
-                recordId: record?.id || null, // null means missing record
+                recordId: record?.id || null,
                 entryTime: record?.entryTime || null,
                 exitTime: record?.exitTime || null,
                 status: (record?.entryTime && record?.exitTime) ? 'Completo' : 'Incompleto'
