@@ -62,7 +62,49 @@ export default function EmployeeHistoryPage() {
             const res = await fetch(`/api/employees/${employeeId}/attendance?month=${month}&year=${year}`);
             if (!res.ok) throw new Error('Failed to fetch');
             const json = await res.json();
-            setData(json);
+
+            // CLIENT-SIDE ALIGNMENT FIX:
+            // The server might map records using UTC-5, but the browser displays them in Local Time.
+            // We re-map the records strictly based on the Local Date of the Entry Time.
+
+            const rawHistory: HistoryRecord[] = json.history;
+            const validRecords = rawHistory.filter(r => r.recordId); // Records that actually exist
+
+            // Generate Client-Side Days (1-31)
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const remappedHistory: HistoryRecord[] = [];
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dayDate = new Date(year, month, d);
+
+                // Find a record that belongs to this day (visually)
+                const match = validRecords.find(r => {
+                    // Priority: Entry Time (Visual Truth) > Date Bucket
+                    const checkDate = r.entryTime ? parseISO(r.entryTime) : parseISO(r.date);
+                    // Compare simply by YYYY-MM-DD in local time
+                    return checkDate.getDate() === d &&
+                        checkDate.getMonth() === month &&
+                        checkDate.getFullYear() === year;
+                });
+
+                if (match) {
+                    remappedHistory.push({
+                        ...match,
+                        date: dayDate.toISOString() // Ensure row date matches the loop
+                    });
+                } else {
+                    // Empty Row
+                    remappedHistory.push({
+                        date: dayDate.toISOString(),
+                        recordId: null,
+                        entryTime: null,
+                        exitTime: null,
+                        status: 'Incompleto'
+                    });
+                }
+            }
+
+            setData({ ...json, history: remappedHistory });
         } catch (error) {
             console.error(error);
             toast.error('Error al cargar historial');
