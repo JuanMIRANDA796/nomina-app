@@ -191,17 +191,12 @@ export default function EmployeeHistoryPage() {
                                                 <Calendar className="w-4 h-4 text-gray-400" />
                                                 <div className="flex flex-col">
                                                     <span className="text-gray-900 font-medium capitalize">
-                                                        {/* Force display of Entry Date if available, else use Bucket Date */}
-                                                        {record.entryTime
-                                                            ? format(parseISO(record.entryTime), 'EEEE, d MMMM', { locale: es })
-                                                            : format(parseISO(record.date), 'EEEE, d MMMM', { locale: es })
-                                                        }
+                                                        {/* Strict Date Listing: Always show the bucket date (e.g. 19th) so the row exists.
+                                                            The API handles moving the right record into this bucket if needed. */}
+                                                        {format(parseISO(record.date), 'EEEE, d MMMM', { locale: es })}
                                                     </span>
                                                     <span className="text-xs text-gray-400">
-                                                        {record.entryTime
-                                                            ? format(parseISO(record.entryTime), 'yyyy')
-                                                            : format(parseISO(record.date), 'yyyy')
-                                                        }
+                                                        {format(parseISO(record.date), 'yyyy')}
                                                     </span>
                                                 </div>
                                             </div>
