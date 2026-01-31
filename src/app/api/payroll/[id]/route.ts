@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { startOfMonth, endOfMonth, parseISO, eachDayOfInterval, format, isSameDay, getISOWeek, startOfWeek, isBefore } from 'date-fns';
+import { startOfMonth, endOfMonth, parseISO, eachDayOfInterval, format, isSameDay, getISOWeek, startOfWeek, isBefore, subHours } from 'date-fns';
 import { calculateShiftHours, ShiftResult, isHoliday } from '@/lib/payroll';
 import { calculatePayroll } from '@/lib/payroll_engine';
 import { getAbsencePercentage } from '@/lib/absence_config';
@@ -79,10 +79,20 @@ export async function GET(
         let workedDaysInWeek = 0;
         let currentWeek = getISOWeek(fetchStart);
 
+        // Pre-process attendances to find their "Visual Date" (Colombia Local)
+        // This ensures a record with Entry Jan 30 maps to row Jan 30 even if DB bucket is Jan 29.
+        const mappedRecords = employee.attendances.reduce((acc, att) => {
+            const dateToUse = att.entryTime ? new Date(att.entryTime) : new Date(att.date);
+            const colombiaTime = subHours(dateToUse, 5);
+            const key = format(colombiaTime, 'yyyy-MM-dd');
+            acc[key] = att;
+            return acc;
+        }, {} as Record<string, typeof employee.attendances[0]>);
+
         for (const day of allDays) {
             const dateStr = format(day, 'yyyy-MM-dd');
-            const att = employee.attendances.find(a => isSameDay(a.date, day));
-            const abs = employee.absences.find(a => isSameDay(a.date, day));
+            const att = mappedRecords[dateStr];
+            const abs = employee.absences.find(a => format(new Date(a.date), 'yyyy-MM-dd') === dateStr);
 
             // Check Week Change for Dominical Logic
             const dayWeek = getISOWeek(day);

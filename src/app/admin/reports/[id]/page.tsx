@@ -178,10 +178,16 @@ export default function PayrollDetailPage() {
                                         <tr key={day.date} className="hover:bg-gray-50/50">
                                             <td className="p-4 whitespace-nowrap">
                                                 <div className="font-medium text-gray-900 capitalize">
-                                                    {format(parseISO(day.date), 'dd MMM', { locale: es })}
+                                                    {day.attendance?.entry
+                                                        ? format(parseISO(day.attendance.entry), 'dd MMM', { locale: es })
+                                                        : format(parseISO(day.date), 'dd MMM', { locale: es })
+                                                    }
                                                 </div>
                                                 <div className="text-xs text-gray-500 capitalize">
-                                                    {format(parseISO(day.date), 'EEEE', { locale: es })}
+                                                    {day.attendance?.entry
+                                                        ? format(parseISO(day.attendance.entry), 'EEEE', { locale: es })
+                                                        : format(parseISO(day.date), 'EEEE', { locale: es })
+                                                    }
                                                 </div>
                                             </td>
                                             <td className="p-4 whitespace-nowrap">
