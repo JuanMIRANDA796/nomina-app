@@ -156,10 +156,10 @@ export default function PayrollDetailPage() {
         { key: 'HN', label: 'Hora Nocturna (HN)', percent: '+35%' },
         { key: 'HED', label: 'Horas extra diurnas (HED)', percent: '+25%' },
         { key: 'HEN', label: 'Horas extra nocturnas (HEN)', percent: '+75%' },
-        { key: 'HDD', label: 'Dominicales y festivos (HDD)', percent: '+75%' },
-        { key: 'HND', label: 'Dominicales y festivos Noct (HND)', percent: '+110%' },
-        { key: 'HEDD', label: 'Dominicales y festivos Extras (HEDD)', percent: '+100%' },
-        { key: 'HEND', label: 'Dominicales y festivos Extras noct. (HEND)', percent: '+150%' },
+        { key: 'HDD', label: 'Dominicales y festivos (HDD)', percent: '+80%' }, // 1.80
+        { key: 'HND', label: 'Dominicales y festivos Noct (HND)', percent: '+115%' }, // 2.15
+        { key: 'HEDD', label: 'Dominicales y festivos Extras (HEDD)', percent: '+105%' }, // 2.05
+        { key: 'HEND', label: 'Dominicales y festivos Extras noct. (HEND)', percent: '+155%' }, // 2.55
     ];
 
     return (

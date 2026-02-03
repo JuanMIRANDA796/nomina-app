@@ -20,12 +20,12 @@ export const RISK_RATES = {
 export const RATES = {
     HD: 1.0,
     HN: 1.35,
-    HDD: 1.75,
-    HND: 2.10,
+    HDD: 1.80,  // Updated from 1.75
+    HND: 2.15,  // Updated from 2.10
     HED: 1.25,
     HEN: 1.75,
-    HEDD: 2.00,
-    HEND: 2.50
+    HEDD: 2.05, // Updated from 2.00
+    HEND: 2.55  // Updated from 2.50
 };
 
 export interface PayrollResult {
@@ -111,7 +111,7 @@ export function calculatePayroll(
     const AUX_THRESHOLD = 3501810; // User specified
 
     // 1. Calculate Earnings per Hour Type
-    const hourlyRate = salary / 240;
+    const hourlyRate = salary / 220; // Updated divisor from 240 to 220 as per 2026 law
 
     const earningsBreakdown = {
         HD: hours.HD * hourlyRate * 1.00,
