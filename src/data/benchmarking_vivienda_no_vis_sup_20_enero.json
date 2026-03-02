@@ -1,0 +1,26 @@
+[
+    {
+        "entity": "5 entidades",
+        "disbursements_num": 154,
+        "amount": 34320,
+        "tpp": 13.23
+    },
+    {
+        "entity": "Banco de Bogotá",
+        "disbursements_num": 74,
+        "amount": 15699,
+        "tpp": 13.53
+    },
+    {
+        "entity": "Itaú",
+        "disbursements_num": 61,
+        "amount": 14755,
+        "tpp": 13.24
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 0,
+        "amount": 0,
+        "tpp": 0.00
+    }
+]

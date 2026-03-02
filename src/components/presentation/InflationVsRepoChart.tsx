@@ -21,18 +21,37 @@ export default function InflationVsRepoChart() {
     const data = globalData.inflationRepo;
     const [isEditing, setIsEditing] = useState(false);
 
+    // Calculate derived data with difference
+    const chartData = data.map((item: any) => ({
+        ...item,
+        difference: (item.repo || 0) - (item.inflation || 0)
+    }));
+
     // Formatting helper
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return `${date.getMonth() + 1}/${date.getFullYear()}`;
     };
 
-    const handleUpdate = (index: number, field: 'inflation' | 'repo', value: string) => {
+    const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
-        newData[index] = {
-            ...newData[index],
-            [field]: parseFloat(value) || 0
-        };
+        if (field === 'date') {
+            newData[index] = { ...newData[index], date: value };
+        } else {
+            newData[index] = { ...newData[index], [field]: parseFloat(value) || 0 };
+        }
+        updateSection('inflationRepo', newData);
+    };
+
+    const handleAddRow = () => {
+        const last = data[data.length - 1];
+        const newRow = { date: '', inflation: last?.inflation ?? 0, repo: last?.repo ?? 0 };
+        updateSection('inflationRepo', [...data, newRow]);
+    };
+
+    const handleDeleteRow = (idx: number) => {
+        if (data.length <= 1) return;
+        const newData = data.filter((_: any, i: number) => i !== idx);
         updateSection('inflationRepo', newData);
     };
 
@@ -53,7 +72,7 @@ export default function InflationVsRepoChart() {
 
             <div className="flex-1 w-full min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
+                    <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
                         <XAxis
                             dataKey="date"
@@ -86,6 +105,16 @@ export default function InflationVsRepoChart() {
                                                         <span className="text-white font-medium">{Number(item.value).toFixed(2)}%</span>
                                                     </div>
                                                 ))}
+                                            {/* Add difference to tooltip even if not in payload context strictly as a Line */}
+                                            {payload && payload[0] && (
+                                                <div className="flex justify-between items-center gap-4 text-sm mt-2 pt-2 border-t border-white/10">
+                                                    <span className="text-pink-400 font-bold">Diferencia :</span>
+                                                    <span className="text-pink-400 font-bold">
+                                                        {(Number(payload.find(p => p.dataKey === 'repo')?.value || 0) -
+                                                            Number(payload.find(p => p.dataKey === 'inflation')?.value || 0)).toFixed(2)}%
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
                                     );
                                 }
@@ -112,6 +141,17 @@ export default function InflationVsRepoChart() {
                             strokeWidth={3}
                             dot={false}
                             activeDot={{ r: 6 }}
+                        />
+
+                        <Line
+                            type="monotone"
+                            dataKey="difference"
+                            name="Diferencia (Repo - Inf)"
+                            stroke="#E91E63"
+                            strokeWidth={2}
+                            strokeDasharray="5 5"
+                            dot={false}
+                            activeDot={{ r: 4 }}
                         />
 
                     </LineChart>
@@ -143,16 +183,26 @@ export default function InflationVsRepoChart() {
                             <table className="w-full text-sm text-left text-slate-400">
                                 <thead className="text-xs uppercase bg-slate-800 text-slate-200 sticky top-0">
                                     <tr>
-                                        <th className="px-6 py-3">Fecha</th>
-                                        <th className="px-6 py-3">Inflación (%)</th>
-                                        <th className="px-6 py-3">Tasa Repo (%)</th>
+                                        <th className="px-4 py-3">Fecha (AAAA-MM-DD)</th>
+                                        <th className="px-4 py-3">Inflación (%)</th>
+                                        <th className="px-4 py-3">Tasa Repo (%)</th>
+                                        <th className="px-4 py-3 text-pink-500">Diferencia (%)</th>
+                                        <th className="px-4 py-3 text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {data.map((row: any, index: number) => (
                                         <tr key={index} className="border-b border-slate-800 hover:bg-slate-800/50">
-                                            <td className="px-6 py-4">{row.date}</td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-4 py-2">
+                                                <input
+                                                    type="text"
+                                                    value={row.date ?? ''}
+                                                    onChange={(e) => handleUpdate(index, 'date', e.target.value)}
+                                                    className="bg-transparent border border-slate-700 rounded px-2 py-1 w-32 focus:border-pink-500 outline-none text-pink-400 font-bold"
+                                                    placeholder="2026-02-01"
+                                                />
+                                            </td>
+                                            <td className="px-4 py-2">
                                                 <input
                                                     type="number"
                                                     value={row.inflation ?? ''}
@@ -161,7 +211,7 @@ export default function InflationVsRepoChart() {
                                                     step="0.01"
                                                 />
                                             </td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-4 py-2">
                                                 <input
                                                     type="number"
                                                     value={row.repo ?? ''}
@@ -170,10 +220,28 @@ export default function InflationVsRepoChart() {
                                                     step="0.01"
                                                 />
                                             </td>
+                                            <td className="px-4 py-2">
+                                                <div className="px-2 py-1 w-24 text-pink-500 font-bold bg-pink-500/5 rounded border border-pink-500/20">
+                                                    {((row.repo || 0) - (row.inflation || 0)).toFixed(2)}%
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-2 text-center">
+                                                <button
+                                                    onClick={() => handleDeleteRow(index)}
+                                                    className="w-7 h-7 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold transition-all text-sm"
+                                                    title="Eliminar fila"
+                                                >×</button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            <button
+                                onClick={handleAddRow}
+                                className="mt-3 w-full py-2 border border-dashed border-white/20 hover:border-pink-500/50 hover:bg-pink-500/5 rounded-xl text-slate-400 hover:text-pink-400 text-sm font-medium transition-all"
+                            >
+                                + Agregar fila
+                            </button>
                         </div>
 
                         <div className="mt-6 flex justify-end">

@@ -31,6 +31,9 @@ import EarlyCancellationsChart from '@/components/presentation/EarlyCancellation
 import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabilitiesBalanceChart';
 import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
+import CDATProposalMainTable from '@/components/presentation/CDATProposalMainTable';
+import CDATRateMatrixTable from '@/components/presentation/CDATRateMatrixTable';
+import CDATSocialComparisonSlide from '@/components/presentation/CDATSocialComparisonSlide';
 
 export default function PresentationPage() {
     const { resetData, isLoading } = usePresentation();
@@ -67,10 +70,10 @@ export default function PresentationPage() {
                         className="mt-8 text-center"
                     >
                         <h2 className="text-2xl md:text-3xl font-light tracking-widest text-white/90 uppercase">
-                            Comité de Precios
+                            Comité de precios enero 2026
                         </h2>
                         <p className="text-xl text-white/80 mt-2 font-medium">
-                            Diciembre 2025
+                            Enero 2026
                         </p>
                     </motion.div>
                 </motion.div>
@@ -163,6 +166,25 @@ export default function PresentationPage() {
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
                     <BenchmarkingCDATsTable />
+                </motion.div>
+            </section>
+
+            {/* NEW PROPOSAL SLIDES */}
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
+                    <CDATProposalMainTable />
+                </motion.div>
+            </section>
+
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
+                    <CDATRateMatrixTable />
+                </motion.div>
+            </section>
+
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-full py-12">
+                    <CDATSocialComparisonSlide />
                 </motion.div>
             </section>
 

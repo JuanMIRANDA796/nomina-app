@@ -17,17 +17,26 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingViviendaNoVisSup20Chart() {
     const { data: globalData, updateSection } = usePresentation();
-    const data = globalData.benchmarkingViviendaNoVisSup20;
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero'>('diciembre');
     const [isEditing, setIsEditing] = useState(false);
+
+    const data = selectedMonth === 'diciembre'
+        ? globalData.benchmarkingViviendaNoVisSup20
+        : globalData.benchmarkingViviendaNoVisSup20Enero;
+
+    const sectionKey = selectedMonth === 'diciembre' ? 'benchmarkingViviendaNoVisSup20' : 'benchmarkingViviendaNoVisSup20Enero';
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
-        newData[index] = {
-            ...newData[index],
-            [field]: value === '' ? null : parseFloat(value)
-        };
-        updateSection('benchmarkingViviendaNoVisSup20', newData);
+        newData[index] = { ...newData[index], [field]: value === '' ? null : parseFloat(value) };
+        updateSection(sectionKey as any, newData);
     };
+
+    const totals = data[0];
+    const presente = data.find((d: any) => d.entity === 'PRESENTE');
+    const presenteTpp = presente?.tpp ?? null;
+    const presenteMonto = presente?.amount ?? 0;
+    const diff = (totals?.tpp != null && presenteTpp != null) ? (totals.tpp - presenteTpp) : null;
 
     return (
         <div className="w-full h-[580px] p-6 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-sm shadow-2xl flex flex-col relative">
@@ -35,17 +44,26 @@ export default function BenchmarkingViviendaNoVisSup20Chart() {
             <div className="flex justify-between items-start mb-4">
                 <div>
                     <h3 className="text-2xl font-bold text-white">
-                        Benchmarking - Compra de vivienda NO VIS pesos
+                        Benchmarking - Compra de vivienda NO VIS pesos <span className="text-cyan-400">{selectedMonth === 'diciembre' ? 'Diciembre' : 'Enero'}</span>
                     </h3>
                     <p className="text-cyan-600 font-semibold text-lg">Superior a 20 años</p>
                 </div>
-                <div className="flex gap-4 items-center">
-                    <button
-                        onClick={() => setIsEditing(true)}
-                        className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-colors text-sm font-medium shadow-lg"
-                    >
-                        Editar Datos
-                    </button>
+                <div className="flex gap-3 items-center">
+                    <div className="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden">
+                        <button onClick={() => setSelectedMonth('diciembre')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'diciembre' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}>Dic</button>
+                        <button onClick={() => setSelectedMonth('enero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'enero' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}>Ene</button>
+                    </div>
+                    <div className="bg-cyan-500/10 px-4 py-3 rounded-xl border border-cyan-500/20 text-center min-w-[120px]">
+                        <p className="text-[10px] text-slate-400 uppercase font-bold mb-1">Presente</p>
+                        <p className="text-xl font-bold text-cyan-400 leading-none">{presenteTpp != null ? `${presenteTpp.toFixed(2).replace('.', ',')}%` : '-'} <span className="text-sm font-normal text-slate-400">ea</span></p>
+                        {diff !== null && (
+                            <p className={`text-[10px] font-bold mt-1 ${diff >= 0 ? 'text-emerald-400/80' : 'text-pink-400/80'}`}>
+                                {diff >= 0 ? '↑' : '↓'} {Math.abs(diff).toFixed(2).replace('.', ',')}% vs Prom.
+                            </p>
+                        )}
+                        <p className="text-[10px] text-cyan-500/60 font-medium mt-1">${presenteMonto.toLocaleString()}</p>
+                    </div>
+                    <button onClick={() => setIsEditing(true)} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-colors text-sm font-medium shadow-lg">Editar Datos</button>
                 </div>
             </div>
 
@@ -53,19 +71,19 @@ export default function BenchmarkingViviendaNoVisSup20Chart() {
                 <div className="w-48 flex flex-col justify-center gap-6 border-r border-white/10 pr-6">
                     <div>
                         <p className="text-xs text-slate-400 uppercase font-bold mb-1">Entidades</p>
-                        <p className="text-2xl font-bold text-sky-400">5</p>
+                        <p className="text-2xl font-bold text-sky-400">{totals?.entity?.split(' ')[0] ?? '-'}</p>
                     </div>
                     <div>
                         <p className="text-xs text-slate-400 uppercase font-bold mb-1">Monto Total</p>
-                        <p className="text-2xl font-bold text-orange-400">$5,84 mil M</p>
+                        <p className="text-2xl font-bold text-orange-400">${totals?.amount != null ? (totals.amount / 1000).toFixed(2) : '-'} mil M</p>
                     </div>
                     <div>
                         <p className="text-xs text-slate-400 uppercase font-bold mb-1">Desembolsos</p>
-                        <p className="text-2xl font-bold text-slate-200">17</p>
+                        <p className="text-2xl font-bold text-slate-200">{totals?.disbursements_num?.toLocaleString() ?? '-'}</p>
                     </div>
                     <div>
                         <p className="text-xs text-slate-400 uppercase font-bold mb-1">Tasa Prom. EA</p>
-                        <p className="text-2xl font-bold text-emerald-400">12,37%</p>
+                        <p className="text-2xl font-bold text-emerald-400">{totals?.tpp != null ? `${totals.tpp.toFixed(2).replace('.', ',')}%` : '-'}</p>
                     </div>
                 </div>
 

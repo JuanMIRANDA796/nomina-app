@@ -1,16 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 
-export default function BenchmarkingCDATsTable() {
+export default function CDATProposalMainTable() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero'>('diciembre');
     const [isEditing, setIsEditing] = useState(false);
 
-    const data = selectedMonth === 'diciembre' ? globalData.benchmarkingCDATs : globalData.benchmarkingCDATsEnero;
-    const sectionKey = selectedMonth === 'diciembre' ? 'benchmarkingCDATs' : 'benchmarkingCDATsEnero';
+    const data = globalData.cdatProposalMain;
 
     const handleUpdate = (groupIdx: number, entIdx: number, field: string, value: string) => {
         const newData = { ...data };
@@ -18,10 +16,10 @@ export default function BenchmarkingCDATsTable() {
         newData.groups[groupIdx] = { ...data.groups[groupIdx] };
         newData.groups[groupIdx].entities = [...data.groups[groupIdx].entities];
 
-        const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value);
+        const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value.replace(',', '.'));
         (newData.groups[groupIdx].entities[entIdx] as any)[field] = val;
 
-        updateSection(sectionKey as any, newData);
+        updateSection('cdatProposalMain', newData);
     };
 
     const columns = [
@@ -35,31 +33,20 @@ export default function BenchmarkingCDATsTable() {
 
     return (
         <div className="w-full h-full flex flex-col p-4 bg-slate-950/50 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
-            <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-4">
+            <div className="flex justify-between items-start mb-4">
+                <div className="flex flex-col">
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-indigo-400 bg-clip-text text-transparent">
-                        Benchmarking CDATs <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : 'Enero'}</span>
+                        {data.title}
                     </h3>
-                    <p className="text-slate-400 text-sm font-medium">Tasas de cartelera al {selectedMonth === 'diciembre' ? '10/12/2025' : '10/01/2026'}</p>
+                    <p className="text-slate-400 text-sm font-medium mt-1">{data.subtitle}</p>
                 </div>
                 <div className="flex gap-4 items-center">
-                    <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner">
-                        <button
-                            onClick={() => setSelectedMonth('diciembre')}
-                            className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'diciembre' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
-                        >
-                            Diciembre
-                        </button>
-                        <button
-                            onClick={() => setSelectedMonth('enero')}
-                            className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'enero' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
-                        >
-                            Enero
-                        </button>
+                    <div className="px-3 py-1 bg-pink-500/10 border border-pink-500/20 rounded-full">
+                        <span className="text-pink-400 text-xs font-bold uppercase tracking-tighter">Propuesta de Tasas</span>
                     </div>
                     <button
                         onClick={() => setIsEditing(!isEditing)}
-                        className={`px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${isEditing ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10'}`}
+                        className={`px-6 py-1.5 rounded-xl text-xs font-bold transition-all duration-300 ${isEditing ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10'}`}
                     >
                         {isEditing ? '✓ Finalizar' : '✎ Editar'}
                     </button>
@@ -92,7 +79,7 @@ export default function BenchmarkingCDATsTable() {
                                         </td>
                                         {columns.map(col => (
                                             <React.Fragment key={col.key}>
-                                                <td className="p-0 border border-white/10">
+                                                <td className="p-0 border border-white/10 text-center relative">
                                                     {isEditing ? (
                                                         <input
                                                             className="w-full h-full bg-white/10 text-center text-white border-none focus:ring-1 focus:ring-pink-500 outline-none p-1"
@@ -100,12 +87,12 @@ export default function BenchmarkingCDATsTable() {
                                                             onChange={(e) => handleUpdate(gIdx, eIdx, col.key, e.target.value)}
                                                         />
                                                     ) : (
-                                                        <div className={`text-center py-1 font-bold ${(row as any)[col.key] != null ? 'text-white' : 'text-slate-600'}`}>
+                                                        <div className={`py-1 font-bold ${(row as any)[col.key] != null ? 'text-white' : 'text-slate-600'}`}>
                                                             {(row as any)[col.key] != null ? `${Number((row as any)[col.key]).toFixed(2)}%` : '-'}
                                                         </div>
                                                     )}
                                                 </td>
-                                                <td className="p-0 border border-white/10 bg-black/20">
+                                                <td className="p-0 border border-white/10 bg-black/20 text-center relative">
                                                     {isEditing ? (
                                                         <input
                                                             className="w-full h-full bg-white/5 text-center text-slate-400 border-none focus:ring-1 focus:ring-pink-500 outline-none p-1"
@@ -113,7 +100,7 @@ export default function BenchmarkingCDATsTable() {
                                                             onChange={(e) => handleUpdate(gIdx, eIdx, col.pk, e.target.value)}
                                                         />
                                                     ) : (
-                                                        <div className="text-center py-1 text-slate-500 font-medium">
+                                                        <div className="py-1 text-slate-500 font-medium">
                                                             {(row as any)[col.pk] ?? ''}
                                                         </div>
                                                     )}
@@ -128,9 +115,8 @@ export default function BenchmarkingCDATsTable() {
                 </table>
             </div>
 
-            <div className="mt-4 flex flex-col gap-1 text-[10px] text-slate-500">
-                <p>* Tasas efectivas anuales (E.A.) para montos inferiores a $50.000.000</p>
-                <p>* Los espacios en blanco es porque la entidad no tiene tasa vigente para ese plazo.</p>
+            <div className="mt-4 flex flex-col gap-1 text-[10px] text-slate-500 italic">
+                <p>* Tasas propuestas para alcanzar el liderazgo en plazos superiores a un año.</p>
             </div>
         </div>
     );

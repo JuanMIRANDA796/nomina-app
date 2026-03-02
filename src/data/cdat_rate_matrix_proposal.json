@@ -1,0 +1,147 @@
+{
+    "at_maturity": {
+        "title": "CDATs pago intereses al vencimiento",
+        "rows": [
+            {
+                "plazo": "1 - 2 meses",
+                "dias": "30-59",
+                "monto": "$100.000-$19.999.999",
+                "vigente": 7.08,
+                "propuesta": 7.08
+            },
+            {
+                "plazo": "1 - 2 meses",
+                "dias": "30-59",
+                "monto": "$20.000.000-$49.999.999",
+                "vigente": 7.33,
+                "propuesta": 7.33
+            },
+            {
+                "plazo": "1 - 2 meses",
+                "dias": "30-59",
+                "monto": "$50.000.000-$69.999.999",
+                "vigente": 7.58,
+                "propuesta": 7.58
+            },
+            {
+                "plazo": "1 - 2 meses",
+                "dias": "30-59",
+                "monto": "$70.000.000-$99.999.999",
+                "vigente": 7.83,
+                "propuesta": 7.83
+            },
+            {
+                "plazo": "1 - 2 meses",
+                "dias": "30-59",
+                "monto": "$100.000.000-$999.999.999",
+                "vigente": 8.08,
+                "propuesta": 8.08
+            },
+            {
+                "plazo": "2 - 3 meses",
+                "dias": "60 - 89",
+                "monto": "$100.000-$999.999.999",
+                "vigente": 8.33,
+                "propuesta": 8.33
+            },
+            {
+                "plazo": "3 - 6 meses",
+                "dias": "90 - 179",
+                "monto": "$100.000-$999.999.999",
+                "vigente": 10.33,
+                "propuesta": 10.33
+            },
+            {
+                "plazo": "6 - 8 meses",
+                "dias": "180 - 239",
+                "monto": "$100.000-$999.999.999",
+                "vigente": 10.53,
+                "propuesta": 10.53
+            },
+            {
+                "plazo": "8 - 12 meses",
+                "dias": "240 - 359",
+                "monto": "$100.000-$999.999.999",
+                "vigente": 9.48,
+                "propuesta": 9.48
+            },
+            {
+                "plazo": "12 - 18 meses",
+                "dias": "360 - 539",
+                "monto": "$100.000-$999.999.999",
+                "vigente": 10.13,
+                "propuesta": 10.60
+            },
+            {
+                "plazo": "18 - 42 meses",
+                "dias": "540 - 1260",
+                "monto": "$100.000-$999.999.999",
+                "vigente": 9.63,
+                "propuesta": 11.50
+            }
+        ]
+    },
+    "monthly_income": {
+        "title": "CDATs Renta Mensual",
+        "groups": [
+            {
+                "plazo": "360 - 539 días / 12 - 18 Meses",
+                "rows": [
+                    {
+                        "desde": "$20.000.000",
+                        "hasta": "$49.999.999",
+                        "vigente": 9.98,
+                        "propuesta": 10.45
+                    },
+                    {
+                        "desde": "$50.000.000",
+                        "hasta": "$69.999.999",
+                        "vigente": 10.03,
+                        "propuesta": 10.50
+                    },
+                    {
+                        "desde": "$70.000.000",
+                        "hasta": "$99.999.999",
+                        "vigente": 10.08,
+                        "propuesta": 10.55
+                    },
+                    {
+                        "desde": "$100.000.000",
+                        "hasta": "En Adelante",
+                        "vigente": 10.13,
+                        "propuesta": 10.60
+                    }
+                ]
+            },
+            {
+                "plazo": "540 - 1260 días / 18 - 42 Meses",
+                "rows": [
+                    {
+                        "desde": "$20.000.000",
+                        "hasta": "$49.999.999",
+                        "vigente": 9.48,
+                        "propuesta": 11.35
+                    },
+                    {
+                        "desde": "$50.000.000",
+                        "hasta": "$69.999.999",
+                        "vigente": 9.53,
+                        "propuesta": 11.40
+                    },
+                    {
+                        "desde": "$70.000.000",
+                        "hasta": "$99.999.999",
+                        "vigente": 9.58,
+                        "propuesta": 11.45
+                    },
+                    {
+                        "desde": "$100.000.000",
+                        "hasta": "En Adelante",
+                        "vigente": 9.63,
+                        "propuesta": 11.50
+                    }
+                ]
+            }
+        ]
+    }
+}

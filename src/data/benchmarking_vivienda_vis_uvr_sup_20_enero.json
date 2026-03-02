@@ -1,0 +1,32 @@
+[
+    {
+        "entity": "8 entidades",
+        "disbursements_num": 2958,
+        "amount": 342110,
+        "tpp": 11.16
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 1003,
+        "amount": 108608,
+        "tpp": 12.12
+    },
+    {
+        "entity": "Fondo Nacional del Ahorro",
+        "disbursements_num": 748,
+        "amount": 91224,
+        "tpp": 9.04
+    },
+    {
+        "entity": "Banco Davivienda",
+        "disbursements_num": 783,
+        "amount": 89317,
+        "tpp": 12.20
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 0,
+        "amount": 0,
+        "tpp": 0.00
+    }
+]

@@ -16,7 +16,7 @@ const analysisPoints = [
     },
     {
         title: "Inflación",
-        phrase: "Inflación baja al 5% reactiva capacidad de ahorro.",
+        phrase: "Inflación 8%",
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.307a.515.515 0 0 0 .799-.037l7.03-10.33" />
@@ -26,7 +26,7 @@ const analysisPoints = [
     },
     {
         title: "Tasas BanRep",
-        phrase: "Tasa BanRep al 9,25% presiona márgenes de colocación.",
+        phrase: "Tasa BanRep al 10,25% presiona márgenes de colocación.",
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
@@ -36,7 +36,7 @@ const analysisPoints = [
     },
     {
         title: "Mercado Laboral",
-        phrase: "Desempleo histórico del 7% reduce riesgo de crédito.",
+        phrase: "Desempleo histórico del 8% reduce riesgo de crédito.",
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.721 7.5 7.5 0 0 1-10.118 0 3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.926-9.418a3.976 3.976 0 0 0 5.18 0m5.18 0a3.976 3.976 0 0 1-5.18 0m5.18 0c.652.684 1.055 1.614 1.055 2.636 0 2.193-1.782 3.973-4 3.973s-4-1.78-4-3.973c0-1.022.403-1.952 1.055-2.636" />
@@ -99,7 +99,7 @@ export default function MacroeconomicAnalysisSlide() {
                                     {point.title}
                                 </h4>
 
-                                <p className="text-sm md:text-base font-medium text-slate-200 leading-snug balance">
+                                <p className="text-base md:text-xl font-bold text-slate-100 leading-tight balance">
                                     {point.phrase}
                                 </p>
                             </div>
@@ -115,7 +115,7 @@ export default function MacroeconomicAnalysisSlide() {
                 >
                     <img src="/logo-presente.png" alt="Presente" className="h-8 object-contain grayscale invert" />
                     <div className="h-6 w-px bg-white/20"></div>
-                    <p className="text-white font-medium tracking-widest text-xs uppercase">Comité de Precios 2025</p>
+                    <p className="text-white font-medium tracking-widest text-xs uppercase">Comité de Precios 2026</p>
                 </motion.div>
             </div>
         </div>

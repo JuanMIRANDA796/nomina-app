@@ -22,11 +22,23 @@ export default function EarlyCancellationsChart() {
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
-        newData[index] = {
-            ...newData[index],
-            [field]: value === '' ? 0 : parseFloat(value)
-        };
+        if (field === 'month') {
+            newData[index] = { ...newData[index], month: value };
+        } else {
+            newData[index] = { ...newData[index], [field]: value === '' ? 0 : parseFloat(value) };
+        }
         updateSection('earlyCancellations', newData);
+    };
+
+    const handleAddRow = () => {
+        const last = data[data.length - 1];
+        const newRow = { month: '', cdat_val: last?.cdat_val ?? 0, cdat_per: last?.cdat_per ?? 0, ahorro_val: last?.ahorro_val ?? 0, ahorro_per: last?.ahorro_per ?? 0 };
+        updateSection('earlyCancellations', [...data, newRow]);
+    };
+
+    const handleDeleteRow = (idx: number) => {
+        if (data.length <= 1) return;
+        updateSection('earlyCancellations', data.filter((_: any, i: number) => i !== idx));
     };
 
     return (
@@ -189,50 +201,29 @@ export default function EarlyCancellationsChart() {
                                         <th className="px-4 py-3 border-b border-white/10 text-sky-400">CDATs (%)</th>
                                         <th className="px-4 py-3 border-b border-white/10 text-purple-400">Ahorro ($)</th>
                                         <th className="px-4 py-3 border-b border-white/10 text-red-400">Ahorro (%)</th>
+                                        <th className="px-4 py-3 border-b border-white/10 text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
                                     {data.map((row: any, index: number) => (
                                         <tr key={index} className="hover:bg-white/5 transition-colors">
-                                            <td className="px-4 py-2 font-bold text-slate-200">{row.month}</td>
                                             <td className="px-4 py-2">
-                                                <input
-                                                    type="number"
-                                                    value={row.cdat_val ?? ''}
-                                                    onChange={(e) => handleUpdate(index, 'cdat_val', e.target.value)}
-                                                    className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-24 outline-none text-white focus:border-green-500"
-                                                />
+                                                <input type="text" value={row.month ?? ''} onChange={(e) => handleUpdate(index, 'month', e.target.value)} className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-20 outline-none text-pink-400 font-bold focus:ring-1 focus:ring-pink-500" placeholder="ene-26" />
                                             </td>
-                                            <td className="px-4 py-2">
-                                                <input
-                                                    type="number"
-                                                    step="0.1"
-                                                    value={row.cdat_per ?? ''}
-                                                    onChange={(e) => handleUpdate(index, 'cdat_per', e.target.value)}
-                                                    className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-24 outline-none text-white focus:border-sky-500"
-                                                />
-                                            </td>
-                                            <td className="px-4 py-2">
-                                                <input
-                                                    type="number"
-                                                    value={row.ahorro_val ?? ''}
-                                                    onChange={(e) => handleUpdate(index, 'ahorro_val', e.target.value)}
-                                                    className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-24 outline-none text-white focus:border-purple-500"
-                                                />
-                                            </td>
-                                            <td className="px-4 py-2">
-                                                <input
-                                                    type="number"
-                                                    step="0.1"
-                                                    value={row.ahorro_per ?? ''}
-                                                    onChange={(e) => handleUpdate(index, 'ahorro_per', e.target.value)}
-                                                    className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-24 outline-none text-white focus:border-red-500"
-                                                />
+                                            <td className="px-4 py-2"><input type="number" value={row.cdat_val ?? ''} onChange={(e) => handleUpdate(index, 'cdat_val', e.target.value)} className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-24 outline-none text-white focus:border-green-500" /></td>
+                                            <td className="px-4 py-2"><input type="number" step="0.1" value={row.cdat_per ?? ''} onChange={(e) => handleUpdate(index, 'cdat_per', e.target.value)} className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-24 outline-none text-white focus:border-sky-500" /></td>
+                                            <td className="px-4 py-2"><input type="number" value={row.ahorro_val ?? ''} onChange={(e) => handleUpdate(index, 'ahorro_val', e.target.value)} className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-24 outline-none text-white focus:border-purple-500" /></td>
+                                            <td className="px-4 py-2"><input type="number" step="0.1" value={row.ahorro_per ?? ''} onChange={(e) => handleUpdate(index, 'ahorro_per', e.target.value)} className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-24 outline-none text-white focus:border-red-500" /></td>
+                                            <td className="px-4 py-2 text-center">
+                                                <button onClick={() => handleDeleteRow(index)} className="w-7 h-7 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold transition-all text-sm" title="Eliminar fila">×</button>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            <button onClick={handleAddRow} className="mt-3 w-full py-2 border border-dashed border-white/20 hover:border-pink-500/50 hover:bg-pink-500/5 rounded-xl text-slate-400 hover:text-pink-400 text-sm font-medium transition-all">
+                                + Agregar fila
+                            </button>
                         </div>
 
                         <div className="mt-8 flex justify-end">

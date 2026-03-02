@@ -22,11 +22,23 @@ export default function PortfolioBalanceByLineChart() {
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
-        newData[index] = {
-            ...newData[index],
-            [field]: value === '' ? 0 : parseFloat(value)
-        };
+        if (field === 'month') {
+            newData[index] = { ...newData[index], month: value };
+        } else {
+            newData[index] = { ...newData[index], [field]: value === '' ? 0 : parseFloat(value) };
+        }
         updateSection('portfolioBalanceByLine', newData);
+    };
+
+    const handleAddRow = () => {
+        const last = data[data.length - 1];
+        const newRow = { month: '', vivienda: last?.vivienda ?? 0, rotativos: last?.rotativos ?? 0, consumo: last?.consumo ?? 0, total: last?.total ?? 0 };
+        updateSection('portfolioBalanceByLine', [...data, newRow]);
+    };
+
+    const handleDeleteRow = (idx: number) => {
+        if (data.length <= 1) return;
+        updateSection('portfolioBalanceByLine', data.filter((_: any, i: number) => i !== idx));
     };
 
     return (
@@ -163,48 +175,29 @@ export default function PortfolioBalanceByLineChart() {
                                         <th className="px-4 py-3 text-orange-400">Rotativos</th>
                                         <th className="px-4 py-3 text-sky-400">Consumo</th>
                                         <th className="px-4 py-3 text-white">Total</th>
+                                        <th className="px-4 py-3 text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {data.map((row: any, index: number) => (
                                         <tr key={index} className="border-b border-slate-800 hover:bg-white/5">
-                                            <td className="px-4 py-2 font-medium text-white">{row.month}</td>
                                             <td className="px-4 py-2">
-                                                <input
-                                                    type="number"
-                                                    value={row.vivienda ?? ''}
-                                                    onChange={(e) => handleUpdate(index, 'vivienda', e.target.value)}
-                                                    className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-emerald-500"
-                                                />
+                                                <input type="text" value={row.month ?? ''} onChange={(e) => handleUpdate(index, 'month', e.target.value)} className="bg-transparent border border-slate-700 rounded px-2 py-1 w-20 outline-none text-pink-400 font-bold focus:border-pink-500" placeholder="ene-26" />
                                             </td>
-                                            <td className="px-4 py-2">
-                                                <input
-                                                    type="number"
-                                                    value={row.rotativos ?? ''}
-                                                    onChange={(e) => handleUpdate(index, 'rotativos', e.target.value)}
-                                                    className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-orange-500"
-                                                />
-                                            </td>
-                                            <td className="px-4 py-2">
-                                                <input
-                                                    type="number"
-                                                    value={row.consumo ?? ''}
-                                                    onChange={(e) => handleUpdate(index, 'consumo', e.target.value)}
-                                                    className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-sky-500"
-                                                />
-                                            </td>
-                                            <td className="px-4 py-2">
-                                                <input
-                                                    type="number"
-                                                    value={row.total ?? ''}
-                                                    onChange={(e) => handleUpdate(index, 'total', e.target.value)}
-                                                    className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-white"
-                                                />
+                                            <td className="px-4 py-2"><input type="number" value={row.vivienda ?? ''} onChange={(e) => handleUpdate(index, 'vivienda', e.target.value)} className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-emerald-500" /></td>
+                                            <td className="px-4 py-2"><input type="number" value={row.rotativos ?? ''} onChange={(e) => handleUpdate(index, 'rotativos', e.target.value)} className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-orange-500" /></td>
+                                            <td className="px-4 py-2"><input type="number" value={row.consumo ?? ''} onChange={(e) => handleUpdate(index, 'consumo', e.target.value)} className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-sky-500" /></td>
+                                            <td className="px-4 py-2"><input type="number" value={row.total ?? ''} onChange={(e) => handleUpdate(index, 'total', e.target.value)} className="bg-transparent border border-slate-700 rounded px-2 py-1 w-24 outline-none text-white focus:border-white" /></td>
+                                            <td className="px-4 py-2 text-center">
+                                                <button onClick={() => handleDeleteRow(index)} className="w-7 h-7 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold transition-all text-sm" title="Eliminar fila">×</button>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            <button onClick={handleAddRow} className="mt-3 w-full py-2 border border-dashed border-white/20 hover:border-pink-500/50 hover:bg-pink-500/5 rounded-xl text-slate-400 hover:text-pink-400 text-sm font-medium transition-all">
+                                + Agregar fila
+                            </button>
                         </div>
 
                         <div className="mt-6 flex justify-end">

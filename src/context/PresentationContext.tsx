@@ -16,6 +16,20 @@ import benchmarkingConsumo3To6Default from '@/data/benchmarking_consumo_3_to_6.j
 import benchmarkingConsumo6To12Default from '@/data/benchmarking_consumo_6_to_12.json';
 import benchmarkingConsumo12To25Default from '@/data/benchmarking_consumo_12_to_25.json';
 import benchmarkingConsumoTodosDefault from '@/data/benchmarking_consumo_todos.json';
+import benchmarkingConsumoHasta1EneroDefault from '@/data/benchmarking_consumo_hasta_1_enero.json';
+import benchmarkingConsumo1To3EneroDefault from '@/data/benchmarking_consumo_1_to_3_enero.json';
+import benchmarkingConsumo3To6EneroDefault from '@/data/benchmarking_consumo_3_to_6_enero.json';
+import benchmarkingConsumo6To12EneroDefault from '@/data/benchmarking_consumo_6_to_12_enero.json';
+import benchmarkingConsumo12To25EneroDefault from '@/data/benchmarking_consumo_12_to_25_enero.json';
+import benchmarkingConsumoTodosEneroDefault from '@/data/benchmarking_consumo_todos_enero.json';
+import benchmarkingViviendaVisHasta20EneroDefault from '@/data/benchmarking_vivienda_vis_hasta_20_enero.json';
+import benchmarkingViviendaVisSup20EneroDefault from '@/data/benchmarking_vivienda_vis_sup_20_enero.json';
+import benchmarkingViviendaNoVisHasta20EneroDefault from '@/data/benchmarking_vivienda_no_vis_hasta_20_enero.json';
+import benchmarkingViviendaNoVisSup20EneroDefault from '@/data/benchmarking_vivienda_no_vis_sup_20_enero.json';
+import benchmarkingViviendaVisUvrHasta20EneroDefault from '@/data/benchmarking_vivienda_vis_uvr_hasta_20_enero.json';
+import benchmarkingViviendaVisUvrSup20EneroDefault from '@/data/benchmarking_vivienda_vis_uvr_sup_20_enero.json';
+import benchmarkingViviendaNoVisUvrHasta20EneroDefault from '@/data/benchmarking_vivienda_no_vis_uvr_hasta_20_enero.json';
+import benchmarkingViviendaNoVisUvrSup20EneroDefault from '@/data/benchmarking_vivienda_no_vis_uvr_sup_20_enero.json';
 import benchmarkingViviendaVisHasta20Default from '@/data/benchmarking_vivienda_vis_hasta_20.json';
 import benchmarkingViviendaVisSup20Default from '@/data/benchmarking_vivienda_vis_sup_20.json';
 import benchmarkingViviendaNoVisHasta20Default from '@/data/benchmarking_vivienda_no_vis_hasta_20.json';
@@ -25,12 +39,16 @@ import benchmarkingViviendaVisUvrSup20Default from '@/data/benchmarking_vivienda
 import benchmarkingViviendaNoVisUvrHasta20Default from '@/data/benchmarking_vivienda_no_vis_uvr_hasta_20.json';
 import benchmarkingViviendaNoVisUvrSup20Default from '@/data/benchmarking_vivienda_no_vis_uvr_sup_20.json';
 import benchmarkingCreditsDefault from '@/data/benchmarking_credits.json';
+import benchmarkingCreditsEneroDefault from '@/data/benchmarking_credits_enero.json';
+import benchmarkingCDATsEneroDefault from '@/data/benchmarking_cdats_enero.json';
 import totalLiabilitiesBalanceDefault from '@/data/total_liabilities_balance.json';
 import earlyCancellationsDefault from '@/data/early_cancellations.json';
 import tppCaptacionSaldosDefault from '@/data/tpp_captacion_saldos.json';
 import benchmarkingCDATsDefault from '@/data/benchmarking_cdats.json';
 import rateProposalDefault from '@/data/rate_proposal.json';
 import fsgProposalDefault from '@/data/fsg_proposal.json';
+import cdatProposalMainDefault from '@/data/cdat_proposal_benchmarking.json';
+import cdatRateMatrixProposalDefault from '@/data/cdat_rate_matrix_proposal.json';
 
 const ALL_DEFAULTS = {
     referenceRates: referenceRatesDefault,
@@ -45,6 +63,20 @@ const ALL_DEFAULTS = {
     benchmarkingConsumo6To12: benchmarkingConsumo6To12Default,
     benchmarkingConsumo12To25: benchmarkingConsumo12To25Default,
     benchmarkingConsumoTodos: benchmarkingConsumoTodosDefault,
+    benchmarkingConsumoHasta1Enero: benchmarkingConsumoHasta1EneroDefault,
+    benchmarkingConsumo1To3Enero: benchmarkingConsumo1To3EneroDefault,
+    benchmarkingConsumo3To6Enero: benchmarkingConsumo3To6EneroDefault,
+    benchmarkingConsumo6To12Enero: benchmarkingConsumo6To12EneroDefault,
+    benchmarkingConsumo12To25Enero: benchmarkingConsumo12To25EneroDefault,
+    benchmarkingConsumoTodosEnero: benchmarkingConsumoTodosEneroDefault,
+    benchmarkingViviendaVisHasta20Enero: benchmarkingViviendaVisHasta20EneroDefault,
+    benchmarkingViviendaVisSup20Enero: benchmarkingViviendaVisSup20EneroDefault,
+    benchmarkingViviendaNoVisHasta20Enero: benchmarkingViviendaNoVisHasta20EneroDefault,
+    benchmarkingViviendaNoVisSup20Enero: benchmarkingViviendaNoVisSup20EneroDefault,
+    benchmarkingViviendaVisUvrHasta20Enero: benchmarkingViviendaVisUvrHasta20EneroDefault,
+    benchmarkingViviendaVisUvrSup20Enero: benchmarkingViviendaVisUvrSup20EneroDefault,
+    benchmarkingViviendaNoVisUvrHasta20Enero: benchmarkingViviendaNoVisUvrHasta20EneroDefault,
+    benchmarkingViviendaNoVisUvrSup20Enero: benchmarkingViviendaNoVisUvrSup20EneroDefault,
     benchmarkingViviendaVisHasta20: benchmarkingViviendaVisHasta20Default,
     benchmarkingViviendaVisSup20: benchmarkingViviendaVisSup20Default,
     benchmarkingViviendaNoVisHasta20: benchmarkingViviendaNoVisHasta20Default,
@@ -54,12 +86,16 @@ const ALL_DEFAULTS = {
     benchmarkingViviendaNoVisUvrHasta20: benchmarkingViviendaNoVisUvrHasta20Default,
     benchmarkingViviendaNoVisUvrSup20: benchmarkingViviendaNoVisUvrSup20Default,
     benchmarkingCredits: benchmarkingCreditsDefault,
+    benchmarkingCreditsEnero: benchmarkingCreditsEneroDefault,
     totalLiabilitiesBalance: totalLiabilitiesBalanceDefault,
     earlyCancellations: earlyCancellationsDefault,
     tppCaptacionSaldos: tppCaptacionSaldosDefault,
     benchmarkingCDATs: benchmarkingCDATsDefault,
+    benchmarkingCDATsEnero: benchmarkingCDATsEneroDefault,
     rateProposal: rateProposalDefault,
     fsgProposal: fsgProposalDefault,
+    cdatProposalMain: cdatProposalMainDefault,
+    cdatRateMatrixProposal: cdatRateMatrixProposalDefault,
 };
 
 type PresentationData = typeof ALL_DEFAULTS;

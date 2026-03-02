@@ -22,11 +22,23 @@ export default function TPPCaptacionSaldosChart() {
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
-        newData[index] = {
-            ...newData[index],
-            [field]: value === '' ? null : parseFloat(value)
-        };
+        if (field === 'month') {
+            newData[index] = { ...newData[index], month: value };
+        } else {
+            newData[index] = { ...newData[index], [field]: value === '' ? null : parseFloat(value) };
+        }
         updateSection('tppCaptacionSaldos', newData);
+    };
+
+    const handleAddRow = () => {
+        const last = data[data.length - 1];
+        const newRow = { month: '', saldo_cdat: last?.saldo_cdat ?? 0, saldo_cap: last?.saldo_cap ?? 0, tpp_cdat: last?.tpp_cdat ?? null, tpp_cap: last?.tpp_cap ?? null };
+        updateSection('tppCaptacionSaldos', [...data, newRow]);
+    };
+
+    const handleDeleteRow = (idx: number) => {
+        if (data.length <= 1) return;
+        updateSection('tppCaptacionSaldos', data.filter((_: any, i: number) => i !== idx));
     };
 
     return (
@@ -191,28 +203,30 @@ export default function TPPCaptacionSaldosChart() {
                                         <th className="px-4 py-3 border-b border-white/10 text-orange-400">Saldo Captación</th>
                                         <th className="px-4 py-3 border-b border-white/10 text-green-400">TPP CDAT (%)</th>
                                         <th className="px-4 py-3 border-b border-white/10 text-sky-400">Total TPP (%)</th>
+                                        <th className="px-4 py-3 border-b border-white/10 text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
                                     {data.map((row: any, index: number) => (
                                         <tr key={index} className="hover:bg-white/5 transition-colors">
-                                            <td className="px-4 py-2 font-bold text-slate-200">{row.month}</td>
+                                            <td className="px-4 py-2">
+                                                <input type="text" value={row.month ?? ''} onChange={(e) => handleUpdate(index, 'month', e.target.value)} className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-20 outline-none text-pink-400 font-bold focus:ring-1 focus:ring-pink-500" placeholder="ene-26" />
+                                            </td>
                                             {['saldo_cdat', 'saldo_cap', 'tpp_cdat', 'tpp_cap'].map(field => (
                                                 <td key={field} className="px-4 py-2">
-                                                    <input
-                                                        type="number"
-                                                        step={field.includes('tpp') ? "0.01" : "1"}
-                                                        value={row[field] ?? ''}
-                                                        onChange={(e) => handleUpdate(index, field, e.target.value)}
-                                                        className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-28 outline-none text-white focus:ring-1 focus:ring-pink-500"
-                                                        placeholder={field.includes('tpp') ? "0.00" : "0"}
-                                                    />
+                                                    <input type="number" step={field.includes('tpp') ? "0.01" : "1"} value={row[field] ?? ''} onChange={(e) => handleUpdate(index, field, e.target.value)} className="bg-slate-800 border border-white/10 rounded px-2 py-1 w-28 outline-none text-white focus:ring-1 focus:ring-pink-500" placeholder={field.includes('tpp') ? "0.00" : "0"} />
                                                 </td>
                                             ))}
+                                            <td className="px-4 py-2 text-center">
+                                                <button onClick={() => handleDeleteRow(index)} className="w-7 h-7 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold transition-all text-sm" title="Eliminar fila">×</button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            <button onClick={handleAddRow} className="mt-3 w-full py-2 border border-dashed border-white/20 hover:border-pink-500/50 hover:bg-pink-500/5 rounded-xl text-slate-400 hover:text-pink-400 text-sm font-medium transition-all">
+                                + Agregar fila
+                            </button>
                         </div>
 
                         <div className="mt-8 flex justify-end">

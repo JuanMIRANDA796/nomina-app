@@ -1,0 +1,32 @@
+[
+    {
+        "entity": "6 entidades",
+        "disbursements_num": 634,
+        "amount": 75890,
+        "tpp": 12.53
+    },
+    {
+        "entity": "Banco de Bogotá",
+        "disbursements_num": 470,
+        "amount": 55995,
+        "tpp": 12.99
+    },
+    {
+        "entity": "BBVA Colombia",
+        "disbursements_num": 119,
+        "amount": 14462,
+        "tpp": 11.12
+    },
+    {
+        "entity": "Banco Davibank",
+        "disbursements_num": 27,
+        "amount": 3639,
+        "tpp": 11.61
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 0,
+        "amount": 0,
+        "tpp": 0.00
+    }
+]

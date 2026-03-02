@@ -13,22 +13,9 @@ import {
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const initialData = [
-    { month: 'Nov-24', ibr: 9.59, repo: 9.75, dtf: 9.27, ipc: 5.20 },
-    { month: 'Dic-24', ibr: 9.51, repo: 9.50, dtf: 9.22, ipc: 5.20 },
-    { month: 'Ene-25', ibr: 9.36, repo: 9.50, dtf: 9.22, ipc: 5.22 },
-    { month: 'Feb-25', ibr: 9.46, repo: 9.50, dtf: 9.41, ipc: 5.28 },
-    { month: 'Mar-25', ibr: 9.42, repo: 9.50, dtf: 9.15, ipc: 5.09 },
-    { month: 'Abr-25', ibr: 9.26, repo: 9.25, dtf: 9.12, ipc: 5.16 },
-    { month: 'May-25', ibr: 9.23, repo: 9.25, dtf: 8.92, ipc: 5.05 },
-    { month: 'Jun-25', ibr: 9.25, repo: 9.25, dtf: 8.96, ipc: 4.82 },
-    { month: 'Jul-25', ibr: 9.25, repo: 9.25, dtf: 8.92, ipc: 4.90 },
-    { month: 'Ago-25', ibr: 9.25, repo: 9.25, dtf: 8.82, ipc: 5.10 },
-    { month: 'Sep-25', ibr: 9.26, repo: 9.25, dtf: 8.76, ipc: 5.18 },
-    { month: 'Oct-25', ibr: 9.25, repo: 9.25, dtf: 8.65, ipc: 5.51 },
-    { month: 'Nov-25', ibr: 9.17, repo: 9.25, dtf: 8.65, ipc: 5.30 },
-    { month: 'Dic-25', ibr: 9.41, repo: 9.25, dtf: 9.00, ipc: 5.10 },
-];
+import referenceRatesData from '@/data/reference_rates.json';
+
+const initialData = referenceRatesData;
 
 import { usePresentation } from '@/context/PresentationContext';
 
@@ -43,6 +30,18 @@ export default function ReferenceRatesChart() {
             ...newData[index],
             [field]: parseFloat(value) || 0
         };
+        updateSection('referenceRates', newData);
+    };
+
+    const handleAddRow = () => {
+        const last = data[data.length - 1];
+        const newRow = { month: '', ibr: last?.ibr ?? 0, repo: last?.repo ?? 0, dtf: last?.dtf ?? 0, ipc: last?.ipc ?? 0 };
+        updateSection('referenceRates', [...data, newRow]);
+    };
+
+    const handleDeleteRow = (idx: number) => {
+        if (data.length <= 1) return;
+        const newData = data.filter((_: any, i: number) => i !== idx);
         updateSection('referenceRates', newData);
     };
 
@@ -135,12 +134,21 @@ export default function ReferenceRatesChart() {
                                         <th className="p-3 border-b border-white/10 text-center">REPO</th>
                                         <th className="p-3 border-b border-white/10 text-center">IPC</th>
                                         <th className="p-3 border-b border-white/10 text-center">DTF</th>
+                                        <th className="p-3 border-b border-white/10 text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {data.map((row: any, idx: number) => (
                                         <tr key={idx} className="hover:bg-white/5 transition-colors">
-                                            <td className="p-3 border-b border-white/5 font-bold text-pink-500">{row.month}</td>
+                                            <td className="p-2 border-b border-white/5">
+                                                <input
+                                                    type="text"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-center font-bold text-pink-400 focus:ring-1 focus:ring-pink-500 outline-none"
+                                                    value={row.month ?? ''}
+                                                    onChange={(e) => handleUpdate(idx, 'month', e.target.value)}
+                                                    placeholder="Ej: Feb-26"
+                                                />
+                                            </td>
                                             {['ibr', 'repo', 'ipc', 'dtf'].map(field => (
                                                 <td key={field} className="p-2 border-b border-white/5">
                                                     <input
@@ -152,10 +160,23 @@ export default function ReferenceRatesChart() {
                                                     />
                                                 </td>
                                             ))}
+                                            <td className="p-2 border-b border-white/5 text-center">
+                                                <button
+                                                    onClick={() => handleDeleteRow(idx)}
+                                                    className="w-7 h-7 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold transition-all text-sm"
+                                                    title="Eliminar fila"
+                                                >×</button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            <button
+                                onClick={handleAddRow}
+                                className="mt-3 w-full py-2 border border-dashed border-white/20 hover:border-pink-500/50 hover:bg-pink-500/5 rounded-xl text-slate-400 hover:text-pink-400 text-sm font-medium transition-all"
+                            >
+                                + Agregar fila
+                            </button>
                         </div>
                     </motion.div>
                 )}

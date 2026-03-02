@@ -31,6 +31,9 @@ import EarlyCancellationsChart from '@/components/presentation/EarlyCancellation
 import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabilitiesBalanceChart';
 import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
+import CDATProposalMainTable from '@/components/presentation/CDATProposalMainTable';
+import CDATRateMatrixTable from '@/components/presentation/CDATRateMatrixTable';
+import CDATSocialComparisonSlide from '@/components/presentation/CDATSocialComparisonSlide';
 
 export default function PresentationContent() {
     const { resetData, isLoading } = usePresentation();
@@ -41,149 +44,89 @@ export default function PresentationContent() {
         </div>
     );
 
+    const slides = [
+        // COVER
+        { id: 'cover', isCover: true },
+
+        // MACRO & TRENDS
+        { id: 'macro-analysis', component: <MacroeconomicAnalysisSlide /> },
+        { id: 'ref-rates', component: <ReferenceRatesChart /> },
+        { id: 'inflation-repo', component: <InflationVsRepoChart /> },
+        { id: 'portfolio-stocks', component: <PortfolioStockRatesChart /> },
+        { id: 'disbursement-rates', component: <DisbursementRatesChart /> },
+        { id: 'placement-amounts', component: <MonthlyDisbursementsChart /> },
+        { id: 'portfolio-balance', component: <PortfolioBalanceByLineChart /> },
+
+        // BENCHMARKING CONSUMO
+        { id: 'benchmarking-consumo-1', component: <BenchmarkingConsumoHasta1Chart /> },
+        { id: 'benchmarking-consumo-2', component: <BenchmarkingConsumo1To3Chart /> },
+        { id: 'benchmarking-consumo-3', component: <BenchmarkingConsumo3To6Chart /> },
+        { id: 'benchmarking-consumo-4', component: <BenchmarkingConsumo6To12Chart /> },
+        { id: 'benchmarking-consumo-5', component: <BenchmarkingConsumo12To25Chart /> },
+        { id: 'benchmarking-consumo-6', component: <BenchmarkingConsumoTodosChart /> },
+
+        // BENCHMARKING VIVIENDA PESOS
+        { id: 'benchmarking-viv-p1', component: <BenchmarkingViviendaVisHasta20Chart /> },
+        { id: 'benchmarking-viv-p2', component: <BenchmarkingViviendaVisSup20Chart /> },
+        { id: 'benchmarking-viv-p3', component: <BenchmarkingViviendaNoVisHasta20Chart /> },
+        { id: 'benchmarking-viv-p4', component: <BenchmarkingViviendaNoVisSup20Chart /> },
+
+        // BENCHMARKING VIVIENDA UVR
+        { id: 'benchmarking-viv-u1', component: <BenchmarkingViviendaVisUvrHasta20Chart /> },
+        { id: 'benchmarking-viv-u2', component: <BenchmarkingViviendaVisUvrSup20Chart /> },
+        { id: 'benchmarking-viv-u3', component: <BenchmarkingViviendaNoVisUvrHasta20Chart /> },
+        { id: 'benchmarking-viv-u4', component: <BenchmarkingViviendaNoVisUvrSup20Chart /> },
+
+        // TABLES & LIABILITIES
+        { id: 'benchmarking-credits', component: <BenchmarkingCreditsTable /> },
+        { id: 'total-liabilities', component: <TotalLiabilitiesBalanceChart /> },
+        { id: 'early-cancellations', component: <EarlyCancellationsChart /> },
+        { id: 'tpp-captacion', component: <TPPCaptacionSaldosChart /> },
+
+        // CDAT PROPOSALS (NEW INTERACTIVE)
+        { id: 'cdat-benchmarking', component: <BenchmarkingCDATsTable /> },
+        { id: 'cdat-proposal-main', component: <CDATProposalMainTable /> },
+        { id: 'cdat-rate-matrix', component: <CDATRateMatrixTable /> },
+        { id: 'cdat-social-comparison', component: <CDATSocialComparisonSlide /> },
+
+        // FINAL PROPOSALS
+        { id: 'fsg-proposal', component: <FSGProposalTable /> },
+    ];
+
     return (
         <main className="snap-y snap-mandatory h-screen w-full overflow-y-scroll bg-slate-950 text-white scroll-smooth selection:bg-pink-500 selection:text-white">
 
-            {/* COVER SLIDE */}
-            <section className="snap-start w-full h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B]">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1 }}
-                    className="relative w-full max-w-3xl flex flex-col items-center"
-                >
-                    <div className="relative w-96 h-48 md:w-[600px] md:h-[300px]">
-                        <img
-                            src="/logo-presente.png"
-                            alt="Presente Fondo de Empleados"
-                            className="object-contain w-full h-full drop-shadow-xl"
-                        />
-                    </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 0.8 }}
-                        className="mt-8 text-center"
-                    >
-                        <h2 className="text-2xl md:text-3xl font-light tracking-widest text-white/90 uppercase">
-                            Comité de Precios
-                        </h2>
-                        <p className="text-xl text-white/80 mt-2 font-medium">
-                            Diciembre 2025
-                        </p>
-                    </motion.div>
-                </motion.div>
-
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.5, duration: 1, repeat: Infinity, repeatType: "reverse" }}
-                    className="absolute bottom-12 text-white/80"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                    </svg>
-                </motion.div>
-            </section>
-
-            {/* FINANCIAL TRENDS */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <ReferenceRatesChart />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full h-full">
-                    <MacroeconomicAnalysisSlide />
-                </motion.div>
-            </section>
-
-            {[InflationVsRepoChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart, PortfolioBalanceByLineChart].map((Chart, i) => (
-                <section key={`fin-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                        <Chart />
-                    </motion.div>
+            {slides.map((slide) => (
+                <section key={slide.id} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                    {slide.isCover ? (
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] rounded-[3rem] p-8 m-4">
+                            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative w-full max-w-3xl flex flex-col items-center">
+                                <div className="relative w-96 h-48 md:w-[600px] md:h-[300px]">
+                                    <img src="/logo-presente.png" alt="Presente" className="object-contain w-full h-full drop-shadow-xl" />
+                                </div>
+                                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-8 text-center text-white">
+                                    <h2 className="text-2xl md:text-3xl font-light tracking-widest uppercase">Comité de precios enero 2026</h2>
+                                    <p className="text-xl opacity-80 mt-2 font-medium">Enero 2026</p>
+                                </motion.div>
+                            </motion.div>
+                            <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 2, repeat: Infinity }} className="absolute bottom-12">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 opacity-60">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </motion.div>
+                        </div>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6 }}
+                            className={`w-full h-full flex items-center justify-center ${slide.id.includes('table') || slide.id.includes('matrix') || slide.id.includes('proposal') ? 'max-w-[95rem]' : 'max-w-7xl'}`}
+                        >
+                            {slide.component}
+                        </motion.div>
+                    )}
                 </section>
             ))}
-
-            {/* BENCHMARKING CONSUMO */}
-            {[BenchmarkingConsumoHasta1Chart, BenchmarkingConsumo1To3Chart, BenchmarkingConsumo3To6Chart, BenchmarkingConsumo6To12Chart, BenchmarkingConsumo12To25Chart, BenchmarkingConsumoTodosChart].map((Chart, i) => (
-                <section key={`cons-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, scale: 0.98 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                        <Chart />
-                    </motion.div>
-                </section>
-            ))}
-
-            {/* BENCHMARKING VIVIENDA PESOS */}
-            {[BenchmarkingViviendaVisHasta20Chart, BenchmarkingViviendaVisSup20Chart, BenchmarkingViviendaNoVisHasta20Chart, BenchmarkingViviendaNoVisSup20Chart].map((Chart, i) => (
-                <section key={`viv-p-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                        <Chart />
-                    </motion.div>
-                </section>
-            ))}
-
-            {/* BENCHMARKING VIVIENDA UVR */}
-            {[BenchmarkingViviendaVisUvrHasta20Chart, BenchmarkingViviendaVisUvrSup20Chart, BenchmarkingViviendaNoVisUvrHasta20Chart, BenchmarkingViviendaNoVisUvrSup20Chart].map((Chart, i) => (
-                <section key={`viv-u-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, y: i % 2 === 0 ? 50 : -50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                        <Chart />
-                    </motion.div>
-                </section>
-            ))}
-
-            {/* BENCHMARKING TABLES */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                    <BenchmarkingCreditsTable />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <TotalLiabilitiesBalanceChart />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <FSGProposalTable />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <EarlyCancellationsChart />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <TPPCaptacionSaldosChart />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                    <BenchmarkingCDATsTable />
-                </motion.div>
-            </section>
-
-            {/* PROPOSALS */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                    <RateProposalTables />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
-                    <FSGProposalTable />
-                </motion.div>
-            </section>
 
             {/* FLOATING RESET BUTTON */}
             <div className="fixed bottom-8 right-8 z-[100]">
