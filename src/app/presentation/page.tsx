@@ -34,6 +34,7 @@ import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicA
 import CDATProposalMainTable from '@/components/presentation/CDATProposalMainTable';
 import CDATRateMatrixTable from '@/components/presentation/CDATRateMatrixTable';
 import CDATSocialComparisonSlide from '@/components/presentation/CDATSocialComparisonSlide';
+import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
 
 export default function PresentationPage() {
     const { resetData, isLoading } = usePresentation();
@@ -100,6 +101,12 @@ export default function PresentationPage() {
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full h-full">
                     <MacroeconomicAnalysisSlide />
+                </motion.div>
+            </section>
+
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+                    <HistoricalRatesV2Chart />
                 </motion.div>
             </section>
 

@@ -49,6 +49,7 @@ import rateProposalDefault from '@/data/rate_proposal.json';
 import fsgProposalDefault from '@/data/fsg_proposal.json';
 import cdatProposalMainDefault from '@/data/cdat_proposal_benchmarking.json';
 import cdatRateMatrixProposalDefault from '@/data/cdat_rate_matrix_proposal.json';
+import historicalRatesV2Default from '@/data/historical_rates_v2.json';
 
 const ALL_DEFAULTS = {
     referenceRates: referenceRatesDefault,
@@ -96,6 +97,7 @@ const ALL_DEFAULTS = {
     fsgProposal: fsgProposalDefault,
     cdatProposalMain: cdatProposalMainDefault,
     cdatRateMatrixProposal: cdatRateMatrixProposalDefault,
+    historicalRatesV2: historicalRatesV2Default,
 };
 
 type PresentationData = typeof ALL_DEFAULTS;
