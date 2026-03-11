@@ -75,9 +75,9 @@ export default function HistoricalRatesV2Chart() {
             <div className="flex justify-between items-center mb-6 shrink-0">
                 <div className="flex flex-col">
                     <h3 className="text-3xl font-black text-white tracking-tighter">
-                        Proyección y <span className="bg-gradient-to-r from-pink-500 to-orange-400 bg-clip-text text-transparent">Tendencia Histórica</span>
+                        Curva de Rendimiento <span className="bg-gradient-to-r from-pink-500 to-orange-400 bg-clip-text text-transparent">TES</span>
                     </h3>
-                    <p className="text-slate-400 text-xs mt-1 uppercase tracking-widest font-bold opacity-60">Análisis comparativo 2021 - 2026</p>
+                    <p className="text-slate-400 text-xs mt-1 uppercase tracking-widest font-bold opacity-60">Análisis Histórico de Tasas de Interés (2021 - 2026)</p>
                 </div>
                 <button
                     onClick={() => setIsEditing(true)}
@@ -99,6 +99,7 @@ export default function HistoricalRatesV2Chart() {
                                 axisLine={false}
                                 tickLine={false}
                                 tickFormatter={(val) => {
+                                    if (!val) return '';
                                     const d = new Date(val);
                                     return `${d.getMonth() + 1}/${d.getFullYear()}`;
                                 }}
@@ -145,7 +146,7 @@ export default function HistoricalRatesV2Chart() {
                             <Line
                                 type="monotone"
                                 dataKey="rate1"
-                                name="Inflación anual"
+                                name="TES 1 año"
                                 stroke="#0F4C81"
                                 strokeWidth={3}
                                 dot={false}
@@ -155,7 +156,7 @@ export default function HistoricalRatesV2Chart() {
                             <Line
                                 type="monotone"
                                 dataKey="rate2"
-                                name="Tasa Repo"
+                                name="TES 5 años"
                                 stroke="#F97316"
                                 strokeWidth={3}
                                 dot={false}
@@ -165,7 +166,7 @@ export default function HistoricalRatesV2Chart() {
                             <Line
                                 type="monotone"
                                 dataKey="rate3"
-                                name="Diferencia Proyectada"
+                                name="TES 10 años"
                                 stroke="#E91E63"
                                 strokeWidth={2}
                                 strokeDasharray="5 5"
@@ -188,7 +189,7 @@ export default function HistoricalRatesV2Chart() {
                         className="absolute inset-0 z-50 bg-slate-950/90 backdrop-blur-md p-6 rounded-3xl overflow-hidden flex flex-col"
                     >
                         <div className="flex justify-between items-center mb-6">
-                            <h4 className="text-xl font-bold text-white">Editor de Datos Históricos</h4>
+                            <h4 className="text-xl font-bold text-white">Editor Curva TES</h4>
                             <button
                                 onClick={() => setIsEditing(false)}
                                 className="px-6 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-pink-600/20"
@@ -202,9 +203,9 @@ export default function HistoricalRatesV2Chart() {
                                 <thead className="sticky top-0 bg-slate-900 text-slate-400 text-xs uppercase">
                                     <tr>
                                         <th className="p-3 border-b border-white/10">Fecha (AAAA-MM-DD)</th>
-                                        <th className="p-3 border-b border-white/10 text-center">Tasa 1 (%)</th>
-                                        <th className="p-3 border-b border-white/10 text-center">Tasa 2 (%)</th>
-                                        <th className="p-3 border-b border-white/10 text-center">Tasa 3 (%)</th>
+                                        <th className="p-3 border-b border-white/10 text-center">TES 1A (%)</th>
+                                        <th className="p-3 border-b border-white/10 text-center">TES 5A (%)</th>
+                                        <th className="p-3 border-b border-white/10 text-center">TES 10A (%)</th>
                                         <th className="p-3 border-b border-white/10 text-center">Acciones</th>
                                     </tr>
                                 </thead>

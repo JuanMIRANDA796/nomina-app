@@ -50,6 +50,7 @@ export default function PresentationPage() {
 
             {/* COVER SLIDE */}
             <section className="snap-start w-full h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B]">
+                {/* ... (Existing Cover Code) ... */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -91,22 +92,24 @@ export default function PresentationPage() {
                 </motion.div>
             </section>
 
-            {/* FINANCIAL TRENDS */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <ReferenceRatesChart />
-                </motion.div>
-            </section>
-
+            {/* SECOND SLIDE: MACROECONOMIC ANALYSIS */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full h-full">
                     <MacroeconomicAnalysisSlide />
                 </motion.div>
             </section>
 
+            {/* THIRD SLIDE: TES CHART */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
                     <HistoricalRatesV2Chart />
+                </motion.div>
+            </section>
+
+            {/* REFERENCE RATES */}
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+                    <ReferenceRatesChart />
                 </motion.div>
             </section>
 
