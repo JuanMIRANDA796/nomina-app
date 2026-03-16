@@ -15,6 +15,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 import RateBox from './RateBox';
+import EditableChartTitle from './EditableChartTitle';
 
 export default function BenchmarkingViviendaNoVisHasta20Chart() {
     const { data: globalData, updateSection } = usePresentation();
@@ -49,12 +50,12 @@ export default function BenchmarkingViviendaNoVisHasta20Chart() {
         <div className="w-full h-[580px] p-6 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-sm shadow-2xl flex flex-col relative">
 
             <div className="flex justify-between items-start mb-4">
-                <div>
-                    <h3 className="text-2xl font-bold text-white">
-                        Benchmarking - Compra de vivienda NO VIS pesos <span className="text-cyan-400">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}</span>
-                    </h3>
-                    <p className="text-cyan-500 font-semibold text-lg">Hasta 20 años</p>
-                </div>
+                <EditableChartTitle
+                    mainTitle="Benchmarking - Compra de vivienda NO VIS pesos"
+                    subtitle="Hasta 20 años"
+                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}
+                    subtitleColor="text-orange-500 font-semibold text-lg"
+                />
                 <div className="flex gap-3 items-center">
                     <div className="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden">
                         <button onClick={() => setSelectedMonth('diciembre')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'diciembre' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}>Dic</button>

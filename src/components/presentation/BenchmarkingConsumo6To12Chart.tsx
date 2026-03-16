@@ -15,6 +15,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 import RateBox from './RateBox';
+import EditableChartTitle from './EditableChartTitle';
 
 export default function BenchmarkingConsumo6To12Chart() {
     const { data: globalData, updateSection } = usePresentation();
@@ -48,12 +49,12 @@ export default function BenchmarkingConsumo6To12Chart() {
         <div className="w-full h-[580px] p-6 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-sm shadow-2xl flex flex-col relative">
 
             <div className="flex justify-between items-start mb-4">
-                <div>
-                    <h3 className="text-2xl font-bold text-white">
-                        Benchmarking Desembolsos - Consumo Créditos <span className="text-indigo-400">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}</span>
-                    </h3>
-                    <p className="text-indigo-500 font-semibold text-lg">De 6 a 12 smmlv</p>
-                </div>
+                <EditableChartTitle
+                    mainTitle="Benchmarking Desembolsos - Consumo Créditos"
+                    subtitle="De 6 a 12 SMLV"
+                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}
+                    subtitleColor="text-indigo-500 font-semibold text-lg"
+                />
                 <div className="flex gap-3 items-center">
                     <div className="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden">
                         <button onClick={() => setSelectedMonth('diciembre')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'diciembre' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}>Dic</button>

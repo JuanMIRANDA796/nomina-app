@@ -6,7 +6,7 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCDATsTable() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('diciembre');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('febrero');
     const [isEditing, setIsEditing] = useState(false);
 
     const data = selectedMonth === 'diciembre' 
