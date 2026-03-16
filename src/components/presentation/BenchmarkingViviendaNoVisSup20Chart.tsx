@@ -14,6 +14,7 @@ import {
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
+import RateBox from './RateBox';
 
 export default function BenchmarkingViviendaNoVisSup20Chart() {
     const { data: globalData, updateSection } = usePresentation();
@@ -53,16 +54,15 @@ export default function BenchmarkingViviendaNoVisSup20Chart() {
                         <button onClick={() => setSelectedMonth('diciembre')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'diciembre' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}>Dic</button>
                         <button onClick={() => setSelectedMonth('enero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'enero' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}>Ene</button>
                     </div>
-                    <div className="bg-cyan-500/10 px-4 py-3 rounded-xl border border-cyan-500/20 text-center min-w-[120px]">
-                        <p className="text-[10px] text-slate-400 uppercase font-bold mb-1">Presente</p>
-                        <p className="text-xl font-bold text-cyan-400 leading-none">{presenteTpp != null ? `${presenteTpp.toFixed(2).replace('.', ',')}%` : '-'} <span className="text-sm font-normal text-slate-400">ea</span></p>
-                        {diff !== null && (
-                            <p className={`text-[10px] font-bold mt-1 ${diff >= 0 ? 'text-emerald-400/80' : 'text-pink-400/80'}`}>
-                                {diff >= 0 ? '↑' : '↓'} {Math.abs(diff).toFixed(2).replace('.', ',')}% vs Prom.
-                            </p>
-                        )}
-                        <p className="text-[10px] text-cyan-500/60 font-medium mt-1">${presenteMonto.toLocaleString()}</p>
-                    </div>
+                    <RateBox 
+                        presenteTpp={presenteTpp} 
+                        totalsTpp={totals?.tpp ?? null} 
+                        extraInfo={presenteMonto ? `$ ${presenteMonto.toLocaleString()}` : undefined}
+                        onUpdate={(newValue) => {
+                            const idx = data.findIndex((d: any) => d.entity === 'PRESENTE');
+                            if (idx !== -1) handleUpdate(idx, 'tpp', newValue.toString());
+                        }}
+                    />
                     <button onClick={() => setIsEditing(true)} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-colors text-sm font-medium shadow-lg">Editar Datos</button>
                 </div>
             </div>

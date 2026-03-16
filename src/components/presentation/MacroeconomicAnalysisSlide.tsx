@@ -1,69 +1,63 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { usePresentation } from '@/context/PresentationContext';
 
-const analysisPoints = [
-    {
-        title: "Salario Mínimo",
-        phrase: "Salario a 2 millones exige captar liquidez inmediata.",
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-        ),
-        color: "from-pink-500 to-rose-600"
-    },
-    {
-        title: "Inflación",
-        phrase: "Inflación 8%",
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.307a.515.515 0 0 0 .799-.037l7.03-10.33" />
-            </svg>
-        ),
-        color: "from-emerald-500 to-teal-600"
-    },
-    {
-        title: "Tasas BanRep",
-        phrase: "Tasa BanRep al 10,25% presiona márgenes de colocación.",
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-            </svg>
-        ),
-        color: "from-orange-500 to-amber-600"
-    },
-    {
-        title: "Mercado Laboral",
-        phrase: "Desempleo histórico del 8% reduce riesgo de crédito.",
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.721 7.5 7.5 0 0 1-10.118 0 3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.926-9.418a3.976 3.976 0 0 0 5.18 0m5.18 0a3.976 3.976 0 0 1-5.18 0m5.18 0c.652.684 1.055 1.614 1.055 2.636 0 2.193-1.782 3.973-4 3.973s-4-1.78-4-3.973c0-1.022.403-1.952 1.055-2.636" />
-            </svg>
-        ),
-        color: "from-blue-500 to-indigo-600"
-    },
-    {
-        title: "Proyección",
-        phrase: "Crecimiento económico incentiva créditos de largo plazo.",
-        icon: (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.59 8.31m5.84 5.91a4.91 4.91 0 0 1-7.29 0l-.82-.82a4.91 4.91 0 0 1 0-7.29l.82-.82a4.91 4.91 0 0 1 7.29 0l.82.82Zm-4.96-.32a.75.75 0 0 1 1.06 0l2.32 2.32a.75.75 0 0 1-1.06 1.06l-2.32-2.32a.75.75 0 0 1 0-1.06ZM9 15.66v4.8M5.44 14.37v4.8" />
-            </svg>
-        ),
-        color: "from-violet-500 to-fuchsia-600"
-    }
-];
+const iconMap: Record<string, React.ReactNode> = {
+    cash: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+    ),
+    chart: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.307a.515.515 0 0 0 .799-.037l7.03-10.33" />
+        </svg>
+    ),
+    bank: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+        </svg>
+    ),
+    users: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.721 7.5 7.5 0 0 1-10.118 0 3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.926-9.418a3.976 3.976 0 0 0 5.18 0m5.18 0a3.976 3.976 0 0 1-5.18 0m5.18 0c.652.684 1.055 1.614 1.055 2.636 0 2.193-1.782 3.973-4 3.973s-4-1.78-4-3.973c0-1.022.403-1.952 1.055-2.636" />
+        </svg>
+    ),
+    rocket: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.59 8.31m5.84 5.91a4.91 4.91 0 0 1-7.29 0l-.82-.82a4.91 4.91 0 0 1 0-7.29l.82-.82a4.91 4.91 0 0 1 7.29 0l.82.82Zm-4.96-.32a.75.75 0 0 1 1.06 0l2.32 2.32a.75.75 0 0 1-1.06 1.06l-2.32-2.32a.75.75 0 0 1 0-1.06ZM9 15.66v4.8M5.44 14.37v4.8" />
+        </svg>
+    )
+};
 
 export default function MacroeconomicAnalysisSlide() {
+    const { data: globalData, updateSection } = usePresentation();
+    const [isEditing, setIsEditing] = useState(false);
+    const analysisPoints = globalData.macroAnalysis;
+
+    const handleUpdate = (index: number, field: string, value: string) => {
+        const newData = [...analysisPoints];
+        newData[index] = { ...newData[index], [field]: value };
+        updateSection('macroAnalysis', newData);
+    };
+
     return (
-        <div className="w-full h-full flex flex-col items-center p-4 md:p-8 bg-slate-950 relative overflow-hidden">
+        <div className="w-full h-full flex flex-col items-center p-4 md:p-8 bg-slate-950 relative overflow-hidden group">
             {/* Background Accents */}
             <div className="absolute top-0 left-0 w-full h-full">
                 <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-pink-600/10 blur-[120px] rounded-full"></div>
                 <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full"></div>
             </div>
+
+            {/* EDIT BUTTON */}
+            <button 
+                onClick={() => setIsEditing(true)}
+                className="absolute top-8 right-8 z-20 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-bold transition-all text-slate-300 opacity-0 group-hover:opacity-100"
+            >
+                ✎ Editar Análisis
+            </button>
 
             <div className="relative z-10 w-full max-w-6xl flex flex-col h-full justify-between py-4">
                 <motion.div
@@ -79,7 +73,7 @@ export default function MacroeconomicAnalysisSlide() {
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 flex-1 items-center content-center">
-                    {analysisPoints.map((point, index) => (
+                    {analysisPoints.map((point: any, index: number) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -92,7 +86,7 @@ export default function MacroeconomicAnalysisSlide() {
 
                             <div className="h-full bg-slate-900/40 backdrop-blur-md border border-white/10 p-4 md:p-6 rounded-3xl flex flex-col items-center text-center hover:border-pink-500/50 transition-all duration-300 shadow-2xl justify-center">
                                 <div className={`mb-4 p-3 rounded-2xl bg-gradient-to-br ${point.color} text-white shadow-lg shadow-pink-500/10 group-hover:scale-110 transition-transform duration-300`}>
-                                    {point.icon}
+                                    {iconMap[point.iconType as string] || iconMap.cash}
                                 </div>
 
                                 <h4 className="text-[10px] uppercase font-black tracking-widest text-pink-500 mb-3 px-2 py-0.5 bg-pink-500/5 rounded-full border border-pink-500/10">
@@ -115,9 +109,68 @@ export default function MacroeconomicAnalysisSlide() {
                 >
                     <img src="/logo-presente.png" alt="Presente" className="h-8 object-contain grayscale invert" />
                     <div className="h-6 w-px bg-white/20"></div>
-                    <p className="text-white font-medium tracking-widest text-xs uppercase">Comité de Precios 2026</p>
+                    <p className="text-white font-medium tracking-widest text-xs uppercase">{globalData.metadata.subtitle}</p>
                 </motion.div>
             </div>
+
+            {/* EDIT MODAL */}
+            <AnimatePresence>
+                {isEditing && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[120] bg-slate-900/98 backdrop-blur-2xl flex items-center justify-center p-8"
+                    >
+                        <div className="bg-slate-800 border border-white/10 rounded-[2rem] p-8 w-full max-w-4xl shadow-2xl max-h-[90vh] flex flex-col">
+                            <h3 className="text-2xl font-bold mb-6 flex justify-between items-center">
+                                Editar Análisis Macroeconómico
+                                <button onClick={() => setIsEditing(false)} className="text-slate-400 hover:text-white transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </h3>
+                            
+                            <div className="flex-1 overflow-auto space-y-6 pr-4 custom-scrollbar">
+                                {analysisPoints.map((point: any, idx: number) => (
+                                    <div key={idx} className="bg-slate-900/50 p-6 rounded-2xl border border-white/5 space-y-4">
+                                        <div className="flex items-center gap-4 border-b border-white/5 pb-4">
+                                            <div className={`p-2 rounded-lg bg-gradient-to-br ${point.color}`}>
+                                                {iconMap[point.iconType as string] || iconMap.cash}
+                                            </div>
+                                            <input 
+                                                className="bg-transparent text-xl font-black text-white outline-none focus:text-pink-400 transition-colors w-full"
+                                                value={point.title}
+                                                onChange={(e) => handleUpdate(idx, 'title', e.target.value)}
+                                                placeholder="Título del punto..."
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] uppercase font-bold text-slate-500 mb-1 block">Frase Principal</label>
+                                            <textarea 
+                                                className="w-full bg-slate-950/50 border border-white/5 rounded-xl p-4 text-slate-200 outline-none focus:border-pink-500/50 min-h-[80px] resize-none"
+                                                value={point.phrase}
+                                                onChange={(e) => handleUpdate(idx, 'phrase', e.target.value)}
+                                                placeholder="Escribe la frase de análisis..."
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="mt-8 flex justify-end">
+                                <button 
+                                    onClick={() => setIsEditing(false)}
+                                    className="px-12 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black shadow-xl shadow-emerald-900/20 transition-all hover:scale-105"
+                                >
+                                    FINALIZAR Y GUARDAR
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

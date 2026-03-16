@@ -51,6 +51,44 @@ import cdatProposalMainDefault from '@/data/cdat_proposal_benchmarking.json';
 import cdatRateMatrixProposalDefault from '@/data/cdat_rate_matrix_proposal.json';
 import historicalRatesV2Default from '@/data/historical_rates_v2.json';
 
+const metadataDefault = {
+    title: 'COMITÉ DE PRECIOS ENERO 2026',
+    subtitle: 'Enero 2026'
+};
+
+const macroAnalysisDefault = [
+    {
+        title: "Salario Mínimo",
+        phrase: "Salario a 2 millones exige captar liquidez inmediata.",
+        iconType: "cash",
+        color: "from-pink-500 to-rose-600"
+    },
+    {
+        title: "Inflación",
+        phrase: "Inflación 8%",
+        iconType: "chart",
+        color: "from-emerald-500 to-teal-600"
+    },
+    {
+        title: "Tasas BanRep",
+        phrase: "Tasa BanRep al 10,25% presiona márgenes de colocación.",
+        iconType: "bank",
+        color: "from-orange-500 to-amber-600"
+    },
+    {
+        title: "Mercado Laboral",
+        phrase: "Desempleo histórico del 8% reduce riesgo de crédito.",
+        iconType: "users",
+        color: "from-blue-500 to-indigo-600"
+    },
+    {
+        title: "Proyección",
+        phrase: "Crecimiento económico incentiva créditos de largo plazo.",
+        iconType: "rocket",
+        color: "from-violet-500 to-fuchsia-600"
+    }
+];
+
 const ALL_DEFAULTS = {
     referenceRates: referenceRatesDefault,
     inflationRepo: inflationRepoDefault,
@@ -98,6 +136,8 @@ const ALL_DEFAULTS = {
     cdatProposalMain: cdatProposalMainDefault,
     cdatRateMatrixProposal: cdatRateMatrixProposalDefault,
     historicalRatesV2: historicalRatesV2Default,
+    metadata: metadataDefault,
+    macroAnalysis: macroAnalysisDefault,
 };
 
 type PresentationData = typeof ALL_DEFAULTS;

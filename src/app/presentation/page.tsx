@@ -33,11 +33,11 @@ import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldo
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
 import CDATProposalMainTable from '@/components/presentation/CDATProposalMainTable';
 import CDATRateMatrixTable from '@/components/presentation/CDATRateMatrixTable';
-import CDATSocialComparisonSlide from '@/components/presentation/CDATSocialComparisonSlide';
 import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
 
 export default function PresentationPage() {
-    const { resetData, isLoading } = usePresentation();
+    const { data, updateSection, resetData, isLoading } = usePresentation();
+    const [isEditingCover, setIsEditingCover] = useState(false);
 
     if (isLoading) return (
         <div className="w-full h-screen bg-slate-950 flex items-center justify-center">
@@ -69,16 +69,69 @@ export default function PresentationPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5, duration: 0.8 }}
-                        className="mt-8 text-center"
+                        className="mt-8 text-center relative group"
                     >
                         <h2 className="text-2xl md:text-3xl font-light tracking-widest text-white/90 uppercase">
-                            Comité de precios enero 2026
+                            {data.metadata.title}
                         </h2>
                         <p className="text-xl text-white/80 mt-2 font-medium">
-                            Enero 2026
+                            {data.metadata.subtitle}
                         </p>
+                        
+                        <button 
+                            onClick={() => setIsEditingCover(true)}
+                            className="absolute -top-4 -right-8 p-1 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                            </svg>
+                        </button>
                     </motion.div>
                 </motion.div>
+
+                {/* EDIT COVER MODAL */}
+                <AnimatePresence>
+                    {isEditingCover && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[110] bg-slate-900/95 backdrop-blur-xl flex items-center justify-center p-8"
+                        >
+                            <div className="bg-slate-800 border border-white/10 rounded-3xl p-8 w-full max-w-lg shadow-2xl">
+                                <h3 className="text-2xl font-bold mb-6">Editar Portada</h3>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Título Principal</label>
+                                        <input 
+                                            type="text" 
+                                            className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 outline-none focus:border-pink-500"
+                                            value={data.metadata.title}
+                                            onChange={(e) => updateSection('metadata', { ...data.metadata, title: e.target.value })}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Subtítulo / Fecha</label>
+                                        <input 
+                                            type="text" 
+                                            className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 outline-none focus:border-pink-500"
+                                            value={data.metadata.subtitle}
+                                            onChange={(e) => updateSection('metadata', { ...data.metadata, subtitle: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mt-8 flex justify-end">
+                                    <button 
+                                        onClick={() => setIsEditingCover(false)}
+                                        className="px-8 py-3 bg-pink-600 hover:bg-pink-700 rounded-2xl font-bold shadow-lg shadow-pink-600/20 transition-all hover:scale-105"
+                                    >
+                                        Guardar y Cerrar
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -193,8 +246,8 @@ export default function PresentationPage() {
             </section>
 
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-full py-12">
-                    <CDATSocialComparisonSlide />
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
+                    <CDATRateMatrixTable />
                 </motion.div>
             </section>
 
