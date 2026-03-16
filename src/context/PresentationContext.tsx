@@ -22,6 +22,12 @@ import benchmarkingConsumo3To6EneroDefault from '@/data/benchmarking_consumo_3_t
 import benchmarkingConsumo6To12EneroDefault from '@/data/benchmarking_consumo_6_to_12_enero.json';
 import benchmarkingConsumo12To25EneroDefault from '@/data/benchmarking_consumo_12_to_25_enero.json';
 import benchmarkingConsumoTodosEneroDefault from '@/data/benchmarking_consumo_todos_enero.json';
+import benchmarkingConsumoHasta1FebreroDefault from '@/data/benchmarking_consumo_hasta_1_febrero.json';
+import benchmarkingConsumo1To3FebreroDefault from '@/data/benchmarking_consumo_1_to_3_febrero.json';
+import benchmarkingConsumo3To6FebreroDefault from '@/data/benchmarking_consumo_3_to_6_febrero.json';
+import benchmarkingConsumo6To12FebreroDefault from '@/data/benchmarking_consumo_6_to_12_febrero.json';
+import benchmarkingConsumo12To25FebreroDefault from '@/data/benchmarking_consumo_12_to_25_febrero.json';
+import benchmarkingConsumoTodosFebreroDefault from '@/data/benchmarking_consumo_todos_febrero.json';
 import benchmarkingViviendaVisHasta20EneroDefault from '@/data/benchmarking_vivienda_vis_hasta_20_enero.json';
 import benchmarkingViviendaVisSup20EneroDefault from '@/data/benchmarking_vivienda_vis_sup_20_enero.json';
 import benchmarkingViviendaNoVisHasta20EneroDefault from '@/data/benchmarking_vivienda_no_vis_hasta_20_enero.json';
@@ -108,6 +114,12 @@ const ALL_DEFAULTS = {
     benchmarkingConsumo6To12Enero: benchmarkingConsumo6To12EneroDefault,
     benchmarkingConsumo12To25Enero: benchmarkingConsumo12To25EneroDefault,
     benchmarkingConsumoTodosEnero: benchmarkingConsumoTodosEneroDefault,
+    benchmarkingConsumoHasta1Febrero: benchmarkingConsumoHasta1FebreroDefault,
+    benchmarkingConsumo1To3Febrero: benchmarkingConsumo1To3FebreroDefault,
+    benchmarkingConsumo3To6Febrero: benchmarkingConsumo3To6FebreroDefault,
+    benchmarkingConsumo6To12Febrero: benchmarkingConsumo6To12FebreroDefault,
+    benchmarkingConsumo12To25Febrero: benchmarkingConsumo12To25FebreroDefault,
+    benchmarkingConsumoTodosFebrero: benchmarkingConsumoTodosFebreroDefault,
     benchmarkingViviendaVisHasta20Enero: benchmarkingViviendaVisHasta20EneroDefault,
     benchmarkingViviendaVisSup20Enero: benchmarkingViviendaVisSup20EneroDefault,
     benchmarkingViviendaNoVisHasta20Enero: benchmarkingViviendaNoVisHasta20EneroDefault,

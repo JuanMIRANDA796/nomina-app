@@ -18,14 +18,20 @@ import RateBox from './RateBox';
 
 export default function BenchmarkingConsumoTodosChart() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero'>('diciembre');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('diciembre');
     const [isEditing, setIsEditing] = useState(false);
 
     const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingConsumoTodos
-        : globalData.benchmarkingConsumoTodosEnero;
+        : selectedMonth === 'enero'
+            ? globalData.benchmarkingConsumoTodosEnero
+            : globalData.benchmarkingConsumoTodosFebrero;
 
-    const sectionKey = selectedMonth === 'diciembre' ? 'benchmarkingConsumoTodos' : 'benchmarkingConsumoTodosEnero';
+    const sectionKey = selectedMonth === 'diciembre' 
+        ? 'benchmarkingConsumoTodos' 
+        : selectedMonth === 'enero' 
+            ? 'benchmarkingConsumoTodosEnero' 
+            : 'benchmarkingConsumoTodosFebrero';
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
@@ -44,7 +50,7 @@ export default function BenchmarkingConsumoTodosChart() {
             <div className="flex justify-between items-start mb-4">
                 <div>
                     <h3 className="text-2xl font-bold text-white">
-                        Benchmarking Desembolsos - Consumo Créditos <span className="text-slate-200">{selectedMonth === 'diciembre' ? 'Diciembre' : 'Enero'}</span>
+                        Benchmarking Desembolsos - Consumo Créditos <span className="text-slate-200">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}</span>
                     </h3>
                     <p className="text-slate-400 font-semibold text-lg uppercase tracking-widest">Todos los montos</p>
                 </div>
@@ -52,6 +58,7 @@ export default function BenchmarkingConsumoTodosChart() {
                     <div className="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden">
                         <button onClick={() => setSelectedMonth('diciembre')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'diciembre' ? 'bg-slate-600 text-white' : 'text-slate-400 hover:text-white'}`}>Dic</button>
                         <button onClick={() => setSelectedMonth('enero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'enero' ? 'bg-slate-600 text-white' : 'text-slate-400 hover:text-white'}`}>Ene</button>
+                        <button onClick={() => setSelectedMonth('febrero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'febrero' ? 'bg-slate-600 text-white' : 'text-slate-400 hover:text-white'}`}>Feb</button>
                     </div>
                     <RateBox 
                         presenteTpp={presenteTpp} 

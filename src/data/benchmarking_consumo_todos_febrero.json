@@ -1,0 +1,62 @@
+[
+    {
+        "entity": "33 entidades",
+        "disbursements_num": 379074,
+        "amount": 4130000,
+        "tpp": 21.80
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 151098,
+        "amount": 1125892,
+        "tpp": 23.92
+    },
+    {
+        "entity": "Banco de Bogotá",
+        "disbursements_num": 50464,
+        "amount": 687073,
+        "tpp": 20.09
+    },
+    {
+        "entity": "Banco Davivienda",
+        "disbursements_num": 51376,
+        "amount": 542595,
+        "tpp": 23.10
+    },
+    {
+        "entity": "Banco Davibank",
+        "disbursements_num": 10735,
+        "amount": 324882,
+        "tpp": 20.17
+    },
+    {
+        "entity": "Scotiabank Colpatria S.A.",
+        "disbursements_num": 10736,
+        "amount": 324882,
+        "tpp": 20.17
+    },
+    {
+        "entity": "BBVA Colombia",
+        "disbursements_num": 17511,
+        "amount": 296034,
+        "tpp": 23.23
+    },
+    {
+        "entity": "Banco Falabella S.A.",
+        "disbursements_num": 24961,
+        "amount": 248637,
+        "tpp": 21.72
+    },
+    {
+        "entity": "Banco de Occidente",
+        "disbursements_num": 2877,
+        "amount": 188008,
+        "tpp": 18.58
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 782,
+        "amount": 7631,
+        "tpp": 20.50
+    }
+]

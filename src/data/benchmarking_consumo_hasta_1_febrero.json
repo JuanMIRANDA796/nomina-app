@@ -1,0 +1,38 @@
+[
+    {
+        "entity": "25 entidades",
+        "disbursements_num": 93695,
+        "amount": 66290,
+        "tpp": 41.48
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 51197,
+        "amount": 38693,
+        "tpp": 42.42
+    },
+    {
+        "entity": "Banco Davivienda",
+        "disbursements_num": 11079,
+        "amount": 11500,
+        "tpp": 52.47
+    },
+    {
+        "entity": "Banco de Bogotá",
+        "disbursements_num": 3290,
+        "amount": 3470,
+        "tpp": null
+    },
+    {
+        "entity": "Nu Colombia C.F.",
+        "disbursements_num": 5992,
+        "amount": 3442,
+        "tpp": 35.49
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 442,
+        "amount": 285,
+        "tpp": 19.01
+    }
+]
