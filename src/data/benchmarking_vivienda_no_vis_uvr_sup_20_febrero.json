@@ -1,20 +1,20 @@
 [
     {
-        "entity": "7 entidades",
-        "disbursements_num": 182,
-        "amount": 45290,
-        "tpp": 13.29
+        "entity": "4 entidades",
+        "disbursements_num": 152,
+        "amount": 42080,
+        "tpp": 13.24
     },
     {
         "entity": "Bancolombia",
-        "disbursements_num": 106,
-        "amount": 25700,
-        "tpp": 12.21
+        "disbursements_num": 90,
+        "amount": 25774,
+        "tpp": 12.19
     },
     {
         "entity": "Fondo Nacional del Ahorro",
-        "disbursements_num": 54,
-        "amount": 12661,
+        "disbursements_num": 51,
+        "amount": 13499,
         "tpp": 10.00
     },
     {

@@ -10,17 +10,17 @@
             "vehiculo_rank": 1,
             "cc_desde": 15.00,
             "cc_hasta": null,
-            "cc_rank": 3
+            "cc_rank": 2
         },
         {
             "entity": "Banco Davivienda",
-            "vis_tasa": 12.60,
+            "vis_tasa": 13.70,
             "vis_rank": 3,
-            "novis_tasa": 12.50,
+            "novis_tasa": 13.15,
             "novis_rank": 3,
-            "vehiculo_tasa": 13.89,
-            "vehiculo_rank": 2,
-            "cc_desde": 15.93,
+            "vehiculo_tasa": 16.35,
+            "vehiculo_rank": 4,
+            "cc_desde": 17.59,
             "cc_hasta": null,
             "cc_rank": 5
         },
@@ -28,37 +28,37 @@
             "entity": "Banco de Occidente",
             "vis_tasa": null,
             "vis_rank": null,
-            "novis_tasa": 14.17,
+            "novis_tasa": 14.67,
             "novis_rank": 6,
             "vehiculo_tasa": 18.08,
             "vehiculo_rank": 5,
             "cc_desde": 16.90,
-            "cc_hasta": 25.08,
-            "cc_rank": 6
+            "cc_hasta": 25.37,
+            "cc_rank": 4
         },
         {
             "entity": "Banco Caja Social S.A.",
-            "vis_tasa": 14.85,
+            "vis_tasa": 15.25,
             "vis_rank": 6,
             "novis_tasa": 16.10,
             "novis_rank": 8,
             "vehiculo_tasa": 15.66,
-            "vehiculo_rank": 3,
-            "cc_desde": 15.39,
-            "cc_hasta": null,
-            "cc_rank": 2
+            "vehiculo_rank": 2,
+            "cc_desde": 14.35,
+            "cc_hasta": 23.95,
+            "cc_rank": 1
         },
         {
             "entity": "Bancolombia",
-            "vis_tasa": 12.00,
+            "vis_tasa": 13.00,
             "vis_rank": 2,
-            "novis_tasa": 12.00,
+            "novis_tasa": 13.00,
             "novis_rank": 2,
             "vehiculo_tasa": 16.21,
-            "vehiculo_rank": 4,
-            "cc_desde": 10.37,
-            "cc_hasta": 25.21,
-            "cc_rank": 1
+            "vehiculo_rank": 3,
+            "cc_desde": 18.16,
+            "cc_hasta": 25.50,
+            "cc_rank": 6
         },
         {
             "entity": "AV Villas",
@@ -70,14 +70,14 @@
             "vehiculo_rank": null,
             "cc_desde": 15.70,
             "cc_hasta": 25.23,
-            "cc_rank": 4
+            "cc_rank": 3
         },
         {
             "entity": "Scotiabank Colpatria S.A.",
-            "vis_tasa": 12.65,
+            "vis_tasa": 14.19,
             "vis_rank": 4,
-            "novis_tasa": 12.75,
-            "novis_rank": 4,
+            "novis_tasa": 14.29,
+            "novis_rank": 5,
             "vehiculo_tasa": null,
             "vehiculo_rank": null,
             "cc_desde": null,
@@ -88,10 +88,10 @@
             "entity": "Itaú",
             "vis_tasa": null,
             "vis_rank": null,
-            "novis_tasa": 13.49,
-            "novis_rank": 5,
-            "vehiculo_tasa": 21.69,
-            "vehiculo_rank": 6,
+            "novis_tasa": 13.72,
+            "novis_rank": 4,
+            "vehiculo_tasa": null,
+            "vehiculo_rank": null,
             "cc_desde": 20.98,
             "cc_hasta": null,
             "cc_rank": 8
@@ -103,7 +103,7 @@
             "novis_tasa": 17.20,
             "novis_rank": 9,
             "vehiculo_tasa": 23.87,
-            "vehiculo_rank": 8,
+            "vehiculo_rank": 7,
             "cc_desde": 22.79,
             "cc_hasta": null,
             "cc_rank": 9
@@ -116,7 +116,7 @@
             "novis_rank": 10,
             "vehiculo_tasa": null,
             "vehiculo_rank": null,
-            "cc_desde": 25.22,
+            "cc_desde": 25.23,
             "cc_hasta": null,
             "cc_rank": 10
         }
