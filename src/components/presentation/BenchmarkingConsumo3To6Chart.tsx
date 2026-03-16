@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 import RateBox from './RateBox';
 import EditableChartTitle from './EditableChartTitle';
+import EditableStatsSidebar from './EditableStatsSidebar';
 
 export default function BenchmarkingConsumo3To6Chart() {
     const { data: globalData, updateSection } = usePresentation();
@@ -74,24 +75,7 @@ export default function BenchmarkingConsumo3To6Chart() {
             </div>
 
             <div className="flex-1 w-full min-h-0 flex gap-6">
-                <div className="w-48 flex flex-col justify-center gap-6 border-r border-white/10 pr-6">
-                    <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold mb-1">Entidades</p>
-                        <p className="text-2xl font-bold text-sky-400">{totals?.entity?.split(' ')[0] ?? '-'}</p>
-                    </div>
-                    <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold mb-1">Monto Total</p>
-                        <p className="text-2xl font-bold text-orange-400">${totals?.amount != null ? (totals.amount / 1000).toFixed(2) : '-'} mil M</p>
-                    </div>
-                    <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold mb-1">Desembolsos</p>
-                        <p className="text-2xl font-bold text-slate-200">{totals?.disbursements_num?.toLocaleString() ?? '-'}</p>
-                    </div>
-                    <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold mb-1">Tasa Prom. EA</p>
-                        <p className="text-2xl font-bold text-emerald-400">{totals?.tpp != null ? `${totals.tpp.toFixed(2).replace('.', ',')}%` : '-'}</p>
-                    </div>
-                </div>
+                <EditableStatsSidebar totals={totals} onUpdate={(field, value) => handleUpdate(0, field, value)} />
 
                 <div className="flex-1">
                     <ResponsiveContainer width="100%" height="100%">
