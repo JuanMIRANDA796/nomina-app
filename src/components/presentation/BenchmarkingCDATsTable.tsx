@@ -6,11 +6,20 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCDATsTable() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero'>('diciembre');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('diciembre');
     const [isEditing, setIsEditing] = useState(false);
 
-    const data = selectedMonth === 'diciembre' ? globalData.benchmarkingCDATs : globalData.benchmarkingCDATsEnero;
-    const sectionKey = selectedMonth === 'diciembre' ? 'benchmarkingCDATs' : 'benchmarkingCDATsEnero';
+    const data = selectedMonth === 'diciembre' 
+        ? globalData.benchmarkingCDATs 
+        : selectedMonth === 'enero'
+            ? globalData.benchmarkingCDATsEnero
+            : globalData.benchmarkingCDATsFebrero;
+
+    const sectionKey = selectedMonth === 'diciembre' 
+        ? 'benchmarkingCDATs' 
+        : selectedMonth === 'enero' 
+            ? 'benchmarkingCDATsEnero'
+            : 'benchmarkingCDATsFebrero';
 
     const handleUpdate = (groupIdx: number, entIdx: number, field: string, value: string) => {
         const newData = { ...data };
@@ -36,8 +45,9 @@ export default function BenchmarkingCDATsTable() {
     const getVariation = (groupName: string, entityName: string, key: string, currentVal: number | null) => {
         if (selectedMonth === 'diciembre' || currentVal === null) return null;
         
-        // Find previous month data (Diciembre)
-        const prevData = globalData.benchmarkingCDATs;
+        // Find previous month data
+        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCDATs : globalData.benchmarkingCDATsEnero;
+        if (!prevData) return null;
         const group = prevData.groups.find((g: any) => g.name === groupName);
         if (!group) return null;
         
@@ -55,9 +65,9 @@ export default function BenchmarkingCDATsTable() {
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-4">
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-indigo-400 bg-clip-text text-transparent">
-                        Benchmarking CDATs <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : 'Enero'}</span>
+                        Benchmarking CDATs <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}</span>
                     </h3>
-                    <p className="text-slate-400 text-sm font-medium">Tasas de cartelera al {selectedMonth === 'diciembre' ? '10/12/2025' : '10/01/2026'}</p>
+                    <p className="text-slate-400 text-sm font-medium">Tasas de cartelera al {selectedMonth === 'diciembre' ? '10/12/2025' : selectedMonth === 'enero' ? '10/01/2026' : '10/02/2026'}</p>
                 </div>
                 <div className="flex gap-4 items-center">
                     <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner">
@@ -65,13 +75,19 @@ export default function BenchmarkingCDATsTable() {
                             onClick={() => setSelectedMonth('diciembre')}
                             className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'diciembre' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
                         >
-                            Diciembre
+                            Dic
                         </button>
                         <button
                             onClick={() => setSelectedMonth('enero')}
                             className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'enero' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
                         >
-                            Enero
+                            Ene
+                        </button>
+                        <button
+                            onClick={() => setSelectedMonth('febrero')}
+                            className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'febrero' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
+                        >
+                            Feb
                         </button>
                     </div>
                     <button
@@ -98,7 +114,7 @@ export default function BenchmarkingCDATsTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.groups.map((group: any, gIdx: number) => (
+                        {(data as any).groups.map((group: any, gIdx: number) => (
                             <React.Fragment key={gIdx}>
                                 <tr className="bg-slate-900 font-bold text-white text-[10px] uppercase tracking-wider">
                                     <td colSpan={13} className="px-4 py-2 border border-white/10">{group.name}</td>

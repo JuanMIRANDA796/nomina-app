@@ -1,62 +1,62 @@
 [
-    {
-        "entity": "33 entidades",
-        "disbursements_num": 379074,
-        "amount": 4130000,
-        "tpp": 21.80
-    },
-    {
-        "entity": "Bancolombia",
-        "disbursements_num": 151098,
-        "amount": 1125892,
-        "tpp": 23.92
-    },
-    {
-        "entity": "Banco de Bogotá",
-        "disbursements_num": 50464,
-        "amount": 687073,
-        "tpp": 20.09
-    },
-    {
-        "entity": "Banco Davivienda",
-        "disbursements_num": 51376,
-        "amount": 542595,
-        "tpp": 23.10
-    },
-    {
-        "entity": "Banco Davibank",
-        "disbursements_num": 10735,
-        "amount": 324882,
-        "tpp": 20.17
-    },
-    {
-        "entity": "Scotiabank Colpatria S.A.",
-        "disbursements_num": 10736,
-        "amount": 324882,
-        "tpp": 20.17
-    },
-    {
-        "entity": "BBVA Colombia",
-        "disbursements_num": 17511,
-        "amount": 296034,
-        "tpp": 23.23
-    },
-    {
-        "entity": "Banco Falabella S.A.",
-        "disbursements_num": 24961,
-        "amount": 248637,
-        "tpp": 21.72
-    },
-    {
-        "entity": "Banco de Occidente",
-        "disbursements_num": 2877,
-        "amount": 188008,
-        "tpp": 18.58
-    },
-    {
-        "entity": "PRESENTE",
-        "disbursements_num": 782,
-        "amount": 7631,
-        "tpp": 20.50
-    }
+  {
+    "entity": "33 entidades",
+    "disbursements_num": 328641,
+    "amount": 3790000,
+    "tpp": 22.23
+  },
+  {
+    "entity": "Bancolombia",
+    "disbursements_num": 131044,
+    "amount": 1082229,
+    "tpp": 23.86
+  },
+  {
+    "entity": "Banco de Bogotá",
+    "disbursements_num": 44153,
+    "amount": 619167,
+    "tpp": 21.51
+  },
+  {
+    "entity": "Banco Davivienda",
+    "disbursements_num": 41972,
+    "amount": 451859,
+    "tpp": 23.39
+  },
+  {
+    "entity": "BBVA Colombia",
+    "disbursements_num": 14907,
+    "amount": 274034,
+    "tpp": 23.21
+  },
+  {
+    "entity": "Banco Davibank",
+    "disbursements_num": 8484,
+    "amount": 259444,
+    "tpp": 21.68
+  },
+  {
+    "entity": "Scotiabank Colpatria S.A.",
+    "disbursements_num": 8484,
+    "amount": 259444,
+    "tpp": 21.68
+  },
+  {
+    "entity": "Banco Falabella S.A.",
+    "disbursements_num": 11221,
+    "amount": 205303,
+    "tpp": 22.21
+  },
+  {
+    "entity": "Banco de Occidente",
+    "disbursements_num": 2606,
+    "amount": 160998,
+    "tpp": 19.86
+  },
+  {
+    "entity": "PRESENTE",
+    "disbursements_num": 1100,
+    "amount": 6786,
+    "tpp": 20.37
+  }
 ]

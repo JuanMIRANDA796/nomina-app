@@ -6,11 +6,20 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCreditsTable() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero'>('diciembre');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('febrero');
     const [isEditing, setIsEditing] = useState(false);
 
-    const data = selectedMonth === 'diciembre' ? globalData.benchmarkingCredits : globalData.benchmarkingCreditsEnero;
-    const sectionKey = selectedMonth === 'diciembre' ? 'benchmarkingCredits' : 'benchmarkingCreditsEnero';
+    const data = selectedMonth === 'diciembre' 
+        ? globalData.benchmarkingCredits 
+        : selectedMonth === 'enero'
+            ? globalData.benchmarkingCreditsEnero
+            : globalData.benchmarkingCreditsFebrero;
+
+    const sectionKey = selectedMonth === 'diciembre' 
+        ? 'benchmarkingCredits' 
+        : selectedMonth === 'enero' 
+            ? 'benchmarkingCreditsEnero'
+            : 'benchmarkingCreditsFebrero';
 
     const handleUpdate = (type: 'banks' | 'cooperatives', index: number, field: string, value: string) => {
         const newData = { ...data };
@@ -23,7 +32,8 @@ export default function BenchmarkingCreditsTable() {
 
     const getVariation = (type: 'banks' | 'cooperatives', entityName: string, field: string, currentVal: number | null) => {
         if (selectedMonth === 'diciembre' || currentVal === null) return null;
-        const prevData = globalData.benchmarkingCredits;
+        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCredits : globalData.benchmarkingCreditsEnero;
+        if (!prevData) return null;
         const section = (prevData as any)[type];
         const entity = section.find((e: any) => e.entity === entityName);
         if (!entity || (entity as any)[field] === null || (entity as any)[field] === undefined) return null;
@@ -122,7 +132,7 @@ export default function BenchmarkingCreditsTable() {
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-4">
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-orange-400 bg-clip-text text-transparent">
-                        Benchmarking Vivienda, Vehículo – Compra Cartera <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : 'Enero'}</span>
+                        Benchmarking Vivienda, Vehículo – Compra Cartera <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}</span>
                     </h3>
                     <div className="px-3 py-1 bg-pink-500/10 border border-pink-500/20 rounded-full">
                         <span className="text-pink-400 text-xs font-bold uppercase tracking-tighter">Comparativo de Tasas</span>
@@ -134,13 +144,19 @@ export default function BenchmarkingCreditsTable() {
                             onClick={() => setSelectedMonth('diciembre')}
                             className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'diciembre' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
                         >
-                            Diciembre
+                            Dic
                         </button>
                         <button
                             onClick={() => setSelectedMonth('enero')}
                             className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'enero' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
                         >
-                            Enero
+                            Ene
+                        </button>
+                        <button
+                            onClick={() => setSelectedMonth('febrero')}
+                            className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'febrero' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
+                        >
+                            Feb
                         </button>
                     </div>
                     <button
