@@ -186,33 +186,88 @@ const PresentationContext = createContext<PresentationContextType | undefined>(u
 export function PresentationProvider({ children }: { children: React.ReactNode }) {
     const [data, setData] = useState<PresentationData>(ALL_DEFAULTS);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
 
-    // Load initial state from LocalStorage
+    // Initial load: Fetch from Server (Primary) then LocalStorage (Fallback)
     useEffect(() => {
-        const saved = localStorage.getItem('presentation_data_v2');
-        if (saved) {
+        async function loadData() {
             try {
-                const parsed = JSON.parse(saved);
-                setData(prev => ({ ...prev, ...parsed }));
-            } catch (e) {
-                console.error('Error parsing local storage data', e);
+                // 1. Try to get from Server
+                const response = await fetch('/api/presentation/shared');
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result && result.data) {
+                        setData(prev => ({ ...prev, ...result.data }));
+                        setIsLoading(false);
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load shared presentation from server:', err);
             }
+
+            // 2. Fallback to LocalStorage if server fails or is empty
+            const saved = localStorage.getItem('presentation_data_v2');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    setData(prev => ({ ...prev, ...parsed }));
+                } catch (e) {
+                    console.error('Error parsing local storage data', e);
+                }
+            }
+            setIsLoading(false);
         }
-        setIsLoading(false);
+
+        loadData();
     }, []);
 
-    // Update section and sync to LocalStorage
+    // Debounced Persist to Server and LocalStorage
+    useEffect(() => {
+        if (isLoading) return;
+
+        const timer = setTimeout(async () => {
+            // Save to LocalStorage immediately for responsiveness
+            localStorage.setItem('presentation_data_v2', JSON.stringify(data));
+
+            // Persist to Server
+            setIsSaving(true);
+            try {
+                await fetch('/api/presentation/shared', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data })
+                });
+            } catch (err) {
+                console.error('Failed to sync presentation to server:', err);
+            } finally {
+                setIsSaving(false);
+            }
+        }, 1500); // 1.5s debounce
+
+        return () => clearTimeout(timer);
+    }, [data, isLoading]);
+
+    // Update section logic
     const updateSection = useCallback((section: keyof PresentationData, newData: any) => {
-        setData(prev => {
-            const updated = { ...prev, [section]: newData };
-            localStorage.setItem('presentation_data_v2', JSON.stringify(updated));
-            return updated;
-        });
+        setData(prev => ({ ...prev, [section]: newData }));
     }, []);
 
-    const resetData = useCallback(() => {
-        if (confirm('¿Estás seguro de restablecer todos los datos a los valores iniciales?')) {
+    const resetData = useCallback(async () => {
+        if (confirm('¿Estás seguro de restablecer todos los datos a los valores iniciales para TODOS los usuarios?')) {
             localStorage.removeItem('presentation_data_v2');
+            
+            // Also reset server state
+            try {
+                await fetch('/api/presentation/shared', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: ALL_DEFAULTS })
+                });
+            } catch (err) {
+                console.error('Failed to reset server state:', err);
+            }
+
             setData(ALL_DEFAULTS);
             window.location.reload();
         }
@@ -221,6 +276,11 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     return (
         <PresentationContext.Provider value={{ data, updateSection, resetData, isLoading }}>
             {children}
+            {isSaving && (
+                <div className="fixed bottom-4 right-4 bg-emerald-600/80 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm z-50 animate-pulse">
+                    Sincronizando...
+                </div>
+            )}
         </PresentationContext.Provider>
     );
 }

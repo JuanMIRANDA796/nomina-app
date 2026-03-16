@@ -1,0 +1,40 @@
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+
+const SHARED_ID = 'main-presentation-v1';
+
+export async function GET() {
+    try {
+        const snapshot = await prisma.presentationSnapshot.findUnique({
+            where: { id: SHARED_ID }
+        });
+        
+        if (!snapshot) {
+            return NextResponse.json({ data: null });
+        }
+        
+        return NextResponse.json(snapshot);
+    } catch (error) {
+        console.error('Shared presentation fetch error:', error);
+        return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    }
+}
+
+export async function POST(request: Request) {
+    try {
+        const body = await request.json();
+        const { data } = body;
+
+        // Upsert the main presentation state
+        const snapshot = await prisma.presentationSnapshot.upsert({
+            where: { id: SHARED_ID },
+            update: { data },
+            create: { id: SHARED_ID, data }
+        });
+
+        return NextResponse.json({ success: true, id: snapshot.id });
+    } catch (error) {
+        console.error('Shared presentation save error:', error);
+        return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    }
+}
