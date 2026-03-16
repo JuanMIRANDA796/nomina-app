@@ -33,6 +33,23 @@ export default function BenchmarkingCDATsTable() {
         { label: '1081 días', key: 'd1081', pk: 'p1081' }
     ];
 
+    const getVariation = (groupName: string, entityName: string, key: string, currentVal: number | null) => {
+        if (selectedMonth === 'diciembre' || currentVal === null) return null;
+        
+        // Find previous month data (Diciembre)
+        const prevData = globalData.benchmarkingCDATs;
+        const group = prevData.groups.find((g: any) => g.name === groupName);
+        if (!group) return null;
+        
+        const entity = group.entities.find((e: any) => e.entity === entityName);
+        if (!entity) return null;
+        
+        const prevVal = (entity as any)[key];
+        if (prevVal === null || prevVal === undefined) return null;
+        
+        return currentVal - prevVal;
+    };
+
     return (
         <div className="w-full h-full flex flex-col p-4 bg-slate-950/50 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
             <div className="flex justify-between items-center mb-4">
@@ -74,6 +91,7 @@ export default function BenchmarkingCDATsTable() {
                             {columns.map(col => (
                                 <React.Fragment key={col.key}>
                                     <th className="px-2 py-3 border border-white/10 text-center">{col.label}</th>
+                                    <th className="px-2 py-3 border border-white/10 text-center text-slate-400">Var</th>
                                     <th className="px-2 py-3 border border-white/10 text-center">Pos</th>
                                 </React.Fragment>
                             ))}
@@ -104,6 +122,24 @@ export default function BenchmarkingCDATsTable() {
                                                             {(row as any)[col.key] != null ? `${Number((row as any)[col.key]).toFixed(2)}%` : '-'}
                                                         </div>
                                                     )}
+                                                </td>
+                                                <td className="p-0 border border-white/10 bg-black/40">
+                                                    <div className={`text-center py-1 text-[9px] font-bold ${
+                                                        (() => {
+                                                            const varVal = getVariation(group.name, row.entity, col.key, (row as any)[col.key]);
+                                                            if (varVal === null) return 'text-slate-600';
+                                                            if (varVal > 0) return 'text-emerald-400';
+                                                            if (varVal < 0) return 'text-rose-400';
+                                                            return 'text-slate-500';
+                                                        })()
+                                                    }`}>
+                                                        {(() => {
+                                                            const varVal = getVariation(group.name, row.entity, col.key, (row as any)[col.key]);
+                                                            if (varVal === null) return '-';
+                                                            const sign = varVal > 0 ? '+' : '';
+                                                            return `${sign}${varVal.toFixed(2)}%`;
+                                                        })()}
+                                                    </div>
                                                 </td>
                                                 <td className="p-0 border border-white/10 bg-black/20">
                                                     {isEditing ? (

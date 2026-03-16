@@ -21,24 +21,38 @@ export default function BenchmarkingCreditsTable() {
         updateSection(sectionKey as any, newData);
     };
 
+    const getVariation = (type: 'banks' | 'cooperatives', entityName: string, field: string, currentVal: number | null) => {
+        if (selectedMonth === 'diciembre' || currentVal === null) return null;
+        const prevData = globalData.benchmarkingCredits;
+        const section = (prevData as any)[type];
+        const entity = section.find((e: any) => e.entity === entityName);
+        if (!entity || (entity as any)[field] === null || (entity as any)[field] === undefined) return null;
+        return currentVal - (entity as any)[field];
+    };
+
     const TableHeader = () => (
         <thead className="bg-[#D4145A] text-white text-[10px] uppercase font-bold tracking-wider sticky top-0 z-10">
             <tr>
                 <th rowSpan={2} className="px-4 py-3 border border-white/10 text-left">Entidad Bancaria</th>
-                <th colSpan={2} className="px-4 py-2 border border-white/10 text-center">VIVIENDA VIS</th>
-                <th colSpan={2} className="px-4 py-2 border border-white/10 text-center">VIVIENDA NO VIS</th>
-                <th colSpan={2} className="px-4 py-2 border border-white/10 text-center">CONSUMO VEHICULO</th>
-                <th colSpan={3} className="px-4 py-2 border border-white/10 text-center">COMPRA CARTERA</th>
+                <th colSpan={3} className="px-4 py-2 border border-white/10 text-center">VIVIENDA VIS</th>
+                <th colSpan={3} className="px-4 py-2 border border-white/10 text-center">VIVIENDA NO VIS</th>
+                <th colSpan={3} className="px-4 py-2 border border-white/10 text-center">CONSUMO VEHICULO</th>
+                <th colSpan={5} className="px-4 py-2 border border-white/10 text-center">COMPRA CARTERA</th>
             </tr>
             <tr>
                 <th className="px-2 py-2 border border-white/10 text-center">Tasa</th>
+                <th className="px-2 py-2 border border-white/10 text-center text-slate-400">Var</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Rank</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Tasa</th>
+                <th className="px-2 py-2 border border-white/10 text-center text-slate-400">Var</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Rank</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Tasa</th>
+                <th className="px-2 py-2 border border-white/10 text-center text-slate-400">Var</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Rank</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Desde</th>
+                <th className="px-2 py-2 border border-white/10 text-center text-slate-400">Var</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Hasta</th>
+                <th className="px-2 py-2 border border-white/10 text-center text-slate-400">Var</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Rank</th>
             </tr>
         </thead>
@@ -52,21 +66,52 @@ export default function BenchmarkingCreditsTable() {
             {(data as any)[type].map((row: any, idx: number) => (
                 <tr key={idx} className={`hover:bg-white/5 transition-colors text-[11px] ${row.entity === 'PRESENTE' ? 'bg-indigo-900/30' : ''}`}>
                     <td className="px-4 py-1.5 border border-white/10 text-white font-medium">{row.entity}</td>
-                    {['vis_tasa', 'vis_rank', 'novis_tasa', 'novis_rank', 'vehiculo_tasa', 'vehiculo_rank', 'cc_desde', 'cc_hasta', 'cc_rank'].map(field => (
-                        <td key={field} className="p-0 border border-white/10">
-                            {isEditing ? (
-                                <input
-                                    className="w-full h-full bg-white/10 text-center text-white border-none focus:ring-1 focus:ring-pink-500 outline-none p-1"
-                                    value={(row as any)[field] ?? ''}
-                                    onChange={(e) => handleUpdate(type, idx, field, e.target.value)}
-                                />
-                            ) : (
-                                <div className="text-center text-slate-300 w-full py-1.5">
-                                    {(row as any)[field] != null ? (field.includes('tasa') || field.includes('desde') || field.includes('hasta') ? `${Number((row as any)[field]).toFixed(2)}%` : (row as any)[field]) : 'N/A'}
-                                </div>
-                            )}
-                        </td>
-                    ))}
+                    {['vis_tasa', 'vis_rank', 'novis_tasa', 'novis_rank', 'vehiculo_tasa', 'vehiculo_rank', 'cc_desde', 'cc_rank_extra', 'cc_hasta', 'cc_rank'].map(field => {
+                        // Special handling for the extra Var columns which are NOT in the field list but we insert them manually in the render or via a trick
+                        // Wait, it's easier to just map the fields and insert logic
+                        const isTasaField = field.includes('tasa') || field === 'cc_desde' || field === 'cc_hasta';
+                        const isRankField = field.includes('rank');
+
+                        if (field === 'cc_rank_extra') return null; // placeholder for manual insertion if needed, but let's just use better logic below
+
+                        return (
+                            <React.Fragment key={field}>
+                                <td className="p-0 border border-white/10">
+                                    {isEditing ? (
+                                        <input
+                                            className="w-full h-full bg-white/10 text-center text-white border-none focus:ring-1 focus:ring-pink-500 outline-none p-1"
+                                            value={(row as any)[field] ?? ''}
+                                            onChange={(e) => handleUpdate(type, idx, field, e.target.value)}
+                                        />
+                                    ) : (
+                                        <div className="text-center text-slate-300 w-full py-1.5">
+                                            {(row as any)[field] != null ? (field.includes('tasa') || field.includes('desde') || field.includes('hasta') ? `${Number((row as any)[field]).toFixed(2)}%` : (row as any)[field]) : 'N/A'}
+                                        </div>
+                                    )}
+                                </td>
+                                {isTasaField && (
+                                    <td className="p-0 border border-white/10 bg-black/40">
+                                        <div className={`text-center py-1 text-[9px] font-bold ${
+                                            (() => {
+                                                const varVal = getVariation(type, row.entity, field, (row as any)[field]);
+                                                if (varVal === null) return 'text-slate-600';
+                                                if (varVal > 0) return 'text-emerald-400';
+                                                if (varVal < 0) return 'text-rose-400';
+                                                return 'text-slate-500';
+                                            })()
+                                        }`}>
+                                            {(() => {
+                                                const varVal = getVariation(type, row.entity, field, (row as any)[field]);
+                                                if (varVal === null) return '-';
+                                                const sign = varVal > 0 ? '+' : '';
+                                                return `${sign}${varVal.toFixed(2)}%`;
+                                            })()}
+                                        </div>
+                                    </td>
+                                )}
+                            </React.Fragment>
+                        );
+                    })}
                 </tr>
             ))}
         </>
