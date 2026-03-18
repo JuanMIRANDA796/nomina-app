@@ -16,8 +16,6 @@ import EarlyCancellationsChart from '@/components/presentation/EarlyCancellation
 import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabilitiesBalanceChart';
 import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
-import CDATProposalMainTable from '@/components/presentation/CDATProposalMainTable';
-import CDATRateMatrixTable from '@/components/presentation/CDATRateMatrixTable';
 import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
 
 // New Components for V2
@@ -136,7 +134,7 @@ export default function PresentationV2Page() {
             </section>
 
             {/* SLIDE: MACROECONOMIC ANALYSIS */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full h-full">
                     <MacroeconomicAnalysisSlide />
                 </motion.div>
@@ -144,7 +142,7 @@ export default function PresentationV2Page() {
 
             {/* CHART: TES & HISTORICAL */}
             {[HistoricalRatesV2Chart, ReferenceRatesChart, InflationVsRepoChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart, PortfolioBalanceByLineChart].map((Chart, i) => (
-                <section key={`chart-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+                <section key={`chart-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
                         <Chart />
                     </motion.div>
@@ -152,7 +150,7 @@ export default function PresentationV2Page() {
             ))}
 
             {/* NEW: BENCHMARKING SUMMARY TABLE (Image 2) */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[95vh] flex flex-col">
                     <BenchmarkingSummaryTable />
                 </motion.div>
@@ -160,7 +158,7 @@ export default function PresentationV2Page() {
 
             {/* BENCHMARKING VIVIENDA PESOS (KEPT) */}
             {[BenchmarkingViviendaVisHasta20Chart, BenchmarkingViviendaNoVisHasta20Chart].map((Chart, i) => (
-                <section key={`viv-p-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+                <section key={`viv-p-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                     <motion.div initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
                         <Chart />
                     </motion.div>
@@ -169,48 +167,40 @@ export default function PresentationV2Page() {
 
             {/* LIABILITIES & SAVINGS */}
             {[TotalLiabilitiesBalanceChart, EarlyCancellationsChart, TPPCaptacionSaldosChart].map((Chart, i) => (
-                <section key={`liab-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+                <section key={`liab-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                     <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
                         <Chart />
                     </motion.div>
                 </section>
             ))}
 
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
                     <BenchmarkingCDATsTable />
                 </motion.div>
             </section>
 
             {/* NEW: CREDIT RATE PROPOSAL (Image 3) */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[95vh] rounded-3xl overflow-hidden border border-white/10 shadow-3xl bg-slate-900/40 backdrop-blur-3xl">
                     <CreditRateProposalSlide />
                 </motion.div>
             </section>
 
             {/* NEW: ATTRIBUTIONS (Image 4) */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, x: -100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
                     <FinancialLeaderAttributionsSlide />
                 </motion.div>
             </section>
 
             {/* NEW: CDAT RATE PROPOSAL (Image 5) */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
                     <CDATRateProposalSlide />
                 </motion.div>
             </section>
 
-            {/* CDAT PROPOSAL (Original Tables) */}
-            {[CDATProposalMainTable, CDATRateMatrixTable].map((Table, i) => (
-                <section key={`cdat-prop-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B] overflow-hidden">
-                    <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                        <Table />
-                    </motion.div>
-                </section>
-            ))}
 
             <div className="fixed bottom-8 right-8 z-[100] flex gap-4">
                 <button
