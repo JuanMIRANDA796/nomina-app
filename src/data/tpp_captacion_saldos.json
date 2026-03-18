@@ -96,5 +96,20 @@
         "saldo_cap": 214639,
         "tpp_cdat": 10.57,
         "tpp_cap": 8.99
+    },
+    {
+        "month": "ene-26",
+        "saldo_cdat": 117911,
+        "saldo_cap": 219525,
+        "tpp_cdat": 10.45,
+        "tpp_cap": 8.99
+    },
+    {
+        "month": "feb-26",
+        "saldo_cdat": 118400,
+        "saldo_cap": 225067,
+        "tpp_cdat": 10.48,
+        "tpp_cap": 8.93
     }
+
 ]

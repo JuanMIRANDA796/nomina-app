@@ -89,5 +89,20 @@
         "rotativos": 91826,
         "vivienda": 106129,
         "total": 392753
+    },
+    {
+        "month": "ene-26",
+        "consumo": 195415,
+        "rotativos": 96347,
+        "vivienda": 106124,
+        "total": 397886
+    },
+    {
+        "month": "feb-26",
+        "consumo": 194387,
+        "rotativos": 102133,
+        "vivienda": 106787,
+        "total": 403307
     }
+
 ]

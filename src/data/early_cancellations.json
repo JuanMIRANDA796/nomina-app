@@ -96,5 +96,20 @@
         "cdat_per": 0.3,
         "ahorro_val": 10,
         "ahorro_per": 0.1
+    },
+    {
+        "month": "ene-26",
+        "cdat_val": 243,
+        "cdat_per": 0.2,
+        "ahorro_val": 91,
+        "ahorro_per": 0.6
+    },
+    {
+        "month": "feb-26",
+        "cdat_val": 153,
+        "cdat_per": 0.3,
+        "ahorro_val": 123,
+        "ahorro_per": 0.7
     }
+
 ]
