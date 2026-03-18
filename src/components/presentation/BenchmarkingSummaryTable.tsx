@@ -56,29 +56,29 @@ export default function BenchmarkingSummaryTable() {
                 </div>
             </div>
 
-            <div className="flex-1 overflow-hidden rounded-2xl border border-white/5">
-                <table className="w-full h-full border-collapse">
-                    <thead className="bg-pink-600/20 sticky top-0">
+            <div className="flex-1 overflow-auto rounded-xl border border-white/10 bg-black/30">
+                <table className="w-full border-collapse">
+                    <thead className="bg-[#D4145A] sticky top-0 z-10">
                         <tr>
-                            <th className="px-4 py-4 text-left text-xs font-bold text-pink-500 uppercase tracking-wider border-b border-white/10">Segmento de Crédito</th>
-                            <th className="px-4 py-4 text-center text-xs font-bold text-pink-500 uppercase tracking-wider border-b border-white/10">Entidades</th>
-                            <th className="px-4 py-4 text-center text-xs font-bold text-pink-500 uppercase tracking-wider border-b border-white/10">Monto Total</th>
-                            <th className="px-4 py-4 text-center text-xs font-bold text-pink-500 uppercase tracking-wider border-b border-white/10">Desembolsos</th>
-                            <th className="px-4 py-4 text-center text-xs font-bold text-pink-500 uppercase tracking-wider border-b border-white/10">Tasa Prom. EA</th>
-                            <th className="px-4 py-4 text-center text-xs font-bold text-pink-500 uppercase tracking-wider border-b border-white/10">Tasa Presente (ea)</th>
-                            <th className="px-4 py-4 text-center text-xs font-bold text-pink-500 uppercase tracking-wider border-b border-white/10">Variación vs Prom.</th>
+                            <th className="px-4 py-3 text-left text-[10px] font-bold text-white uppercase tracking-wider border-b border-white/20">Segmento de Crédito</th>
+                            <th className="px-4 py-3 text-center text-[10px] font-bold text-white uppercase tracking-wider border-b border-white/20">Entidades</th>
+                            <th className="px-4 py-3 text-center text-[10px] font-bold text-white uppercase tracking-wider border-b border-white/20">Monto Total</th>
+                            <th className="px-4 py-3 text-center text-[10px] font-bold text-white uppercase tracking-wider border-b border-white/20">Desembolsos</th>
+                            <th className="px-4 py-3 text-center text-[10px] font-bold text-white uppercase tracking-wider border-b border-white/20">Tasa Prom. EA</th>
+                            <th className="px-4 py-3 text-center text-[10px] font-bold text-white uppercase tracking-wider border-b border-white/20">Tasa Presente (ea)</th>
+                            <th className="px-4 py-3 text-center text-[10px] font-bold text-white uppercase tracking-wider border-b border-white/20">Variación vs Prom.</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5 bg-white/5">
+                    <tbody className="divide-y divide-white/5">
                         {filteredData.map((row, idx) => (
-                            <tr key={idx} className="hover:bg-white/10 transition-colors">
-                                <td className="px-4 py-4 text-sm font-medium text-slate-200">{row.segmento}</td>
-                                <td className="px-4 py-4 text-center text-sm text-sky-400 font-bold">{row.entidades}</td>
-                                <td className="px-4 py-4 text-center text-sm text-orange-400 font-bold">{row.monto}</td>
-                                <td className="px-4 py-4 text-center text-sm text-slate-300">{row.desembolsos}</td>
-                                <td className="px-4 py-4 text-center text-sm text-slate-300">{row.tasaProm}</td>
-                                <td className="px-4 py-4 text-center text-sm text-emerald-400 font-bold">{row.tasaPresente}</td>
-                                <td className="px-4 py-4 text-center text-sm font-bold text-emerald-500">{row.variacion}</td>
+                            <tr key={idx} className="hover:bg-white/5 transition-colors">
+                                <td className="px-4 py-3 text-[11px] font-medium text-slate-100">{row.segmento}</td>
+                                <td className="px-4 py-3 text-center text-[11px] text-sky-400 font-bold">{row.entidades}</td>
+                                <td className="px-4 py-3 text-center text-[11px] text-orange-400 font-bold">{row.monto}</td>
+                                <td className="px-4 py-3 text-center text-[11px] text-slate-300">{row.desembolsos}</td>
+                                <td className="px-4 py-3 text-center text-[11px] text-slate-300">{row.tasaProm}</td>
+                                <td className="px-4 py-3 text-center text-[11px] text-emerald-400 font-bold">{row.tasaPresente}</td>
+                                <td className="px-4 py-3 text-center text-[11px] font-bold text-emerald-500">{row.variacion}</td>
                             </tr>
                         ))}
                     </tbody>
