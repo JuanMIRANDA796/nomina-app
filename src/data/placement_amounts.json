@@ -89,5 +89,20 @@
         "consumo": 4790,
         "vivienda": 3054,
         "total": 13227
+    },
+    {
+        "month": "ene-26",
+        "tarjeta": 11378,
+        "consumo": 7631,
+        "vivienda": 746,
+        "total": 19755
+    },
+    {
+        "month": "feb-26",
+        "tarjeta": 12526,
+        "consumo": 6786,
+        "vivienda": 1930,
+        "total": 21242
     }
+
 ]

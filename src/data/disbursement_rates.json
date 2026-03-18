@@ -89,5 +89,20 @@
         "tpp": 19.73,
         "consumo": 19.38,
         "vivienda": 11.134
+    },
+    {
+        "month": "ene-26",
+        "tarjeta": 24.26,
+        "tpp": 22.27,
+        "consumo": 20.43,
+        "vivienda": 10.828
+    },
+    {
+        "month": "feb-26",
+        "tarjeta": 25.13,
+        "tpp": 22.37,
+        "consumo": 20.38,
+        "vivienda": 11.430
     }
+
 ]
