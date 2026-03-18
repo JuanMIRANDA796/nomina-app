@@ -11,10 +11,7 @@ import MonthlyDisbursementsChart from '@/components/presentation/MonthlyDisburse
 import PortfolioBalanceByLineChart from '@/components/presentation/PortfolioBalanceByLineChart';
 import BenchmarkingViviendaVisHasta20Chart from '@/components/presentation/BenchmarkingViviendaVisHasta20Chart';
 import BenchmarkingViviendaNoVisHasta20Chart from '@/components/presentation/BenchmarkingViviendaNoVisHasta20Chart';
-import BenchmarkingCreditsTable from '@/components/presentation/BenchmarkingCreditsTable';
 import BenchmarkingCDATsTable from '@/components/presentation/BenchmarkingCDATsTable';
-import RateProposalTables from '@/components/presentation/RateProposalTables';
-import FSGProposalTable from '@/components/presentation/FSGProposalTable';
 import EarlyCancellationsChart from '@/components/presentation/EarlyCancellationsChart';
 import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabilitiesBalanceChart';
 import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
@@ -30,8 +27,7 @@ import FinancialLeaderAttributionsSlide from '@/components/presentation/Financia
 import CDATRateProposalSlide from '@/components/presentation/CDATRateProposalSlide';
 
 export default function PresentationV2Page() {
-    const { data, updateSection, resetData, isLoading } = usePresentation();
-    const [isEditingCover, setIsEditingCover] = useState(false);
+    const { resetData, isLoading } = usePresentation();
 
     if (isLoading) return (
         <div className="w-full h-screen bg-slate-950 flex items-center justify-center">

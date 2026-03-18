@@ -10,32 +10,7 @@ const SectionHeader = ({ title }: { title: string }) => (
     </div>
 );
 
-const ProposalTable = ({ headers, rows }: { headers: string[], rows: string[][] }) => (
-    <div className="overflow-hidden rounded-xl border border-white/10 bg-slate-900/50">
-        <table className="w-full border-collapse">
-            <thead className="bg-[#D4145A]">
-                <tr>
-                    {headers.map((h, i) => (
-                        <th key={i} className="px-3 py-2 text-left text-[10px] font-bold text-white/90 uppercase tracking-wider border-r border-white/10 last:border-0 border-b border-white/20">
-                            {h}
-                        </th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-                {rows.map((row, i) => (
-                    <tr key={i} className="hover:bg-white/5 transition-colors">
-                        {row.map((cell, j) => (
-                            <tr key={j} className="px-3 py-2 text-[11px] font-medium text-slate-300 border-r border-white/5 last:border-0">
-                                {cell}
-                            </tr>
-                        ))}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    </div>
-);
+
 
 // Wait, the table structure is slightly different for each. Let me refine it.
 
