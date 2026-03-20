@@ -73,36 +73,10 @@ const metadataDefault = {
 };
 
 const macroAnalysisDefault = [
-    {
-        title: "Salario Mínimo",
-        phrase: "Salario a 2 millones exige captar liquidez inmediata.",
-        iconType: "cash",
-        color: "from-pink-500 to-rose-600"
-    },
-    {
-        title: "Inflación",
-        phrase: "Inflación 5.29%",
-        iconType: "chart",
-        color: "from-emerald-500 to-teal-600"
-    },
-    {
-        title: "Tasas BanRep",
-        phrase: "Tasa BanRep al 10,25% presiona márgenes de colocación.",
-        iconType: "bank",
-        color: "from-orange-500 to-amber-600"
-    },
-    {
-        title: "Mercado Laboral",
-        phrase: "Desempleo histórico del 8% reduce riesgo de crédito.",
-        iconType: "users",
-        color: "from-blue-500 to-indigo-600"
-    },
-    {
-        title: "Proyección",
-        phrase: "Crecimiento económico incentiva créditos de largo plazo.",
-        iconType: "rocket",
-        color: "from-violet-500 to-fuchsia-600"
-    }
+    "El panorama macroeconómico de Colombia atraviesa un momento **restrictivo y de cautela**, originado por un repunte de la inflación al 5,35% que obligó al Banco de la República a elevar la tasa REPO al 10,25% para frenar el alza de precios.",
+    "Este **encarecimiento** del crédito privado se enlaza con una profunda preocupación de los mercados frente a un déficit fiscal que podría rondar el 6,7%, dada la falta de claridad en los recortes de gasto público.",
+    "Como resultado de esta incertidumbre, la deuda del Gobierno es vista como más **riesgosa**, disparando los rendimientos de los TES por encima del 13,8% y comprometiendo el presupuesto de la nación.",
+    "Todo este cóctel de **altas tasas**, crédito caro e incertidumbre fiscal amenaza con frenar la inversión, poniendo en riesgo la actual resiliencia del desempleo, que por ahora se ubica en un 10,9%, pero que enfrenta un horizonte bastante complejo."
 ];
 
 const ALL_DEFAULTS = {
