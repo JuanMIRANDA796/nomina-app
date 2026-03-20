@@ -24,14 +24,9 @@ import BenchmarkingViviendaNoVisUvrHasta20Chart from '@/components/presentation/
 import BenchmarkingViviendaNoVisUvrSup20Chart from '@/components/presentation/BenchmarkingViviendaNoVisUvrSup20Chart';
 import BenchmarkingCreditsTable from '@/components/presentation/BenchmarkingCreditsTable';
 import BenchmarkingCDATsTable from '@/components/presentation/BenchmarkingCDATsTable';
-import RateProposalTables from '@/components/presentation/RateProposalTables';
-import FSGProposalTable from '@/components/presentation/FSGProposalTable';
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
 import CreditRateProposalTable from '@/components/presentation/CreditRateProposalTable';
-import CreditRateProposalSlide from '@/components/presentation/CreditRateProposalSlide';
 import CreditRateProposalSummaryTable from '@/components/presentation/CreditRateProposalSummaryTable';
-import CDATProposalMainTable from '@/components/presentation/CDATProposalMainTable';
-import CDATRateMatrixTable from '@/components/presentation/CDATRateMatrixTable';
 import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
 
 export default function PresentationPage() {
@@ -46,128 +41,32 @@ export default function PresentationPage() {
 
     return (
         <main className="snap-y snap-mandatory h-screen w-full overflow-y-scroll bg-slate-950 text-white scroll-smooth selection:bg-pink-500 selection:text-white">
+            <title>Link</title>
 
             {/* COVER SLIDE */}
             <section className="snap-start w-full h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#D4145A] via-[#E91E63] to-[#FBB03B]">
-                {/* ... (Existing Cover Code) ... */}
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1 }}
-                    className="relative w-full max-w-3xl flex flex-col items-center"
-                >
+                <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative w-full max-w-3xl flex flex-col items-center">
                     <div className="relative w-96 h-48 md:w-[600px] md:h-[300px]">
-                        <img
-                            src="/logo-presente.png"
-                            alt="Presente Fondo de Empleados"
-                            className="object-contain w-full h-full drop-shadow-xl"
-                        />
+                        <img src="/logo-presente.png" alt="Presente" className="object-contain w-full h-full drop-shadow-xl" />
                     </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 0.8 }}
-                        className="mt-8 text-center relative group"
-                    >
-                        <h2 className="text-2xl md:text-3xl font-light tracking-widest text-white/90 uppercase">
-                            {data.metadata.title}
-                        </h2>
-                        <p className="text-xl text-white/80 mt-2 font-medium">
-                            {data.metadata.subtitle}
-                        </p>
-
-                        <button
-                            onClick={() => setIsEditingCover(true)}
-                            className="absolute -top-4 -right-8 p-1 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                            </svg>
-                        </button>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-8 text-center relative group">
+                        <h2 className="text-2xl md:text-3xl font-light tracking-widest text-white/90 uppercase">{data.metadata.title}</h2>
+                        <p className="text-xl text-white/80 mt-2 font-medium">{data.metadata.subtitle}</p>
                     </motion.div>
-                </motion.div>
-
-                {/* EDIT COVER MODAL */}
-                <AnimatePresence>
-                    {isEditingCover && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-[110] bg-slate-900/95 backdrop-blur-xl flex items-center justify-center p-8"
-                        >
-                            <div className="bg-slate-800 border border-white/10 rounded-3xl p-8 w-full max-w-lg shadow-2xl">
-                                <h3 className="text-2xl font-bold mb-6">Editar Portada</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Título Principal</label>
-                                        <input
-                                            type="text"
-                                            className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 outline-none focus:border-pink-500"
-                                            value={data.metadata.title}
-                                            onChange={(e) => updateSection('metadata', { ...data.metadata, title: e.target.value })}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Subtítulo / Fecha</label>
-                                        <input
-                                            type="text"
-                                            className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 outline-none focus:border-pink-500"
-                                            value={data.metadata.subtitle}
-                                            onChange={(e) => updateSection('metadata', { ...data.metadata, subtitle: e.target.value })}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        onClick={() => setIsEditingCover(false)}
-                                        className="px-8 py-3 bg-pink-600 hover:bg-pink-700 rounded-2xl font-bold shadow-lg shadow-pink-600/20 transition-all hover:scale-105"
-                                    >
-                                        Guardar y Cerrar
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.5, duration: 1, repeat: Infinity, repeatType: "reverse" }}
-                    className="absolute bottom-12 text-white/80"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                    </svg>
                 </motion.div>
             </section>
 
-            {/* SECOND SLIDE: MACROECONOMIC ANALYSIS */}
+            {/* MACROECONOMIC ANALISIS */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full h-full">
+                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.8 }} className="w-full h-full">
                     <MacroeconomicAnalysisSlide />
                 </motion.div>
             </section>
 
-            {/* THIRD SLIDE: TES CHART */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <HistoricalRatesV2Chart />
-                </motion.div>
-            </section>
-
-            {/* REFERENCE RATES */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <ReferenceRatesChart />
-                </motion.div>
-            </section>
-
-            {[InflationVsRepoChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart].map((Chart, i) => (
-                <section key={`fin-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+            {/* CHARTS SECTION */}
+            {[HistoricalRatesV2Chart, ReferenceRatesChart, InflationVsRepoChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart].map((Chart, i) => (
+                <section key={`chart-fin-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                         <Chart />
                     </motion.div>
                 </section>
@@ -176,31 +75,22 @@ export default function PresentationPage() {
             {/* BENCHMARKING CONSUMO */}
             {[BenchmarkingConsumoHasta1Chart, BenchmarkingConsumo1To3Chart, BenchmarkingConsumo3To6Chart, BenchmarkingConsumo6To12Chart, BenchmarkingConsumo12To25Chart, BenchmarkingConsumoTodosChart].map((Chart, i) => (
                 <section key={`cons-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, scale: 0.98 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+                    <motion.div initial={{ opacity: 0, scale: 0.98 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                         <Chart />
                     </motion.div>
                 </section>
             ))}
 
-            {/* BENCHMARKING VIVIENDA PESOS */}
-            {[BenchmarkingViviendaVisHasta20Chart, BenchmarkingViviendaVisSup20Chart, BenchmarkingViviendaNoVisHasta20Chart, BenchmarkingViviendaNoVisSup20Chart].map((Chart, i) => (
-                <section key={`viv-p-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+            {/* BENCHMARKING VIVIENDA */}
+            {[BenchmarkingViviendaVisHasta20Chart, BenchmarkingViviendaVisSup20Chart, BenchmarkingViviendaNoVisHasta20Chart, BenchmarkingViviendaNoVisSup20Chart, BenchmarkingViviendaVisUvrHasta20Chart, BenchmarkingViviendaVisUvrSup20Chart, BenchmarkingViviendaNoVisUvrHasta20Chart, BenchmarkingViviendaNoVisUvrSup20Chart].map((Chart, i) => (
+                <section key={`viv-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                    <motion.div initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                         <Chart />
                     </motion.div>
                 </section>
             ))}
 
-            {/* BENCHMARKING VIVIENDA UVR */}
-            {[BenchmarkingViviendaVisUvrHasta20Chart, BenchmarkingViviendaVisUvrSup20Chart, BenchmarkingViviendaNoVisUvrHasta20Chart, BenchmarkingViviendaNoVisUvrSup20Chart].map((Chart, i) => (
-                <section key={`viv-u-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, y: i % 2 === 0 ? 50 : -50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                        <Chart />
-                    </motion.div>
-                </section>
-            ))}
-
-            {/* BENCHMARKING TABLES */}
+            {/* TABLES AND PROPOSALS */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
                     <BenchmarkingCreditsTable />
@@ -225,19 +115,12 @@ export default function PresentationPage() {
                 </motion.div>
             </section>
 
-            {/* FLOATING RESET BUTTON */}
+            {/* RESET BUTTON */}
             <div className="fixed bottom-8 right-8 z-[100]">
-                <button
-                    onClick={resetData}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white rounded-lg border border-white/10 transition-colors text-xs font-medium backdrop-blur-sm"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                    </svg>
+                <button onClick={resetData} className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white rounded-lg border border-white/10 transition-colors text-xs font-medium backdrop-blur-sm">
                     Restablecer Datos
                 </button>
             </div>
-
         </main>
     );
 }
