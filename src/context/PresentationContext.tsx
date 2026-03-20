@@ -184,6 +184,17 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                                     merged.macroAnalysis = ALL_DEFAULTS.macroAnalysis;
                                 }
                             }
+
+                            // FORCE OVERRIDE for 2026-02-01 inflation value (if stuck at 5.42)
+                            if (merged.inflationRepo && Array.isArray(merged.inflationRepo)) {
+                                merged.inflationRepo = merged.inflationRepo.map((item: any) => {
+                                    if (item.date === "2026-02-01" && (item.inflation === 5.42 || item.inflation === "5.42")) {
+                                        return { ...item, inflation: 5.29 };
+                                    }
+                                    return item;
+                                });
+                            }
+
                             return merged;
                         });
                         setIsLoading(false);
@@ -210,6 +221,16 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                         if (parsed.macroAnalysis.length > 4 || (typeof parsed.macroAnalysis[0] === 'string' && parsed.macroAnalysis[0].includes('Salario a 2 millones'))) {
                             parsed.macroAnalysis = ALL_DEFAULTS.macroAnalysis;
                         }
+                    }
+
+                    // FORCE OVERRIDE for 2026-02-01 inflation value (if stuck at 5.42)
+                    if (parsed.inflationRepo && Array.isArray(parsed.inflationRepo)) {
+                        parsed.inflationRepo = parsed.inflationRepo.map((item: any) => {
+                            if (item.date === "2026-02-01" && (item.inflation === 5.42 || item.inflation === "5.42")) {
+                                return { ...item, inflation: 5.29 };
+                            }
+                            return item;
+                        });
                     }
 
                     setData(prev => ({ ...prev, ...parsed }));

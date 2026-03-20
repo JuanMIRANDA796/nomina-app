@@ -7,11 +7,11 @@ const SECTIONS = [
     {
         name: 'CONSUMO',
         rows: [
-            { modalidad: 'SOAT', actMin: '23,00%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Libre Inversión', actMin: '23,00%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Viajes', actMin: '23,00%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Educación, Calam., Salud, Emp.', actMin: '12,00%', actMax: '-', propMin: '12,00%', propMax: '18,67%', mvMin: '0,95%', mvMax: '1,44%' },
-            { modalidad: 'Centro Vacacionales', actMin: '15,00%', actMax: '-', propMin: '15,00%', propMax: '20,94%', mvMin: '1,17%', mvMax: '1,60%' },
+            { modalidad: 'SOAT', actMin: '23,00%', actMax: '23,00%', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
+            { modalidad: 'Libre Inversión', actMin: '23,00%', actMax: '23,00%', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
+            { modalidad: 'Viajes', actMin: '23,00%', actMax: '23,00%', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
+            { modalidad: 'Educación, Calam., Salud, Emp.', actMin: '12,00%', actMax: '12,00%', propMin: '12,00%', propMax: '18,67%', mvMin: '0,95%', mvMax: '1,44%' },
+            { modalidad: 'Centro Vacacionales', actMin: '15,00%', actMax: '15,00%', propMin: '15,00%', propMax: '20,94%', mvMin: '1,17%', mvMax: '1,60%' },
         ]
     },
     {
@@ -24,19 +24,19 @@ const SECTIONS = [
     {
         name: 'VIVIENDA',
         rows: [
-            { modalidad: 'Plan Mi Casa VIS', actMin: '12,27%', actMax: '-', propMin: '12,27%', propMax: '-', mvMin: '0,97%', mvMax: '-' },
-            { modalidad: 'Plan Mi Casa No VIS', actMin: '12,40%', actMax: '-', propMin: '12,40%', propMax: '-', mvMin: '0,98%', mvMax: '-' },
-            { modalidad: 'Vivienda VIS', actMin: '12,40%', actMax: '-', propMin: '12,40%', propMax: '-', mvMin: '0,98%', mvMax: '-' },
-            { modalidad: 'Vivienda No VIS', actMin: '12,60%', actMax: '-', propMin: '12,60%', propMax: '-', mvMin: '0,99%', mvMax: '-' },
+            { modalidad: 'Plan Mi Casa VIS', actMin: '12,27%', actMax: '12,27%', propMin: '12,27%', propMax: '12,27%', mvMin: '0,97%', mvMax: '0,97%' },
+            { modalidad: 'Plan Mi Casa No VIS', actMin: '12,40%', actMax: '12,40%', propMin: '12,40%', propMax: '12,40%', mvMin: '0,98%', mvMax: '0,98%' },
+            { modalidad: 'Vivienda VIS', actMin: '12,40%', actMax: '12,40%', propMin: '12,40%', propMax: '12,40%', mvMin: '0,98%', mvMax: '0,98%' },
+            { modalidad: 'Vivienda No VIS', actMin: '12,60%', actMax: '12,60%', propMin: '12,60%', propMax: '12,60%', mvMin: '0,99%', mvMax: '0,99%' },
         ]
     },
     {
         name: 'HIPOTECARIO OTROS USOS',
         rows: [
-            { modalidad: 'Hipotecario (0-5 Años)', actMin: '16,00%', actMax: '-', propMin: '16,00%', propMax: '-', mvMin: '1,24%', mvMax: '-' },
-            { modalidad: 'Hipotecario (5-10 Años)', actMin: '16,67%', actMax: '-', propMin: '16,67%', propMax: '-', mvMin: '1,29%', mvMax: '-' },
-            { modalidad: 'Hipotecario (10-15 Años)', actMin: '17,33%', actMax: '-', propMin: '17,33%', propMax: '-', mvMin: '1,34%', mvMax: '-' },
-            { modalidad: 'Hipotecario (15-20 Años)', actMin: '18,00%', actMax: '-', propMin: '18,00%', propMax: '-', mvMin: '1,39%', mvMax: '-' },
+            { modalidad: 'Hipotecario (0-5 Años)', actMin: '16,00%', actMax: '16,00%', propMin: '16,00%', propMax: '16,00%', mvMin: '1,24%', mvMax: '1,24%' },
+            { modalidad: 'Hipotecario (5-10 Años)', actMin: '16,67%', actMax: '16,67%', propMin: '16,67%', propMax: '16,67%', mvMin: '1,29%', mvMax: '1,29%' },
+            { modalidad: 'Hipotecario (10-15 Años)', actMin: '17,33%', actMax: '17,33%', propMin: '17,33%', propMax: '17,33%', mvMin: '1,34%', mvMax: '1,34%' },
+            { modalidad: 'Hipotecario (15-20 Años)', actMin: '18,00%', actMax: '18,00%', propMin: '18,00%', propMax: '18,00%', mvMin: '1,39%', mvMax: '1,39%' },
         ]
     }
 ];
