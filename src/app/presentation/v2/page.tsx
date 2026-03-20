@@ -12,16 +12,12 @@ import PortfolioBalanceByLineChart from '@/components/presentation/PortfolioBala
 import BenchmarkingViviendaVisHasta20Chart from '@/components/presentation/BenchmarkingViviendaVisHasta20Chart';
 import BenchmarkingViviendaNoVisHasta20Chart from '@/components/presentation/BenchmarkingViviendaNoVisHasta20Chart';
 import BenchmarkingCDATsTable from '@/components/presentation/BenchmarkingCDATsTable';
-import EarlyCancellationsChart from '@/components/presentation/EarlyCancellationsChart';
-import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabilitiesBalanceChart';
-import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
 import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
 
 // New Components for V2
 import BenchmarkingSummaryTable from '@/components/presentation/BenchmarkingSummaryTable';
 import CreditRateProposalTable from '@/components/presentation/CreditRateProposalTable';
-import CreditRateProposalSummaryTable from '@/components/presentation/CreditRateProposalSummaryTable';
 import FinancialLeaderAttributionsSlide from '@/components/presentation/FinancialLeaderAttributionsSlide';
 import CDATRateProposalSlide from '@/components/presentation/CDATRateProposalSlide';
 
@@ -167,14 +163,6 @@ export default function PresentationV2Page() {
                 </section>
             ))}
 
-            {/* LIABILITIES & SAVINGS */}
-            {[TotalLiabilitiesBalanceChart, EarlyCancellationsChart, TPPCaptacionSaldosChart].map((Chart, i) => (
-                <section key={`liab-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
-                        <Chart />
-                    </motion.div>
-                </section>
-            ))}
 
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
@@ -189,12 +177,6 @@ export default function PresentationV2Page() {
                 </motion.div>
             </section>
 
-            {/* NEW: CREDIT RATE PROPOSAL SUMMARY (Resumen) */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                    <CreditRateProposalSummaryTable />
-                </motion.div>
-            </section>
 
             {/* NEW: ATTRIBUTIONS (Image 4) */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">

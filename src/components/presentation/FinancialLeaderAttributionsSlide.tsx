@@ -11,7 +11,7 @@ const SectionHeader = ({ title }: { title: string }) => (
 );
 
 const AtribucionCard = ({ title, description, formula }: { title: string, description: string, formula: string }) => (
-    <motion.div 
+    <motion.div
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:border-pink-500/30 transition-all shadow-xl group"
@@ -38,25 +38,25 @@ const AtribucionCard = ({ title, description, formula }: { title: string, descri
 
 export default function FinancialLeaderAttributionsSlide() {
     return (
-        <div className="w-full h-full p-12 flex flex-col items-center bg-slate-950 text-white">
-            <div className="w-full max-w-5xl flex justify-between items-start mb-16">
+        <div className="w-full h-full p-8 md:p-12 flex flex-col items-center bg-slate-950 text-white overflow-y-auto custom-scrollbar">
+            <div className="w-full max-w-5xl flex justify-between items-start mb-12 shrink-0">
                 <div className="flex flex-col gap-3">
-                    <h1 className="text-5xl font-black text-white tracking-tighter">Atribuciones Líder Financiero</h1>
+                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase italic">Atribuciones Líder Financiero</h1>
                     <div className="h-1.5 w-48 bg-pink-600 rounded-full shadow-[0_0_20px_rgba(233,30,99,0.5)]" />
                 </div>
-                <div className="relative w-48 h-16 opacity-30">
+                <div className="relative w-32 h-12 md:w-48 md:h-16 opacity-30">
                     <img src="/logo-presente.png" alt="Presente" className="object-contain w-full h-full brightness-0 invert" />
                 </div>
             </div>
 
-            <div className="w-full max-w-5xl flex flex-col gap-8">
-                <AtribucionCard 
+            <div className="w-full max-w-5xl flex flex-col gap-6 md:gap-8 pb-12 shrink-0">
+                <AtribucionCard
                     title="Consumo"
                     description="Se solicita otorgar atribuciones al Líder Financiero para negociar la tasa de interés de créditos de consumo que generen un buen negocio para el Fondo."
                     formula="Tasa marginal de la deuda + 300 puntos básicos."
                 />
-                
-                <AtribucionCard 
+
+                <AtribucionCard
                     title="Vivienda"
                     description="Se solicita otorgar atribuciones al Líder Financiero para negociar la tasa de interés de créditos de vivienda que generen un buen negocio para el Fondo."
                     formula="Tasa marginal de la deuda + 50 puntos básicos."

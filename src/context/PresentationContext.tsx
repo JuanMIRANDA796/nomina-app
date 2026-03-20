@@ -81,7 +81,7 @@ const macroAnalysisDefault = [
     },
     {
         title: "Inflación",
-        phrase: "Inflación 8%",
+        phrase: "Inflación 5.29%",
         iconType: "chart",
         color: "from-emerald-500 to-teal-600"
     },
@@ -256,7 +256,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     const resetData = useCallback(async () => {
         if (confirm('¿Estás seguro de restablecer todos los datos a los valores iniciales para TODOS los usuarios?')) {
             localStorage.removeItem('presentation_data_v2');
-            
+
             // Also reset server state
             try {
                 await fetch('/api/presentation/shared', {
