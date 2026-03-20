@@ -9,24 +9,22 @@ export default function BenchmarkingCreditsTable() {
     const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('febrero');
     const [isEditing, setIsEditing] = useState(false);
 
-    const data = selectedMonth === 'diciembre' 
-        ? globalData.benchmarkingCredits 
+    const data = selectedMonth === 'diciembre'
+        ? globalData.benchmarkingCredits
         : selectedMonth === 'enero'
             ? globalData.benchmarkingCreditsEnero
             : globalData.benchmarkingCreditsFebrero;
 
-    const sectionKey = selectedMonth === 'diciembre' 
-        ? 'benchmarkingCredits' 
-        : selectedMonth === 'enero' 
+    const sectionKey = selectedMonth === 'diciembre'
+        ? 'benchmarkingCredits'
+        : selectedMonth === 'enero'
             ? 'benchmarkingCreditsEnero'
             : 'benchmarkingCreditsFebrero';
 
     const handleUpdate = (type: 'banks' | 'cooperatives', index: number, field: string, value: string) => {
-        const newData = { ...data };
-        const sectionData = [...(data as any)[type]];
-        const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value);
-        sectionData[index] = { ...sectionData[index], [field]: val };
-        (newData as any)[type] = sectionData;
+        const newData = JSON.parse(JSON.stringify(data));
+        const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value.replace('%', ''));
+        (newData as any)[type][index][field] = val;
         updateSection(sectionKey as any, newData);
     };
 
@@ -35,9 +33,31 @@ export default function BenchmarkingCreditsTable() {
         const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCredits : globalData.benchmarkingCreditsEnero;
         if (!prevData) return null;
         const section = (prevData as any)[type];
+        if (!section) return null;
         const entity = section.find((e: any) => e.entity === entityName);
         if (!entity || (entity as any)[field] === null || (entity as any)[field] === undefined) return null;
         return currentVal - (entity as any)[field];
+    };
+
+    // Dynamic Ranking Formula (Lowest Tasa = #1)
+    const getRank = (type: 'banks' | 'cooperatives', field: string, value: number | null) => {
+        if (value === null || value === undefined) return '-';
+
+        const allRates: number[] = [];
+        const section = (data as any)[type];
+        if (!section) return '-';
+
+        section.forEach((entity: any) => {
+            const val = entity[field];
+            if (val !== null && val !== undefined && typeof val === 'number') {
+                allRates.push(val);
+            }
+        });
+
+        if (allRates.length === 0) return '-';
+        const uniqueSorted = Array.from(new Set(allRates)).sort((a, b) => a - b);
+        const rank = uniqueSorted.indexOf(value) + 1;
+        return rank > 0 ? rank.toString() : '-';
     };
 
     const TableHeader = () => (
@@ -47,7 +67,7 @@ export default function BenchmarkingCreditsTable() {
                 <th colSpan={3} className="px-4 py-2 border border-white/10 text-center">VIVIENDA VIS</th>
                 <th colSpan={3} className="px-4 py-2 border border-white/10 text-center">VIVIENDA NO VIS</th>
                 <th colSpan={3} className="px-4 py-2 border border-white/10 text-center">CONSUMO VEHICULO</th>
-                <th colSpan={5} className="px-4 py-2 border border-white/10 text-center">COMPRA CARTERA</th>
+                <th colSpan={4} className="px-4 py-2 border border-white/10 text-center">COMPRA CARTERA</th>
             </tr>
             <tr>
                 <th className="px-2 py-2 border border-white/10 text-center">Tasa</th>
@@ -60,7 +80,6 @@ export default function BenchmarkingCreditsTable() {
                 <th className="px-2 py-2 border border-white/10 text-center text-slate-400">Var</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Rank</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Desde</th>
-                <th className="px-2 py-2 border border-white/10 text-center text-slate-400">Var</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Hasta</th>
                 <th className="px-2 py-2 border border-white/10 text-center text-slate-400">Var</th>
                 <th className="px-2 py-2 border border-white/10 text-center">Rank</th>
@@ -68,107 +87,108 @@ export default function BenchmarkingCreditsTable() {
         </thead>
     );
 
+    const DataCell = ({ type, idx, field, row, isTasa = false }: any) => {
+        const value = (row as any)[field];
+        const isEditingField = isEditing && isTasa;
+
+        return (
+            <td className="p-0 border border-white/10">
+                {isEditingField ? (
+                    <input
+                        className="w-full h-full bg-white/10 text-center text-white border-none focus:ring-1 focus:ring-pink-500 outline-none p-1 text-[10px]"
+                        value={value ?? ''}
+                        onChange={(e) => handleUpdate(type, idx, field, e.target.value)}
+                    />
+                ) : (
+                    <div className={`text-center py-1.5 font-bold ${value != null ? 'text-white' : 'text-slate-600'}`}>
+                        {value != null ? `${Number(value).toFixed(2)}%` : 'N/A'}
+                    </div>
+                )}
+            </td>
+        );
+    };
+
+    const VariationCell = ({ type, row, field }: any) => {
+        const varVal = getVariation(type, row.entity, field, (row as any)[field]);
+        if (varVal === null) return <td className="p-0 border border-white/10 bg-black/40 text-center text-slate-600">-</td>;
+        const sign = varVal > 0 ? '+' : '';
+        return (
+            <td className={`p-0 border border-white/10 bg-black/40 text-center text-[9px] font-bold ${varVal > 0 ? 'text-emerald-400' : varVal < 0 ? 'text-rose-400' : 'text-slate-500'}`}>
+                {sign}{varVal.toFixed(2)}%
+            </td>
+        );
+    };
+
+    const RankCell = ({ type, field, value }: any) => (
+        <td className="p-0 border border-white/10 bg-black/20 text-center text-slate-500 font-black">
+            {getRank(type, field, value)}
+        </td>
+    );
+
     const renderRows = (type: 'banks' | 'cooperatives', label: string) => (
         <>
-            <tr className="bg-pink-900/40 font-bold text-white uppercase text-xs">
-                <td colSpan={10} className="px-4 py-2 border border-white/10">{label}</td>
+            <tr className="bg-slate-900 font-bold text-white uppercase text-[10px] tracking-widest">
+                <td colSpan={15} className="px-4 py-2 border border-white/10 bg-slate-950/50">{label}</td>
             </tr>
             {(data as any)[type].map((row: any, idx: number) => (
-                <tr key={idx} className={`hover:bg-white/5 transition-colors text-[11px] ${row.entity === 'PRESENTE' ? 'bg-indigo-900/30' : ''}`}>
-                    <td className="px-4 py-1.5 border border-white/10 text-white font-medium">{row.entity}</td>
-                    {['vis_tasa', 'vis_rank', 'novis_tasa', 'novis_rank', 'vehiculo_tasa', 'vehiculo_rank', 'cc_desde', 'cc_rank_extra', 'cc_hasta', 'cc_rank'].map(field => {
-                        // Special handling for the extra Var columns which are NOT in the field list but we insert them manually in the render or via a trick
-                        // Wait, it's easier to just map the fields and insert logic
-                        const isTasaField = field.includes('tasa') || field === 'cc_desde' || field === 'cc_hasta';
-                        const isRankField = field.includes('rank');
+                <tr key={idx} className={`hover:bg-white/5 transition-colors text-[11px] ${row.entity === 'PRESENTE' ? 'bg-indigo-900/20' : ''}`}>
+                    <td className={`px-4 py-1.5 border border-white/10 font-bold ${row.entity === 'PRESENTE' ? 'text-pink-400' : 'text-slate-300'}`}>
+                        {row.entity}
+                    </td>
+                    <DataCell type={type} idx={idx} field="vis_tasa" row={row} isTasa={true} />
+                    <VariationCell type={type} row={row} field="vis_tasa" />
+                    <RankCell type={type} field="vis_tasa" value={row.vis_tasa} />
 
-                        if (field === 'cc_rank_extra') return null; // placeholder for manual insertion if needed, but let's just use better logic below
+                    <DataCell type={type} idx={idx} field="novis_tasa" row={row} isTasa={true} />
+                    <VariationCell type={type} row={row} field="novis_tasa" />
+                    <RankCell type={type} field="novis_tasa" value={row.novis_tasa} />
 
-                        return (
-                            <React.Fragment key={field}>
-                                <td className="p-0 border border-white/10">
-                                    {isEditing ? (
-                                        <input
-                                            className="w-full h-full bg-white/10 text-center text-white border-none focus:ring-1 focus:ring-pink-500 outline-none p-1"
-                                            value={(row as any)[field] ?? ''}
-                                            onChange={(e) => handleUpdate(type, idx, field, e.target.value)}
-                                        />
-                                    ) : (
-                                        <div className="text-center text-slate-300 w-full py-1.5">
-                                            {(row as any)[field] != null ? (field.includes('tasa') || field.includes('desde') || field.includes('hasta') ? `${Number((row as any)[field]).toFixed(2)}%` : (row as any)[field]) : 'N/A'}
-                                        </div>
-                                    )}
-                                </td>
-                                {isTasaField && (
-                                    <td className="p-0 border border-white/10 bg-black/40">
-                                        <div className={`text-center py-1 text-[9px] font-bold ${
-                                            (() => {
-                                                const varVal = getVariation(type, row.entity, field, (row as any)[field]);
-                                                if (varVal === null) return 'text-slate-600';
-                                                if (varVal > 0) return 'text-emerald-400';
-                                                if (varVal < 0) return 'text-rose-400';
-                                                return 'text-slate-500';
-                                            })()
-                                        }`}>
-                                            {(() => {
-                                                const varVal = getVariation(type, row.entity, field, (row as any)[field]);
-                                                if (varVal === null) return '-';
-                                                const sign = varVal > 0 ? '+' : '';
-                                                return `${sign}${varVal.toFixed(2)}%`;
-                                            })()}
-                                        </div>
-                                    </td>
-                                )}
-                            </React.Fragment>
-                        );
-                    })}
+                    <DataCell type={type} idx={idx} field="vehiculo_tasa" row={row} isTasa={true} />
+                    <VariationCell type={type} row={row} field="vehiculo_tasa" />
+                    <RankCell type={type} field="vehiculo_tasa" value={row.vehiculo_tasa} />
+
+                    <DataCell type={type} idx={idx} field="cc_desde" row={row} isTasa={true} />
+                    <DataCell type={type} idx={idx} field="cc_hasta" row={row} isTasa={true} />
+                    <VariationCell type={type} row={row} field="cc_desde" />
+                    <RankCell type={type} field="cc_desde" value={row.cc_desde} />
                 </tr>
             ))}
         </>
     );
 
     return (
-        <div className="w-full h-full flex flex-col p-4 bg-slate-950/50 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
-            <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-4">
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-orange-400 bg-clip-text text-transparent">
-                        Benchmarking Vivienda, Vehículo – Compra Cartera <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}</span>
+        <div className="w-full h-full flex flex-col p-6 bg-slate-950/80 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden group">
+            <div className="flex justify-between items-center mb-6">
+                <div>
+                    <h3 className="text-3xl font-black bg-gradient-to-r from-pink-500 via-rose-500 to-orange-400 bg-clip-text text-transparent uppercase italic tracking-tighter">
+                        Benchmarking Vivienda y Consumo
                     </h3>
-                    <div className="px-3 py-1 bg-pink-500/10 border border-pink-500/20 rounded-full">
-                        <span className="text-pink-400 text-xs font-bold uppercase tracking-tighter">Comparativo de Tasas</span>
-                    </div>
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">
+                        Tasas de cartelera al {selectedMonth === 'febrero' ? '16/03/2026' : selectedMonth === 'enero' ? '10/01/2026' : '10/12/2025'}
+                    </p>
                 </div>
                 <div className="flex gap-4 items-center">
                     <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner">
-                        <button
-                            onClick={() => setSelectedMonth('diciembre')}
-                            className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'diciembre' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
-                        >
-                            Dic
-                        </button>
-                        <button
-                            onClick={() => setSelectedMonth('enero')}
-                            className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'enero' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
-                        >
-                            Ene
-                        </button>
-                        <button
-                            onClick={() => setSelectedMonth('febrero')}
-                            className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'febrero' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
-                        >
-                            Feb
-                        </button>
+                        {(['diciembre', 'enero', 'febrero'] as const).map(m => (
+                            <button
+                                key={m}
+                                onClick={() => setSelectedMonth(m)}
+                                className={`px-4 py-1.5 text-xs font-black transition-all duration-300 rounded-lg uppercase ${selectedMonth === m ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
+                            >
+                                {m.substring(0, 3)}
+                            </button>
+                        ))}
                     </div>
                     <button
                         onClick={() => setIsEditing(!isEditing)}
-                        className={`px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${isEditing ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10'}`}
+                        className={`px-6 py-2 rounded-xl text-xs font-black transition-all duration-300 uppercase ${isEditing ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10'}`}
                     >
                         {isEditing ? '✓ Finalizar' : '✎ Editar'}
                     </button>
                 </div>
             </div>
 
-            <div className="flex-1 overflow-auto rounded-xl border border-white/10">
+            <div className="flex-1 overflow-auto rounded-2xl border border-white/10 bg-black/40 custom-scrollbar shadow-inner">
                 <table className="w-full border-collapse">
                     <TableHeader />
                     <tbody>
@@ -178,16 +198,36 @@ export default function BenchmarkingCreditsTable() {
                 </table>
             </div>
 
-            <div className="mt-4 flex gap-4 text-[10px] text-slate-500">
-                <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-indigo-500/30 border border-indigo-400/30 rounded-full"></div>
-                    <span>PRESENTE</span>
+            <div className="mt-6 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                <div className="flex gap-6">
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-pink-500 rounded-full" />
+                        <span>PRESENTE</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-slate-400 rounded-full" />
+                        <span>Comparativos Sectoriales</span>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-pink-500 border border-pink-500/20 rounded-full"></div>
-                    <span>Bancos / Cooperativas</span>
-                </div>
+                <span className="opacity-50">Confidencial / Comité de Crédito 2026</span>
             </div>
+
+            <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 20px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(233, 30, 99, 0.4);
+                }
+            `}</style>
         </div>
     );
 }
+

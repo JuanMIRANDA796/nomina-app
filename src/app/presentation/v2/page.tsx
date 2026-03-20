@@ -18,6 +18,7 @@ import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2C
 // New Components for V2
 import BenchmarkingSummaryTable from '@/components/presentation/BenchmarkingSummaryTable';
 import CreditRateProposalTable from '@/components/presentation/CreditRateProposalTable';
+import BenchmarkingCreditsTable from '@/components/presentation/BenchmarkingCreditsTable';
 import FinancialLeaderAttributionsSlide from '@/components/presentation/FinancialLeaderAttributionsSlide';
 import CDATRateProposalSlide from '@/components/presentation/CDATRateProposalSlide';
 
@@ -167,6 +168,13 @@ export default function PresentationV2Page() {
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
                     <BenchmarkingCDATsTable />
+                </motion.div>
+            </section>
+
+            {/* NEW: BENCHMARKING CREDITS (Vivienda/Consumo) */}
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[95rem] h-[85vh]">
+                    <BenchmarkingCreditsTable />
                 </motion.div>
             </section>
 
