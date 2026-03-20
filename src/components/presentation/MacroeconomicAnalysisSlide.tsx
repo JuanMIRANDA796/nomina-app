@@ -27,7 +27,7 @@ export default function MacroeconomicAnalysisSlide() {
     };
 
     return (
-        <div className="w-full h-full flex flex-col p-8 md:p-24 bg-white text-slate-800 relative overflow-hidden group">
+        <div className="w-full h-full flex flex-col p-8 md:p-16 bg-white text-slate-800 relative overflow-hidden group">
             {/* LARGE GRAPHIC ARCH (Semi-circle) */}
             <div className="absolute top-0 right-0 w-[800px] h-[800px] border-[60px] border-pink-500/10 rounded-full translate-x-1/2 -translate-y-1/4" />
 
@@ -40,13 +40,13 @@ export default function MacroeconomicAnalysisSlide() {
             </button>
 
             {/* HEADER AREA */}
-            <div className="w-full flex justify-between items-start mb-16 relative z-10">
+            <div className="w-full flex justify-between items-start mb-8 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h2 className="text-5xl md:text-7xl font-black text-[#9D1D5A] tracking-tighter">
+                    <h2 className="text-4xl md:text-6xl font-black text-[#9D1D5A] tracking-tighter">
                         Análisis Macroeconómico
                     </h2>
                 </motion.div>
@@ -61,15 +61,14 @@ export default function MacroeconomicAnalysisSlide() {
                 </motion.div>
             </div>
 
-            {/* TEXT CONTENT */}
-            <div className="flex-1 w-full max-w-5xl flex flex-col gap-10 relative z-10 overflow-y-auto custom-scrollbar pr-4">
+            <div className="flex-1 w-full max-w-5xl flex flex-col gap-4 relative z-10 overflow-y-auto custom-scrollbar pr-4">
                 {paragraphs.map((p: string, idx: number) => (
                     <motion.p
                         key={idx}
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: idx * 0.1 }}
-                        className="text-lg md:text-2xl leading-relaxed text-slate-700 font-medium text-justify"
+                        className="text-lg md:text-[1.35rem] leading-relaxed text-slate-700 font-medium text-justify"
                         dangerouslySetInnerHTML={formatText(p)}
                     />
                 ))}
