@@ -34,6 +34,10 @@ import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicA
 import CDATProposalMainTable from '@/components/presentation/CDATProposalMainTable';
 import CDATRateMatrixTable from '@/components/presentation/CDATRateMatrixTable';
 import CDATSocialComparisonSlide from '@/components/presentation/CDATSocialComparisonSlide';
+import CreditRateProposalTable from '@/components/presentation/CreditRateProposalTable';
+import CreditRateProposalSummaryTable from '@/components/presentation/CreditRateProposalSummaryTable';
+import CreditRateProposalSlide from '@/components/presentation/CreditRateProposalSlide';
+import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
 
 export default function PresentationContent() {
     const { resetData, isLoading } = usePresentation();
@@ -89,12 +93,18 @@ export default function PresentationContent() {
         { id: 'cdat-rate-matrix', component: <CDATRateMatrixTable /> },
         { id: 'cdat-social-comparison', component: <CDATSocialComparisonSlide /> },
 
+        // CREDIT PROPOSALS (NEW)
+        { id: 'credit-proposal-main', component: <CreditRateProposalTable /> },
+        { id: 'credit-proposal-summary', component: <CreditRateProposalSummaryTable /> },
+        { id: 'credit-proposal-slide', component: <CreditRateProposalSlide /> },
+
         // FINAL PROPOSALS
         { id: 'fsg-proposal', component: <FSGProposalTable /> },
     ];
 
     return (
         <main className="snap-y snap-mandatory h-screen w-full overflow-y-scroll bg-slate-950 text-white scroll-smooth selection:bg-pink-500 selection:text-white">
+            <title>Link</title>
 
             {slides.map((slide) => (
                 <section key={slide.id} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
