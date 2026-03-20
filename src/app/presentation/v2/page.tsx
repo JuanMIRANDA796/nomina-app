@@ -20,10 +20,10 @@ import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2C
 
 // New Components for V2
 import BenchmarkingSummaryTable from '@/components/presentation/BenchmarkingSummaryTable';
-import CreditRateProposalSlide from '@/components/presentation/CreditRateProposalSlide';
+import CreditRateProposalTable from '@/components/presentation/CreditRateProposalTable';
+import CreditRateProposalSummaryTable from '@/components/presentation/CreditRateProposalSummaryTable';
 import FinancialLeaderAttributionsSlide from '@/components/presentation/FinancialLeaderAttributionsSlide';
 import CDATRateProposalSlide from '@/components/presentation/CDATRateProposalSlide';
-import CreditRateProposalSummaryTable from '@/components/presentation/CreditRateProposalSummaryTable';
 
 export default function PresentationV2Page() {
     const { data, updateSection, resetData, isLoading } = usePresentation();
@@ -145,7 +145,7 @@ export default function PresentationV2Page() {
             {/* CHART: TES & HISTORICAL */}
             {[HistoricalRatesV2Chart, ReferenceRatesChart, InflationVsRepoChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart, PortfolioBalanceByLineChart].map((Chart, i) => (
                 <section key={`chart-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+                    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                         <Chart />
                     </motion.div>
                 </section>
@@ -161,7 +161,7 @@ export default function PresentationV2Page() {
             {/* BENCHMARKING VIVIENDA PESOS (KEPT) */}
             {[BenchmarkingViviendaVisHasta20Chart, BenchmarkingViviendaNoVisHasta20Chart].map((Chart, i) => (
                 <section key={`viv-p-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+                    <motion.div initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                         <Chart />
                     </motion.div>
                 </section>
@@ -170,7 +170,7 @@ export default function PresentationV2Page() {
             {/* LIABILITIES & SAVINGS */}
             {[TotalLiabilitiesBalanceChart, EarlyCancellationsChart, TPPCaptacionSaldosChart].map((Chart, i) => (
                 <section key={`liab-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                         <Chart />
                     </motion.div>
                 </section>
@@ -182,12 +182,14 @@ export default function PresentationV2Page() {
                 </motion.div>
             </section>
 
+            {/* NEW: CREDIT RATE PROPOSAL (Image 3) */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[95vh] rounded-3xl overflow-hidden border border-white/10 shadow-3xl bg-slate-900/40 backdrop-blur-3xl">
-                    <CreditRateProposalSlide />
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
+                    <CreditRateProposalTable />
                 </motion.div>
             </section>
 
+            {/* NEW: CREDIT RATE PROPOSAL SUMMARY (Resumen) */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
                     <CreditRateProposalSummaryTable />
@@ -196,14 +198,14 @@ export default function PresentationV2Page() {
 
             {/* NEW: ATTRIBUTIONS (Image 4) */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, x: -100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+                <motion.div initial={{ opacity: 0, x: -100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                     <FinancialLeaderAttributionsSlide />
                 </motion.div>
             </section>
 
             {/* NEW: CDAT RATE PROPOSAL (Image 5) */}
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
+                <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                     <CDATRateProposalSlide />
                 </motion.div>
             </section>
@@ -217,7 +219,7 @@ export default function PresentationV2Page() {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                     </svg>
-                    Restablecer
+                    Restablecer Datos
                 </button>
             </div>
 
