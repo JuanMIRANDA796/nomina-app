@@ -9,7 +9,8 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
-    ResponsiveContainer
+    ResponsiveContainer,
+    LabelList
 } from 'recharts';
 import initialData from '@/data/inflation_repo_data.json';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -135,7 +136,9 @@ export default function InflationVsRepoChart() {
                             strokeWidth={3}
                             dot={false}
                             activeDot={{ r: 6 }}
-                        />
+                        >
+                            <LabelList dataKey="inflation" position="top" offset={10} fill="#0F4C81" fontSize={10} fontWeight="bold" formatter={(val: any) => `${Number(val).toFixed(2)}%`} />
+                        </Line>
 
                         <Line
                             type="monotone"
@@ -145,7 +148,9 @@ export default function InflationVsRepoChart() {
                             strokeWidth={3}
                             dot={false}
                             activeDot={{ r: 6 }}
-                        />
+                        >
+                            <LabelList dataKey="repo" position="top" offset={10} fill="#F97316" fontSize={10} fontWeight="bold" formatter={(val: any) => `${Number(val).toFixed(2)}%`} />
+                        </Line>
 
                         <Line
                             type="monotone"

@@ -108,7 +108,9 @@ export default function PortfolioStockRatesChart() {
                             stroke="#F97316"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#F97316' }}
-                        />
+                        >
+                            <LabelList dataKey="rotativos" position="top" offset={10} fill="#F97316" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
+                        </Line>
 
                         <Line
                             type="monotone"
@@ -117,7 +119,9 @@ export default function PortfolioStockRatesChart() {
                             stroke="#0F4C81"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#0F4C81' }}
-                        />
+                        >
+                            <LabelList dataKey="consumo" position="top" offset={10} fill="#0F4C81" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
+                        </Line>
 
                         <Line
                             type="monotone"
@@ -126,7 +130,9 @@ export default function PortfolioStockRatesChart() {
                             stroke="#38BDF8"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#38BDF8' }}
-                        />
+                        >
+                            <LabelList dataKey="total" position="top" offset={10} fill="#38BDF8" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
+                        </Line>
 
                         <Line
                             type="monotone"
@@ -135,7 +141,9 @@ export default function PortfolioStockRatesChart() {
                             stroke="#10B981"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#10B981' }}
-                        />
+                        >
+                            <LabelList dataKey="vivienda" position="top" offset={10} fill="#10B981" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
+                        </Line>
 
                     </LineChart>
                 </ResponsiveContainer>

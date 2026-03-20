@@ -108,7 +108,9 @@ export default function PortfolioBalanceByLineChart() {
                             dot={{ r: 4, fill: '#10b981', strokeWidth: 0 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Vivienda"
-                        />
+                        >
+                            <LabelList dataKey="vivienda" position="top" offset={10} fill="#10b981" fontSize={10} fontWeight="bold" formatter={(val: any) => `$${Number(val).toLocaleString()}`} />
+                        </Line>
                         <Line
                             type="monotone"
                             dataKey="rotativos"
@@ -117,7 +119,9 @@ export default function PortfolioBalanceByLineChart() {
                             dot={{ r: 4, fill: '#f97316', strokeWidth: 0 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Rotativos"
-                        />
+                        >
+                            <LabelList dataKey="rotativos" position="top" offset={10} fill="#f97316" fontSize={10} fontWeight="bold" formatter={(val: any) => `$${Number(val).toLocaleString()}`} />
+                        </Line>
                         <Line
                             type="monotone"
                             dataKey="consumo"
@@ -126,7 +130,9 @@ export default function PortfolioBalanceByLineChart() {
                             dot={{ r: 4, fill: '#0ea5e9', strokeWidth: 0 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Consumo"
-                        />
+                        >
+                            <LabelList dataKey="consumo" position="top" offset={10} fill="#0ea5e9" fontSize={10} fontWeight="bold" formatter={(val: any) => `$${Number(val).toLocaleString()}`} />
+                        </Line>
                         <Line
                             type="monotone"
                             dataKey="total"
@@ -135,7 +141,9 @@ export default function PortfolioBalanceByLineChart() {
                             strokeWidth={3}
                             strokeDasharray="5 5"
                             dot={{ r: 3, fill: '#ffffff' }}
-                        />
+                        >
+                            <LabelList dataKey="total" position="top" offset={10} fill="#ffffff" fontSize={10} fontWeight="bold" formatter={(val: any) => `$${Number(val).toLocaleString()}`} />
+                        </Line>
                     </LineChart>
                 </ResponsiveContainer>
             </div>

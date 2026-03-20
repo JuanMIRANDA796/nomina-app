@@ -27,10 +27,8 @@ import BenchmarkingCreditsTable from '@/components/presentation/BenchmarkingCred
 import BenchmarkingCDATsTable from '@/components/presentation/BenchmarkingCDATsTable';
 import RateProposalTables from '@/components/presentation/RateProposalTables';
 import FSGProposalTable from '@/components/presentation/FSGProposalTable';
-import EarlyCancellationsChart from '@/components/presentation/EarlyCancellationsChart';
-import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabilitiesBalanceChart';
-import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
+import CreditRateProposalTable from '@/components/presentation/CreditRateProposalTable';
 import CDATProposalMainTable from '@/components/presentation/CDATProposalMainTable';
 import CDATRateMatrixTable from '@/components/presentation/CDATRateMatrixTable';
 import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
@@ -77,8 +75,8 @@ export default function PresentationPage() {
                         <p className="text-xl text-white/80 mt-2 font-medium">
                             {data.metadata.subtitle}
                         </p>
-                        
-                        <button 
+
+                        <button
                             onClick={() => setIsEditingCover(true)}
                             className="absolute -top-4 -right-8 p-1 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                         >
@@ -103,8 +101,8 @@ export default function PresentationPage() {
                                 <div className="space-y-4">
                                     <div>
                                         <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Título Principal</label>
-                                        <input 
-                                            type="text" 
+                                        <input
+                                            type="text"
                                             className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 outline-none focus:border-pink-500"
                                             value={data.metadata.title}
                                             onChange={(e) => updateSection('metadata', { ...data.metadata, title: e.target.value })}
@@ -112,8 +110,8 @@ export default function PresentationPage() {
                                     </div>
                                     <div>
                                         <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Subtítulo / Fecha</label>
-                                        <input 
-                                            type="text" 
+                                        <input
+                                            type="text"
                                             className="w-full bg-slate-900 border border-white/10 rounded-xl p-3 outline-none focus:border-pink-500"
                                             value={data.metadata.subtitle}
                                             onChange={(e) => updateSection('metadata', { ...data.metadata, subtitle: e.target.value })}
@@ -121,7 +119,7 @@ export default function PresentationPage() {
                                     </div>
                                 </div>
                                 <div className="mt-8 flex justify-end">
-                                    <button 
+                                    <button
                                         onClick={() => setIsEditingCover(false)}
                                         className="px-8 py-3 bg-pink-600 hover:bg-pink-700 rounded-2xl font-bold shadow-lg shadow-pink-600/20 transition-all hover:scale-105"
                                     >
@@ -209,20 +207,8 @@ export default function PresentationPage() {
             </section>
 
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <TotalLiabilitiesBalanceChart />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <EarlyCancellationsChart />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
-                    <TPPCaptacionSaldosChart />
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
+                    <CreditRateProposalTable />
                 </motion.div>
             </section>
 
