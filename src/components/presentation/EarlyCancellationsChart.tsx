@@ -71,6 +71,7 @@ export default function EarlyCancellationsChart() {
                         />
                         <YAxis
                             yAxisId="left"
+                            hide={true}
                             stroke="#9CA3AF"
                             tick={{ fill: '#9CA3AF', fontSize: 12 }}
                             axisLine={false}
@@ -79,6 +80,7 @@ export default function EarlyCancellationsChart() {
                         />
                         <YAxis
                             yAxisId="right"
+                            hide={true}
                             orientation="right"
                             stroke="#9CA3AF"
                             tick={{ fill: '#9CA3AF', fontSize: 12 }}
@@ -113,7 +115,6 @@ export default function EarlyCancellationsChart() {
                         />
                         <Legend verticalAlign="bottom" height={36} iconType="circle" />
 
-                        {/* % CDATs cancelados - Light Blue */}
                         <Line
                             yAxisId="right"
                             type="monotone"
@@ -123,9 +124,7 @@ export default function EarlyCancellationsChart() {
                             strokeWidth={3}
                             dot={{ fill: '#0ea5e9', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="cdat_per" position="top" style={{ fill: '#0ea5e9', fontSize: 10, fontWeight: 'bold' }} formatter={(v: any) => `${v}%`} />
-                        </Line>
+                        />
 
                         {/* CDATs cancelados - Green */}
                         <Line
@@ -137,11 +136,8 @@ export default function EarlyCancellationsChart() {
                             strokeWidth={3}
                             dot={{ fill: '#16a34a', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="cdat_val" position="right" style={{ fill: '#16a34a', fontSize: 10, fontWeight: 'bold' }} formatter={(v: any) => `$ ${v}`} />
-                        </Line>
+                        />
 
-                        {/* Ahorro programados - Purple */}
                         <Line
                             yAxisId="left"
                             type="monotone"
@@ -151,9 +147,7 @@ export default function EarlyCancellationsChart() {
                             strokeWidth={3}
                             dot={{ fill: '#9333ea', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="ahorro_val" position="right" style={{ fill: '#9333ea', fontSize: 10, fontWeight: 'bold' }} formatter={(v: any) => `$ ${v}`} />
-                        </Line>
+                        />
 
                         {/* % Ahorros cancelados - Red */}
                         <Line
@@ -165,9 +159,7 @@ export default function EarlyCancellationsChart() {
                             strokeWidth={3}
                             dot={{ fill: '#dc2626', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="ahorro_per" position="top" style={{ fill: '#dc2626', fontSize: 10, fontWeight: 'bold' }} formatter={(v: any) => `${v}%`} />
-                        </Line>
+                        />
                     </LineChart>
                 </ResponsiveContainer>
             </div>

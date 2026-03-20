@@ -29,8 +29,11 @@ export default function InflationVsRepoChart() {
 
     // Formatting helper
     const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return `${date.getMonth() + 1}/${date.getFullYear()}`;
+        if (!dateString) return '';
+        const parts = dateString.split('-');
+        if (parts.length < 2) return dateString;
+        // Return MM/YYYY directly from string parts to avoid timezone issues
+        return `${parseInt(parts[1])}/${parts[0]}`;
     };
 
     const handleUpdate = (index: number, field: string, value: string) => {
@@ -85,6 +88,7 @@ export default function InflationVsRepoChart() {
                             minTickGap={30}
                         />
                         <YAxis
+                            hide={true}
                             stroke="#9CA3AF"
                             tick={{ fill: '#9CA3AF' }}
                             axisLine={false}

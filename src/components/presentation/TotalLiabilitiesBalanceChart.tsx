@@ -108,9 +108,7 @@ export default function TotalLiabilitiesBalanceChart() {
                             strokeWidth={3}
                             dot={{ fill: '#a855f7', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="total" position="top" style={{ fill: '#a855f7', fontSize: 9, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
-                        </Line>
+                        />
 
                         {/* CDATs - Orange */}
                         <Line
@@ -121,9 +119,7 @@ export default function TotalLiabilitiesBalanceChart() {
                             strokeWidth={3}
                             dot={{ fill: '#f97316', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="cdats" position="top" style={{ fill: '#f97316', fontSize: 9, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
-                        </Line>
+                        />
 
                         {/* Ahorro Futuro - Pink/Magenta */}
                         <Line
@@ -134,9 +130,7 @@ export default function TotalLiabilitiesBalanceChart() {
                             strokeWidth={3}
                             dot={{ fill: '#d946ef', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="fut" position="top" style={{ fill: '#d946ef', fontSize: 8, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
-                        </Line>
+                        />
 
                         {/* Ahorros disponibles - Light Blue */}
                         <Line
@@ -147,9 +141,7 @@ export default function TotalLiabilitiesBalanceChart() {
                             strokeWidth={3}
                             dot={{ fill: '#0ea5e9', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="disp" position="bottom" style={{ fill: '#0ea5e9', fontSize: 8, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
-                        </Line>
+                        />
 
                         {/* Ahorros Programados - Lime */}
                         <Line
@@ -160,9 +152,7 @@ export default function TotalLiabilitiesBalanceChart() {
                             strokeWidth={3}
                             dot={{ fill: '#84cc16', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="prog" position="top" style={{ fill: '#84cc16', fontSize: 8, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
-                        </Line>
+                        />
                     </LineChart>
                 </ResponsiveContainer>
             </div>

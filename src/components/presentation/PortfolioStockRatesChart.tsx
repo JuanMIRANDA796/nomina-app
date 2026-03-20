@@ -49,7 +49,7 @@ export default function PortfolioStockRatesChart() {
 
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D81B60] to-[#FF9800]">
-                    Tasas de Stock Cartera
+                    Tasas efectiva de Stock de Cartera
                 </h3>
                 <button
                     onClick={() => setIsEditing(true)}
@@ -108,9 +108,7 @@ export default function PortfolioStockRatesChart() {
                             stroke="#F97316"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#F97316' }}
-                        >
-                            <LabelList dataKey="rotativos" position="top" offset={10} fill="#9CA3AF" fontSize={12} formatter={(val: any) => `${val}%`} />
-                        </Line>
+                        />
 
                         <Line
                             type="monotone"
@@ -119,9 +117,7 @@ export default function PortfolioStockRatesChart() {
                             stroke="#0F4C81"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#0F4C81' }}
-                        >
-                            <LabelList dataKey="consumo" position="top" offset={10} fill="#9CA3AF" fontSize={12} formatter={(val: any) => `${val}%`} />
-                        </Line>
+                        />
 
                         <Line
                             type="monotone"
@@ -130,9 +126,7 @@ export default function PortfolioStockRatesChart() {
                             stroke="#38BDF8"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#38BDF8' }}
-                        >
-                            <LabelList dataKey="total" position="bottom" offset={10} fill="#9CA3AF" fontSize={12} formatter={(val: any) => `${val}%`} />
-                        </Line>
+                        />
 
                         <Line
                             type="monotone"
@@ -141,9 +135,7 @@ export default function PortfolioStockRatesChart() {
                             stroke="#10B981"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#10B981' }}
-                        >
-                            <LabelList dataKey="vivienda" position="bottom" offset={10} fill="#9CA3AF" fontSize={12} formatter={(val: any) => `${val}%`} />
-                        </Line>
+                        />
 
                     </LineChart>
                 </ResponsiveContainer>

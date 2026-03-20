@@ -108,9 +108,7 @@ export default function PortfolioBalanceByLineChart() {
                             dot={{ r: 4, fill: '#10b981', strokeWidth: 0 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Vivienda"
-                        >
-                            <LabelList dataKey="vivienda" position="top" style={{ fill: '#10b981', fontSize: 11, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
-                        </Line>
+                        />
                         <Line
                             type="monotone"
                             dataKey="rotativos"
@@ -119,9 +117,7 @@ export default function PortfolioBalanceByLineChart() {
                             dot={{ r: 4, fill: '#f97316', strokeWidth: 0 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Rotativos"
-                        >
-                            <LabelList dataKey="rotativos" position="top" style={{ fill: '#f97316', fontSize: 11, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
-                        </Line>
+                        />
                         <Line
                             type="monotone"
                             dataKey="consumo"
@@ -130,9 +126,7 @@ export default function PortfolioBalanceByLineChart() {
                             dot={{ r: 4, fill: '#0ea5e9', strokeWidth: 0 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
                             name="Consumo"
-                        >
-                            <LabelList dataKey="consumo" position="top" style={{ fill: '#0ea5e9', fontSize: 11, fontWeight: 'bold' }} formatter={(v: any) => v.toLocaleString()} />
-                        </Line>
+                        />
                         <Line
                             type="monotone"
                             dataKey="total"
@@ -141,9 +135,7 @@ export default function PortfolioBalanceByLineChart() {
                             strokeWidth={3}
                             strokeDasharray="5 5"
                             dot={{ r: 3, fill: '#ffffff' }}
-                        >
-                            <LabelList dataKey="total" position="top" style={{ fill: '#ffffff', fontSize: 12, fontWeight: 'bold' }} formatter={(v: any) => `$ ${v.toLocaleString()}`} />
-                        </Line>
+                        />
                     </LineChart>
                 </ResponsiveContainer>
             </div>

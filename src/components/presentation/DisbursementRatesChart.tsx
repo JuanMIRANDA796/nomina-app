@@ -46,7 +46,7 @@ export default function DisbursementRatesChart() {
 
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D81B60] to-[#FF9800]">
-                    Tasa de Desembolso
+                    Tasa efectiva de desembolso
                 </h3>
                 <button
                     onClick={() => setIsEditing(true)}

@@ -70,6 +70,7 @@ export default function ReferenceRatesChart() {
                         tickLine={false}
                     />
                     <YAxis
+                        hide={true}
                         stroke="#475569"
                         tick={{ fill: '#94A3B8', fontSize: 12 }}
                         axisLine={false}

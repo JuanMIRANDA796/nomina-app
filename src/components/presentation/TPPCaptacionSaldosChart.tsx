@@ -71,6 +71,7 @@ export default function TPPCaptacionSaldosChart() {
                         />
                         <YAxis
                             yAxisId="left"
+                            hide={true}
                             stroke="#9CA3AF"
                             tick={{ fill: '#9CA3AF', fontSize: 11 }}
                             axisLine={false}
@@ -80,6 +81,7 @@ export default function TPPCaptacionSaldosChart() {
                         />
                         <YAxis
                             yAxisId="right"
+                            hide={true}
                             orientation="right"
                             stroke="#9CA3AF"
                             tick={{ fill: '#9CA3AF', fontSize: 11 }}
@@ -115,7 +117,6 @@ export default function TPPCaptacionSaldosChart() {
                         />
                         <Legend verticalAlign="bottom" height={36} iconType="circle" />
 
-                        {/* Saldo Captación - Orange */}
                         <Line
                             yAxisId="left"
                             type="monotone"
@@ -125,11 +126,8 @@ export default function TPPCaptacionSaldosChart() {
                             strokeWidth={3}
                             dot={{ fill: '#ea580c', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="saldo_cap" position="top" style={{ fill: '#ea580c', fontSize: 9, fontWeight: 'bold' }} formatter={(v: any) => v?.toLocaleString()} />
-                        </Line>
+                        />
 
-                        {/* TPP CDAT - Green */}
                         <Line
                             yAxisId="right"
                             type="monotone"
@@ -139,11 +137,8 @@ export default function TPPCaptacionSaldosChart() {
                             strokeWidth={3}
                             dot={{ fill: '#15803d', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="tpp_cdat" position="top" style={{ fill: '#15803d', fontSize: 9, fontWeight: 'bold' }} formatter={(v: any) => v != null ? `${v}%` : ''} />
-                        </Line>
+                        />
 
-                        {/* Total TPP captación - Cyan */}
                         <Line
                             yAxisId="right"
                             type="monotone"
@@ -153,11 +148,8 @@ export default function TPPCaptacionSaldosChart() {
                             strokeWidth={3}
                             dot={{ fill: '#0ea5e9', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="tpp_cap" position="bottom" style={{ fill: '#0ea5e9', fontSize: 9, fontWeight: 'bold' }} formatter={(v: any) => v != null ? `${v}%` : ''} />
-                        </Line>
+                        />
 
-                        {/* Saldo CDATs - Navy/Dark Blue */}
                         <Line
                             yAxisId="left"
                             type="monotone"
@@ -167,9 +159,7 @@ export default function TPPCaptacionSaldosChart() {
                             strokeWidth={3}
                             dot={{ fill: '#1e3a8a', r: 4 }}
                             activeDot={{ r: 6, strokeWidth: 0 }}
-                        >
-                            <LabelList dataKey="saldo_cdat" position="top" style={{ fill: '#1e3a8a', fontSize: 9, fontWeight: 'bold' }} formatter={(v: any) => v?.toLocaleString()} />
-                        </Line>
+                        />
                     </LineChart>
                 </ResponsiveContainer>
             </div>

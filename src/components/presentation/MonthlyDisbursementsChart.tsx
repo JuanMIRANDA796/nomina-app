@@ -103,9 +103,7 @@ export default function MonthlyDisbursementsChart() {
                             stroke="#0ea5e9"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#0ea5e9' }}
-                        >
-                            <LabelList dataKey="tarjeta" position="top" offset={10} fill="#9CA3AF" fontSize={11} formatter={(val: any) => val.toLocaleString()} />
-                        </Line>
+                        />
 
                         <Line
                             type="monotone"
@@ -114,9 +112,7 @@ export default function MonthlyDisbursementsChart() {
                             stroke="#f97316"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#f97316' }}
-                        >
-                            <LabelList dataKey="consumo" position="bottom" offset={10} fill="#9CA3AF" fontSize={11} formatter={(val: any) => val.toLocaleString()} />
-                        </Line>
+                        />
 
                         <Line
                             type="monotone"
@@ -125,9 +121,7 @@ export default function MonthlyDisbursementsChart() {
                             stroke="#10b981"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#10b981' }}
-                        >
-                            <LabelList dataKey="vivienda" position="bottom" offset={10} fill="#9CA3AF" fontSize={11} formatter={(val: any) => val.toLocaleString()} />
-                        </Line>
+                        />
 
                     </LineChart>
                 </ResponsiveContainer>

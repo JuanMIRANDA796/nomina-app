@@ -9,15 +9,15 @@ export default function BenchmarkingCDATsTable() {
     const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('febrero');
     const [isEditing, setIsEditing] = useState(false);
 
-    const data = selectedMonth === 'diciembre' 
-        ? globalData.benchmarkingCDATs 
+    const data = selectedMonth === 'diciembre'
+        ? globalData.benchmarkingCDATs
         : selectedMonth === 'enero'
             ? globalData.benchmarkingCDATsEnero
             : globalData.benchmarkingCDATsFebrero;
 
-    const sectionKey = selectedMonth === 'diciembre' 
-        ? 'benchmarkingCDATs' 
-        : selectedMonth === 'enero' 
+    const sectionKey = selectedMonth === 'diciembre'
+        ? 'benchmarkingCDATs'
+        : selectedMonth === 'enero'
             ? 'benchmarkingCDATsEnero'
             : 'benchmarkingCDATsFebrero';
 
@@ -44,19 +44,19 @@ export default function BenchmarkingCDATsTable() {
 
     const getVariation = (groupName: string, entityName: string, key: string, currentVal: number | null) => {
         if (selectedMonth === 'diciembre' || currentVal === null) return null;
-        
+
         // Find previous month data
         const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCDATs : globalData.benchmarkingCDATsEnero;
         if (!prevData) return null;
         const group = prevData.groups.find((g: any) => g.name === groupName);
         if (!group) return null;
-        
+
         const entity = group.entities.find((e: any) => e.entity === entityName);
         if (!entity) return null;
-        
+
         const prevVal = (entity as any)[key];
         if (prevVal === null || prevVal === undefined) return null;
-        
+
         return currentVal - prevVal;
     };
 
@@ -67,7 +67,7 @@ export default function BenchmarkingCDATsTable() {
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-indigo-400 bg-clip-text text-transparent">
                         Benchmarking CDATs <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}</span>
                     </h3>
-                    <p className="text-slate-400 text-sm font-medium">Tasas de cartelera al {selectedMonth === 'diciembre' ? '10/12/2025' : selectedMonth === 'enero' ? '10/01/2026' : '10/02/2026'}</p>
+                    <p className="text-slate-400 text-sm font-medium">Tasas de cartelera al {selectedMonth === 'diciembre' ? '10/12/2025' : selectedMonth === 'enero' ? '10/01/2026' : '19/03/2026'}</p>
                 </div>
                 <div className="flex gap-4 items-center">
                     <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner">
@@ -140,15 +140,14 @@ export default function BenchmarkingCDATsTable() {
                                                     )}
                                                 </td>
                                                 <td className="p-0 border border-white/10 bg-black/40">
-                                                    <div className={`text-center py-1 text-[9px] font-bold ${
-                                                        (() => {
+                                                    <div className={`text-center py-1 text-[9px] font-bold ${(() => {
                                                             const varVal = getVariation(group.name, row.entity, col.key, (row as any)[col.key]);
                                                             if (varVal === null) return 'text-slate-600';
                                                             if (varVal > 0) return 'text-emerald-400';
                                                             if (varVal < 0) return 'text-rose-400';
                                                             return 'text-slate-500';
                                                         })()
-                                                    }`}>
+                                                        }`}>
                                                         {(() => {
                                                             const varVal = getVariation(group.name, row.entity, col.key, (row as any)[col.key]);
                                                             if (varVal === null) return '-';
