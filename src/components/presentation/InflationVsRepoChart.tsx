@@ -132,9 +132,9 @@ export default function InflationVsRepoChart() {
                             type="monotone"
                             dataKey="inflation"
                             stroke="#D81B60"
-                            strokeWidth={4}
-                            dot={{ r: 4, fill: '#D81B60', strokeWidth: 0 }}
-                            activeDot={{ r: 6, strokeWidth: 0 }}
+                            strokeWidth={2}
+                            dot={{ r: 2, fill: '#D81B60', strokeWidth: 0 }}
+                            activeDot={{ r: 4, strokeWidth: 0 }}
                             name="Inflación"
                         />
 
@@ -142,9 +142,9 @@ export default function InflationVsRepoChart() {
                             type="monotone"
                             dataKey="repo"
                             stroke="#0ea5e9"
-                            strokeWidth={4}
-                            dot={{ r: 4, fill: '#0ea5e9', strokeWidth: 0 }}
-                            activeDot={{ r: 6, strokeWidth: 0 }}
+                            strokeWidth={2}
+                            dot={{ r: 2, fill: '#0ea5e9', strokeWidth: 0 }}
+                            activeDot={{ r: 4, strokeWidth: 0 }}
                             name="Tasa REPO"
                         />
 
@@ -153,10 +153,10 @@ export default function InflationVsRepoChart() {
                             dataKey="difference"
                             name="Diferencia (Repo - Inf)"
                             stroke="#E91E63"
-                            strokeWidth={2}
-                            strokeDasharray="5 5"
+                            strokeWidth={1}
+                            strokeDasharray="3 3"
                             dot={false}
-                            activeDot={{ r: 4 }}
+                            activeDot={{ r: 3 }}
                         />
 
                     </LineChart>
