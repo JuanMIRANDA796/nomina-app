@@ -22,11 +22,7 @@ export default function BenchmarkingCDATsTable() {
             : 'benchmarkingCDATsFebrero';
 
     const handleUpdate = (groupIdx: number, entIdx: number, field: string, value: string) => {
-        const newData = { ...data };
-        newData.groups = [...data.groups];
-        newData.groups[groupIdx] = { ...data.groups[groupIdx] };
-        newData.groups[groupIdx].entities = [...data.groups[groupIdx].entities];
-
+        const newData = JSON.parse(JSON.stringify(data));
         const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value);
         (newData.groups[groupIdx].entities[entIdx] as any)[field] = val;
 
@@ -58,6 +54,32 @@ export default function BenchmarkingCDATsTable() {
         if (prevVal === null || prevVal === undefined) return null;
 
         return currentVal - prevVal;
+    };
+
+    // Calculate position dynamically
+    const getPosition = (key: string, value: number | null) => {
+        if (value === null || value === undefined) return '-';
+
+        // Collect all rates for this specific column (key) from ALL entities in ALL groups
+        const allRates: number[] = [];
+        data.groups.forEach((group: any) => {
+            group.entities.forEach((entity: any) => {
+                const rate = entity[key];
+                if (rate !== null && rate !== undefined && typeof rate === 'number') {
+                    allRates.push(rate);
+                }
+            });
+        });
+
+        if (allRates.length === 0) return '-';
+
+        // Sort unique rates in descending order
+        const uniqueSorted = Array.from(new Set(allRates)).sort((a, b) => b - a);
+
+        // Find the rank (position) of the current value
+        const rank = uniqueSorted.indexOf(value) + 1;
+
+        return rank > 0 ? rank.toString() : '-';
     };
 
     return (
@@ -141,12 +163,12 @@ export default function BenchmarkingCDATsTable() {
                                                 </td>
                                                 <td className="p-0 border border-white/10 bg-black/40">
                                                     <div className={`text-center py-1 text-[9px] font-bold ${(() => {
-                                                            const varVal = getVariation(group.name, row.entity, col.key, (row as any)[col.key]);
-                                                            if (varVal === null) return 'text-slate-600';
-                                                            if (varVal > 0) return 'text-emerald-400';
-                                                            if (varVal < 0) return 'text-rose-400';
-                                                            return 'text-slate-500';
-                                                        })()
+                                                        const varVal = getVariation(group.name, row.entity, col.key, (row as any)[col.key]);
+                                                        if (varVal === null) return 'text-slate-600';
+                                                        if (varVal > 0) return 'text-emerald-400';
+                                                        if (varVal < 0) return 'text-rose-400';
+                                                        return 'text-slate-500';
+                                                    })()
                                                         }`}>
                                                         {(() => {
                                                             const varVal = getVariation(group.name, row.entity, col.key, (row as any)[col.key]);
@@ -157,17 +179,9 @@ export default function BenchmarkingCDATsTable() {
                                                     </div>
                                                 </td>
                                                 <td className="p-0 border border-white/10 bg-black/20">
-                                                    {isEditing ? (
-                                                        <input
-                                                            className="w-full h-full bg-white/5 text-center text-slate-400 border-none focus:ring-1 focus:ring-pink-500 outline-none p-1"
-                                                            value={(row as any)[col.pk] ?? ''}
-                                                            onChange={(e) => handleUpdate(gIdx, eIdx, col.pk, e.target.value)}
-                                                        />
-                                                    ) : (
-                                                        <div className="text-center py-1 text-slate-500 font-medium">
-                                                            {(row as any)[col.pk] ?? ''}
-                                                        </div>
-                                                    )}
+                                                    <div className="text-center py-1 text-slate-500 font-black">
+                                                        {getPosition(col.key, (row as any)[col.key])}
+                                                    </div>
                                                 </td>
                                             </React.Fragment>
                                         ))}
