@@ -5,45 +5,38 @@ import { motion } from 'framer-motion';
 
 const SECTIONS = [
     {
-        name: 'VIVIENDA',
+        name: 'CONSUMO',
         rows: [
-            { modalidad: 'Plan Mi Casa No VIS', actMin: '12,40%', actMax: '-', propMin: '12,40%', propMax: '-', mvMin: '0,98%', mvMax: '-' },
-            { modalidad: 'Plan Mi Casa VIS', actMin: '12,27%', actMax: '-', propMin: '12,27%', propMax: '-', mvMin: '0,97%', mvMax: '-' },
-            { modalidad: 'Vivienda PRESENTE (VP) No VIS', actMin: '-', actMax: '-', propMin: '12,60%', propMax: '-', mvMin: '0,99%', mvMax: '-' },
-            { modalidad: 'Vivienda PRESENTE (VP) VIS', actMin: '-', actMax: '-', propMin: '12,40%', propMax: '-', mvMin: '0,98%', mvMax: '-' },
-        ]
-    },
-    {
-        name: 'HIPOTECARIO OTROS USOS',
-        rows: [
-            { modalidad: 'Otros Usos a 5 años', actMin: '15,99%', actMax: '-', propMin: '16,00%', propMax: '-', mvMin: '1,24%', mvMax: '-' },
-            { modalidad: 'Otros Usos de 5 a 10 años', actMin: '16,60%', actMax: '-', propMin: '16,67%', propMax: '-', mvMin: '1,29%', mvMax: '-' },
-            { modalidad: 'Otros Usos de 10 a 15 años', actMin: '17,30%', actMax: '-', propMin: '17,33%', propMax: '-', mvMin: '1,34%', mvMax: '-' },
-            { modalidad: 'Otros Usos de 15 a 20 años', actMin: '18,00%', actMax: '-', propMin: '18,00%', propMax: '-', mvMin: '1,39%', mvMax: '-' },
+            { modalidad: 'SOAT', actMin: '23,00%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
+            { modalidad: 'Libre Inversión', actMin: '23,00%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
+            { modalidad: 'Viajes', actMin: '23,00%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
+            { modalidad: 'Educación, Calam., Salud, Emp.', actMin: '12,00%', actMax: '-', propMin: '12,00%', propMax: '18,67%', mvMin: '0,95%', mvMax: '1,44%' },
+            { modalidad: 'Centro Vacacionales', actMin: '15,00%', actMax: '-', propMin: '15,00%', propMax: '20,94%', mvMin: '1,17%', mvMax: '1,60%' },
         ]
     },
     {
         name: 'COMPRA DE CARTERA & VEHÍCULO',
         rows: [
-            { modalidad: 'Vehículo', actMin: '15,00%', actMax: '17,04%', propMin: '15,00%', propMax: '17,00%', mvMin: '1,17%', mvMax: '1,32%' },
-            { modalidad: 'Vehículo motos', actMin: '-', actMax: '-', propMin: '25,27%', propMax: '-', mvMin: '1,89%', mvMax: '-' },
             { modalidad: 'Compra de Cartera', actMin: '16,10%', actMax: '19,56%', propMin: '16,10%', propMax: '19,56%', mvMin: '1,25%', mvMax: '1,50%' },
+            { modalidad: 'Vehículo', actMin: '15,00%', actMax: '17,00%', propMin: '15,00%', propMax: '17,00%', mvMin: '1,17%', mvMax: '1,32%' },
         ]
     },
     {
-        name: 'CONSUMO',
+        name: 'VIVIENDA',
         rows: [
-            { modalidad: 'Libre Inversión', actMin: '22,99%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Libre Inversión R', actMin: '-', actMax: '-', propMin: '25,27%', propMax: '-', mvMin: '1,89%', mvMax: '-' },
-            { modalidad: 'Viajes', actMin: '22,99%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Centro Vacacionales', actMin: '15,01%', actMax: '-', propMin: '15,00%', propMax: '20,94%', mvMin: '1,17%', mvMax: '1,60%' },
-            { modalidad: 'SOAT', actMin: '22,99%', actMax: '-', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Seguros a crédito', actMin: '-', actMax: '-', propMin: '0%', propMax: '-', mvMin: '0%', mvMax: '-' },
-            { modalidad: 'Crediyá', actMin: '-', actMax: '-', propMin: '25,42%', propMax: '-', mvMin: '1,91%', mvMax: '-' },
-            { modalidad: 'Mi Compra', actMin: '-', actMax: '-', propMin: '25,42%', propMax: '-', mvMin: '1,91%', mvMax: '-' },
-            { modalidad: 'Educación, Salud y Emp.', actMin: '12,02%', actMax: '-', propMin: '12,00%', propMax: '18,67%', mvMin: '0,95%', mvMax: '1,44%' },
-            { modalidad: 'Crédito Aportes', actMin: '-', actMax: '-', propMin: '7,00%', propMax: '-', mvMin: '0,57%', mvMax: '-' },
-            { modalidad: 'Eventos boletería', actMin: '-', actMax: '-', propMin: '25,27%', propMax: '-', mvMin: '1,89%', mvMax: '-' },
+            { modalidad: 'Plan Mi Casa VIS', actMin: '12,27%', actMax: '-', propMin: '12,27%', propMax: '-', mvMin: '0,97%', mvMax: '-' },
+            { modalidad: 'Plan Mi Casa No VIS', actMin: '12,40%', actMax: '-', propMin: '12,40%', propMax: '-', mvMin: '0,98%', mvMax: '-' },
+            { modalidad: 'Vivienda VIS', actMin: '12,40%', actMax: '-', propMin: '12,40%', propMax: '-', mvMin: '0,98%', mvMax: '-' },
+            { modalidad: 'Vivienda No VIS', actMin: '12,60%', actMax: '-', propMin: '12,60%', propMax: '-', mvMin: '0,99%', mvMax: '-' },
+        ]
+    },
+    {
+        name: 'HIPOTECARIO OTROS USOS',
+        rows: [
+            { modalidad: 'Hipotecario (0-5 Años)', actMin: '16,00%', actMax: '-', propMin: '16,00%', propMax: '-', mvMin: '1,24%', mvMax: '-' },
+            { modalidad: 'Hipotecario (5-10 Años)', actMin: '16,67%', actMax: '-', propMin: '16,67%', propMax: '-', mvMin: '1,29%', mvMax: '-' },
+            { modalidad: 'Hipotecario (10-15 Años)', actMin: '17,33%', actMax: '-', propMin: '17,33%', propMax: '-', mvMin: '1,34%', mvMax: '-' },
+            { modalidad: 'Hipotecario (15-20 Años)', actMin: '18,00%', actMax: '-', propMin: '18,00%', propMax: '-', mvMin: '1,39%', mvMax: '-' },
         ]
     }
 ];
@@ -58,7 +51,7 @@ export default function CreditRateProposalTable() {
                 </div>
             </div>
 
-            <div className="flex-1 overflow-hidden bg-[#0a0a0a] rounded-xl border border-white/10 shadow-inner">
+            <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#0a0a0a] rounded-xl border border-white/10 shadow-inner">
                 <table className="w-full border-collapse h-full">
                     <thead className="sticky top-0 z-30">
                         <tr className="bg-slate-900 border-b border-white/10">
