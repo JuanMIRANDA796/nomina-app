@@ -131,26 +131,22 @@ export default function InflationVsRepoChart() {
                         <Line
                             type="monotone"
                             dataKey="inflation"
-                            name="Inflación anual"
-                            stroke="#0F4C81"
-                            strokeWidth={3}
-                            dot={false}
-                            activeDot={{ r: 6 }}
-                        >
-                            <LabelList dataKey="inflation" position="top" offset={10} fill="#0F4C81" fontSize={10} fontWeight="bold" formatter={(val: any) => `${Number(val).toFixed(2)}%`} />
-                        </Line>
+                            stroke="#D81B60"
+                            strokeWidth={4}
+                            dot={{ r: 4, fill: '#D81B60', strokeWidth: 0 }}
+                            activeDot={{ r: 6, strokeWidth: 0 }}
+                            name="Inflación"
+                        />
 
                         <Line
                             type="monotone"
                             dataKey="repo"
-                            name="Tasa Repo"
-                            stroke="#F97316"
-                            strokeWidth={3}
-                            dot={false}
-                            activeDot={{ r: 6 }}
-                        >
-                            <LabelList dataKey="repo" position="top" offset={10} fill="#F97316" fontSize={10} fontWeight="bold" formatter={(val: any) => `${Number(val).toFixed(2)}%`} />
-                        </Line>
+                            stroke="#0ea5e9"
+                            strokeWidth={4}
+                            dot={{ r: 4, fill: '#0ea5e9', strokeWidth: 0 }}
+                            activeDot={{ r: 6, strokeWidth: 0 }}
+                            name="Tasa REPO"
+                        />
 
                         <Line
                             type="monotone"

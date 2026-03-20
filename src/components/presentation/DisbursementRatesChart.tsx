@@ -9,8 +9,7 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
-    ResponsiveContainer,
-    LabelList
+    ResponsiveContainer
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
@@ -100,9 +99,7 @@ export default function DisbursementRatesChart() {
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#0ea5e9' }}
                             activeDot={{ r: 6 }}
-                        >
-                            <LabelList dataKey="tarjeta" position="top" offset={10} fill="#0ea5e9" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
-                        </Line>
+                        />
 
                         <Line
                             type="monotone"
@@ -112,9 +109,7 @@ export default function DisbursementRatesChart() {
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#f97316' }}
                             activeDot={{ r: 6 }}
-                        >
-                            <LabelList dataKey="consumo" position="top" offset={10} fill="#f97316" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
-                        </Line>
+                        />
 
                         <Line
                             type="monotone"
@@ -124,9 +119,7 @@ export default function DisbursementRatesChart() {
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#10b981' }}
                             activeDot={{ r: 6 }}
-                        >
-                            <LabelList dataKey="vivienda" position="top" offset={10} fill="#10b981" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
-                        </Line>
+                        />
 
                         <Line
                             type="monotone"
@@ -137,9 +130,7 @@ export default function DisbursementRatesChart() {
                             strokeDasharray="5 5"
                             dot={{ r: 4, fill: '#fbbf24' }}
                             activeDot={{ r: 6 }}
-                        >
-                            <LabelList dataKey="tpp" position="top" offset={10} fill="#fbbf24" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
-                        </Line>
+                        />
 
                     </LineChart>
                 </ResponsiveContainer>

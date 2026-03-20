@@ -105,45 +105,41 @@ export default function PortfolioStockRatesChart() {
                             type="monotone"
                             dataKey="rotativos"
                             name="TP - Rotativos"
-                            stroke="#F97316"
+                            stroke="#f97316"
                             strokeWidth={3}
-                            dot={{ r: 4, fill: '#F97316' }}
-                        >
-                            <LabelList dataKey="rotativos" position="top" offset={10} fill="#F97316" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
-                        </Line>
+                            dot={{ r: 4, fill: '#f97316' }}
+                            activeDot={{ r: 6 }}
+                        />
 
                         <Line
                             type="monotone"
                             dataKey="consumo"
                             name="CO - Consumo"
-                            stroke="#0F4C81"
+                            stroke="#0ea5e9"
                             strokeWidth={3}
-                            dot={{ r: 4, fill: '#0F4C81' }}
-                        >
-                            <LabelList dataKey="consumo" position="top" offset={10} fill="#0F4C81" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
-                        </Line>
+                            dot={{ r: 4, fill: '#0ea5e9' }}
+                            activeDot={{ r: 6 }}
+                        />
 
                         <Line
                             type="monotone"
                             dataKey="total"
                             name="Total general"
-                            stroke="#38BDF8"
+                            stroke="#ffffff"
                             strokeWidth={3}
-                            dot={{ r: 4, fill: '#38BDF8' }}
-                        >
-                            <LabelList dataKey="total" position="top" offset={10} fill="#38BDF8" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
-                        </Line>
+                            strokeDasharray="5 5"
+                            dot={{ r: 3, fill: '#ffffff' }}
+                        />
 
                         <Line
                             type="monotone"
                             dataKey="vivienda"
                             name="VI - Vivienda"
-                            stroke="#10B981"
+                            stroke="#10b981"
                             strokeWidth={3}
-                            dot={{ r: 4, fill: '#10B981' }}
-                        >
-                            <LabelList dataKey="vivienda" position="top" offset={10} fill="#10B981" fontSize={10} fontWeight="bold" formatter={(val: any) => `${val}%`} />
-                        </Line>
+                            dot={{ r: 4, fill: '#10b981' }}
+                            activeDot={{ r: 6 }}
+                        />
 
                     </LineChart>
                 </ResponsiveContainer>

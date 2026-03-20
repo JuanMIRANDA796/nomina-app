@@ -8,7 +8,6 @@ import InflationVsRepoChart from '@/components/presentation/InflationVsRepoChart
 import PortfolioStockRatesChart from '@/components/presentation/PortfolioStockRatesChart';
 import DisbursementRatesChart from '@/components/presentation/DisbursementRatesChart';
 import MonthlyDisbursementsChart from '@/components/presentation/MonthlyDisbursementsChart';
-import PortfolioBalanceByLineChart from '@/components/presentation/PortfolioBalanceByLineChart';
 import BenchmarkingConsumoHasta1Chart from '@/components/presentation/BenchmarkingConsumoHasta1Chart';
 import BenchmarkingConsumo1To3Chart from '@/components/presentation/BenchmarkingConsumo1To3Chart';
 import BenchmarkingConsumo3To6Chart from '@/components/presentation/BenchmarkingConsumo3To6Chart';
@@ -164,7 +163,7 @@ export default function PresentationPage() {
                 </motion.div>
             </section>
 
-            {[InflationVsRepoChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart, PortfolioBalanceByLineChart].map((Chart, i) => (
+            {[InflationVsRepoChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart].map((Chart, i) => (
                 <section key={`fin-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl">
                         <Chart />
@@ -218,35 +217,9 @@ export default function PresentationPage() {
                 </motion.div>
             </section>
 
-            {/* NEW PROPOSAL SLIDES */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                    <CDATProposalMainTable />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                    <CDATRateMatrixTable />
-                </motion.div>
-            </section>
-
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                    <CDATRateMatrixTable />
-                </motion.div>
-            </section>
-
-            {/* PROPOSALS */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-[90rem] h-[85vh]">
-                    <RateProposalTables />
-                </motion.div>
-            </section>
-
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
-                    <FSGProposalTable />
+                    <HistoricalRatesV2Chart />
                 </motion.div>
             </section>
 
