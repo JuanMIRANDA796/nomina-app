@@ -61,14 +61,14 @@ export default function MacroeconomicAnalysisSlide() {
                 </motion.div>
             </div>
 
-            <div className="flex-1 w-full max-w-5xl flex flex-col gap-4 relative z-10 overflow-y-auto custom-scrollbar pr-4">
+            <div className="flex-1 w-full max-w-5xl flex flex-col gap-1 relative z-10 overflow-hidden pr-4">
                 {paragraphs.map((p: string, idx: number) => (
                     <motion.p
                         key={idx}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: idx * 0.1 }}
-                        className="text-lg md:text-[1.35rem] leading-relaxed text-slate-700 font-medium text-justify"
+                        transition={{ duration: 0.5, delay: idx * 0.1 }}
+                        className="text-base md:text-[1.15rem] leading-[1.6] text-slate-700 font-medium text-justify"
                         dangerouslySetInnerHTML={formatText(p)}
                     />
                 ))}
