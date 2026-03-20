@@ -8,8 +8,8 @@ import { Suspense } from 'react';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Nómina Colombia",
-  description: "Sistema de gestión de nómina y asistencia",
+  title: "Link",
+  description: "Link",
 };
 
 export default function RootLayout({
