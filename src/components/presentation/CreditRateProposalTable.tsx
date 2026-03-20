@@ -17,26 +17,26 @@ const SECTIONS = [
     {
         name: 'VIVIENDA',
         rows: [
-            { modalidad: 'Vivienda VIS', actMin: '12,40%", actMax: ' - ', propMin: '13, 790% ', propMax: ' - ', mvMin: '1,08% ', mvMax: ' - ' },
-            { modalidad: 'Vivienda No VIS', actMin: '12,60%", actMax: ' - ', propMin: '14, 129% ', propMax: ' - ', mvMin: '1, 11% ', mvMax: ' - ' },
-            { modalidad: 'Plan Mi Casa VIS', actMin: '12,27%", actMax: ' - ', propMin: '13, 117% ', propMax: ' - ', mvMin: '1,03% ', mvMax: ' - ' },
-            { modalidad: 'Plan Mi Casa No VIS', actMin: '12,40%", actMax: ' - ', propMin: '13, 566% ', propMax: ' - ', mvMin: '1,07% ', mvMax: ' - ' },
+            { modalidad: 'Vivienda VIS', actMin: '12,40%', actMax: '-', propMin: '13,790%', propMax: '-', mvMin: '1,08%', mvMax: '-' },
+            { modalidad: 'Vivienda No VIS', actMin: '12,60%', actMax: '-', propMin: '14,129%', propMax: '-', mvMin: '1,11%', mvMax: '-' },
+            { modalidad: 'Plan Mi Casa VIS', actMin: '12,27%', actMax: '-', propMin: '13,117%', propMax: '-', mvMin: '1,03%', mvMax: '-' },
+            { modalidad: 'Plan Mi Casa No VIS', actMin: '12,40%', actMax: '-', propMin: '13,566%', propMax: '-', mvMin: '1,07%', mvMax: '-' },
         ]
     },
     {
         name: 'COMPRA DE CARTERA & VEHÍCULO',
         rows: [
-            { modalidad: 'Compra de Cartera', actMin: '16,10%", actMax: '19, 56% ', propMin: '16, 650% ', propMax: '20, 152% ', mvMin: '1, 29% ', mvMax: '1, 54% ' },
-            { modalidad: 'Línea de Vehículo', actMin: '15,00%", actMax: '17,04% ', propMin: '16, 650% ', propMax: '18, 974% ', mvMin: '1, 29% ', mvMax: '1, 46% ' },
+            { modalidad: 'Compra de Cartera', actMin: '16,10%', actMax: '19,56%', propMin: '16,650%', propMax: '20,152%', mvMin: '1,29%', mvMax: '1,54%' },
+            { modalidad: 'Línea de Vehículo', actMin: '15,00%', actMax: '17,04%', propMin: '16,650%', propMax: '18,974%', mvMin: '1,29%', mvMax: '1,46%' },
         ]
     },
     {
         name: 'HIPOTECARIO OTROS USOS',
         rows: [
-            { modalidad: 'Hipotecario (0-5 Años)', actMin: '15,99%", actMax: ' - ', propMin: '16, 420% ', propMax: ' - ', mvMin: '1, 28% ', mvMax: ' - ' },
-            { modalidad: 'Hipotecario (5-10 Años)', actMin: '16,60%", actMax: ' - ', propMin: '17,088% ', propMax: ' - ', mvMin: '1, 32% ', mvMax: ' - ' },
-            { modalidad: 'Hipotecario (10-15 Años)', actMin: '17,30%", actMax: ' - ', propMin: '17, 760% ', propMax: ' - ', mvMin: '1, 37% ', mvMax: ' - ' },
-            { modalidad: 'Hipotecario (15-20 Años)', actMin: '18,00%", actMax: ' - ', propMin: '18, 436% ', propMax: ' - ', mvMin: '1, 42% ', mvMax: ' - ' },
+            { modalidad: 'Hipotecario (0-5 Años)', actMin: '15,99%', actMax: '-', propMin: '16,420%', propMax: '-', mvMin: '1,28%', mvMax: '-' },
+            { modalidad: 'Hipotecario (5-10 Años)', actMin: '16,60%', actMax: '-', propMin: '17,088%', propMax: '-', mvMin: '1,32%', mvMax: '-' },
+            { modalidad: 'Hipotecario (10-15 Años)', actMin: '17,30%', actMax: '-', propMin: '17,760%', propMax: '-', mvMin: '1,37%', mvMax: '-' },
+            { modalidad: 'Hipotecario (15-20 Años)', actMin: '18,00%', actMax: '-', propMin: '18,436%', propMax: '-', mvMin: '1,42%', mvMax: '-' },
         ]
     }
 ];
@@ -46,8 +46,8 @@ export default function CreditRateProposalTable() {
         <div className="w-full h-full bg-[#1e1e1e] rounded-3xl border border-white/5 p-8 flex flex-col shadow-2xl font-sans overflow-hidden">
             <div className="mb-6 flex justify-between items-end border-b border-white/10 pb-4">
                 <div>
-                    <h2 className="text-3xl font-black text-white italic tracking-tighter">Propuesta de Tasas de Crédito</h2>
-                    <p className="text-slate-500 text-xs mt-1 font-black uppercase tracking-widest">Acuerdo Estratégico Comité Ejecutivo</p>
+                    <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase">Propuesta de Tasas de Crédito</h2>
+                    <p className="text-slate-500 text-xs mt-1 font-black uppercase tracking-widest">Acuerdo Estratégico Comité Ejecutivo 2026</p>
                 </div>
             </div>
 
@@ -56,9 +56,9 @@ export default function CreditRateProposalTable() {
                     <thead className="sticky top-0 z-30">
                         <tr className="bg-slate-900 border-b border-white/10">
                             <th className="px-6 py-6 text-left text-sm font-black text-white w-1/4"></th>
-                            <th colSpan={2} className="px-4 py-3 text-center text-[10px] font-black text-slate-400 border-x border-white/5 uppercase">Actual ea</th>
+                            <th colSpan={2} className="px-4 py-3 text-center text-[10px] font-black text-slate-400 border-x border-white/5 uppercase">Actual EA</th>
                             <th colSpan={2} className="px-4 py-3 text-center text-[10px] font-black text-pink-500 border-x border-white/5 uppercase bg-pink-500/5">Propuesta EA</th>
-                            <th colSpan={2} className="px-4 py-3 text-center text-[10px] font-black text-slate-400 border-x border-white/5 uppercase">MV (Tasa Mes Vencido)</th>
+                            <th colSpan={2} className="px-4 py-3 text-center text-[10px] font-black text-slate-400 border-x border-white/5 uppercase">MV (Mes Vencido)</th>
                         </tr>
                         <tr className="bg-[#1a1a1a] shadow-md">
                             <th className="px-6 py-3 text-left text-[11px] font-black text-slate-500 uppercase tracking-widest border border-white/10">Modalidad</th>
@@ -100,7 +100,7 @@ export default function CreditRateProposalTable() {
 
             <div className="mt-8 flex justify-between items-center text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] opacity-50">
                 <span>Comité de Crédito / Marzo 2026</span>
-                <span className="text-pink-600">Documento Clasificado</span>
+                <span className="text-pink-600 font-bold uppercase">Estrictamente Confidencial</span>
             </div>
 
             <style jsx>{`
