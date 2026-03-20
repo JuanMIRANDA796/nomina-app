@@ -171,7 +171,16 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                 if (response.ok) {
                     const result = await response.json();
                     if (result && result.data) {
-                        setData(prev => ({ ...prev, ...result.data }));
+                        setData(prev => {
+                            const merged = { ...prev, ...result.data };
+                            // Migration: Ensure macroAnalysis is always an array of strings
+                            if (merged.macroAnalysis && Array.isArray(merged.macroAnalysis)) {
+                                merged.macroAnalysis = merged.macroAnalysis.map((item: any) =>
+                                    typeof item === 'string' ? item : (item.phrase || item.title || '...')
+                                );
+                            }
+                            return merged;
+                        });
                         setIsLoading(false);
                         return;
                     }
@@ -185,6 +194,14 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
+
+                    // Migration: Ensure macroAnalysis is always an array of strings
+                    if (parsed.macroAnalysis && Array.isArray(parsed.macroAnalysis)) {
+                        parsed.macroAnalysis = parsed.macroAnalysis.map((item: any) =>
+                            typeof item === 'string' ? item : (item.phrase || item.title || '...')
+                        );
+                    }
+
                     setData(prev => ({ ...prev, ...parsed }));
                 } catch (e) {
                     console.error('Error parsing local storage data', e);

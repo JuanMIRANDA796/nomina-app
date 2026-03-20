@@ -7,7 +7,9 @@ import { usePresentation } from '@/context/PresentationContext';
 export default function MacroeconomicAnalysisSlide() {
     const { data: globalData, updateSection } = usePresentation();
     const [isEditing, setIsEditing] = useState(false);
-    const paragraphs = globalData.macroAnalysis;
+    // Safety guard for data structure changes
+    const rawParagraphs = globalData.macroAnalysis;
+    const paragraphs = Array.isArray(rawParagraphs) ? rawParagraphs : [];
 
     const handleUpdate = (index: number, value: string) => {
         const newData = [...paragraphs];
@@ -16,9 +18,11 @@ export default function MacroeconomicAnalysisSlide() {
     };
 
     // Helper to format Bold text (**text**) to <strong>text</strong>
-    const formatText = (text: string) => {
+    const formatText = (text: any) => {
         if (!text) return { __html: '' };
-        const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-pink-600 font-black">$1</strong>');
+        // Robustness: handle both new string format and old object format (phrase property)
+        const content = typeof text === 'string' ? text : (text.phrase || text.title || '');
+        const formatted = content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-pink-600 font-black">$1</strong>');
         return { __html: formatted };
     };
 
@@ -96,7 +100,7 @@ export default function MacroeconomicAnalysisSlide() {
                                         <label className="text-[10px] uppercase font-black text-pink-600 mb-2 block tracking-widest">Párrafo {idx + 1}</label>
                                         <textarea
                                             className="w-full bg-white border border-slate-200 rounded-xl p-4 text-slate-800 text-lg outline-none focus:border-pink-500 min-h-[120px] resize-none shadow-inner"
-                                            value={p}
+                                            value={typeof p === 'string' ? p : (p as any).phrase || (p as any).title || ''}
                                             onChange={(e) => handleUpdate(idx, e.target.value)}
                                             placeholder="Escribe el párrafo aquí..."
                                         />
