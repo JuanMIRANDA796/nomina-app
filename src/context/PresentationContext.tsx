@@ -178,6 +178,11 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                                 merged.macroAnalysis = merged.macroAnalysis.map((item: any) =>
                                     typeof item === 'string' ? item : (item.phrase || item.title || '...')
                                 );
+
+                                // FORCE NEW DATA if old structure/text detected
+                                if (merged.macroAnalysis.length > 4 || (typeof merged.macroAnalysis[0] === 'string' && merged.macroAnalysis[0].includes('Salario a 2 millones'))) {
+                                    merged.macroAnalysis = ALL_DEFAULTS.macroAnalysis;
+                                }
                             }
                             return merged;
                         });
@@ -200,6 +205,11 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                         parsed.macroAnalysis = parsed.macroAnalysis.map((item: any) =>
                             typeof item === 'string' ? item : (item.phrase || item.title || '...')
                         );
+
+                        // FORCE NEW DATA if old structure/text detected
+                        if (parsed.macroAnalysis.length > 4 || (typeof parsed.macroAnalysis[0] === 'string' && parsed.macroAnalysis[0].includes('Salario a 2 millones'))) {
+                            parsed.macroAnalysis = ALL_DEFAULTS.macroAnalysis;
+                        }
                     }
 
                     setData(prev => ({ ...prev, ...parsed }));
