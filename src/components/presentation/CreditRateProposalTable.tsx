@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function CreditRateProposalTable() {
-    const { data, updateSection } = usePresentation();
+    const { data, updateSection, setGlobalEditing } = usePresentation();
     const [isEditing, setIsEditing] = useState(false);
     
     // Safely get data or default to empty array
@@ -14,8 +14,10 @@ export default function CreditRateProposalTable() {
     const [localData, setLocalData] = useState<any[]>(globalData);
 
     useEffect(() => {
-        setLocalData(globalData);
-    }, [globalData]);
+        if (!isEditing) {
+            setLocalData(globalData);
+        }
+    }, [globalData, isEditing]);
 
     const handleUpdate = (sIdx: number, rIdx: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(localData));
@@ -25,11 +27,13 @@ export default function CreditRateProposalTable() {
 
     const handleSave = () => {
         updateSection('creditRateProposals', localData);
+        setGlobalEditing(false);
         setIsEditing(false);
     };
 
     const handleCancel = () => {
         setLocalData(globalData);
+        setGlobalEditing(false);
         setIsEditing(false);
     };
 
@@ -58,7 +62,7 @@ export default function CreditRateProposalTable() {
                         </>
                     ) : (
                         <button
-                            onClick={() => setIsEditing(true)}
+                            onClick={() => { setIsEditing(true); setGlobalEditing(true); }}
                             className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-bold transition-all border border-white/10 flex items-center gap-2"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">

@@ -157,6 +157,7 @@ interface PresentationContextType {
     updateSection: (section: keyof PresentationData, newData: any) => void;
     resetData: () => void;
     isLoading: boolean;
+    setGlobalEditing: (editing: boolean) => void;
 }
 
 const PresentationContext = createContext<PresentationContextType | undefined>(undefined);
@@ -165,6 +166,9 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     const [data, setData] = useState<PresentationData>(ALL_DEFAULTS);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    // When true, polling will NOT overwrite local state (user is actively editing)
+    const [isEditingGlobal, setIsEditingGlobal] = useState(false);
+    const setGlobalEditing = useCallback((editing: boolean) => setIsEditingGlobal(editing), []);
 
     // Initial load: Fetch from Server (Primary) then LocalStorage (Fallback)
     useEffect(() => {
@@ -250,13 +254,13 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         // 3. Polling for real-time sync across computers
         const interval = setInterval(async () => {
             if (isSaving) return; // Don't poll if we're currently pushing updates
+            if (isEditingGlobal) return; // DON'T overwrite data if user is actively editing!
             try {
                 const response = await fetch('/api/presentation/shared');
                 if (response.ok) {
                     const result = await response.json();
                     if (result && result.data) {
                         setData(prev => {
-                            // Only update if data is actually different to avoid unnecessary re-renders
                             const newData = { ...prev, ...result.data };
                             if (JSON.stringify(prev) === JSON.stringify(newData)) return prev;
                             return newData;
@@ -269,7 +273,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         }, 10000); // Poll every 10s
 
         return () => clearInterval(interval);
-    }, [isSaving]);
+    }, [isSaving, isEditingGlobal]);
 
     // Debounced Persist to Server and LocalStorage
     useEffect(() => {
@@ -323,7 +327,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     }, []);
 
     return (
-        <PresentationContext.Provider value={{ data, updateSection, resetData, isLoading }}>
+        <PresentationContext.Provider value={{ data, updateSection, resetData, isLoading, setGlobalEditing }}>
             {children}
             {isSaving && (
                 <div className="fixed bottom-4 right-4 bg-emerald-600/80 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm z-50 animate-pulse">

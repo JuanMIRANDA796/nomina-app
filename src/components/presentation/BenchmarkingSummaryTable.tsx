@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingSummaryTable() {
-    const { data, updateSection } = usePresentation();
+    const { data, updateSection, setGlobalEditing } = usePresentation();
     const [selectedMonth, setSelectedMonth] = useState('Febrero');
     const [isEditing, setIsEditing] = useState(false);
     
@@ -12,8 +12,10 @@ export default function BenchmarkingSummaryTable() {
     const [localData, setLocalData] = useState<any[]>(globalData);
 
     useEffect(() => {
-        setLocalData(globalData);
-    }, [globalData]);
+        if (!isEditing) {
+            setLocalData(globalData);
+        }
+    }, [globalData, isEditing]);
 
     const handleUpdate = (gIdx: number, field: string, value: string) => {
         const newData = [...localData];
@@ -23,11 +25,13 @@ export default function BenchmarkingSummaryTable() {
 
     const handleSave = () => {
         updateSection('benchmarkingSummaryData', localData);
+        setGlobalEditing(false);
         setIsEditing(false);
     };
 
     const handleCancel = () => {
         setLocalData(globalData);
+        setGlobalEditing(false);
         setIsEditing(false);
     };
 
@@ -54,7 +58,7 @@ export default function BenchmarkingSummaryTable() {
                             </>
                         ) : (
                             <button
-                                onClick={() => setIsEditing(true)}
+                                onClick={() => { setIsEditing(true); setGlobalEditing(true); }}
                                 className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition-all border border-white/10 flex items-center gap-2 tracking-normal"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
