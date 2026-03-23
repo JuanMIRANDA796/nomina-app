@@ -259,7 +259,8 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         const interval = setInterval(async () => {
             if (isEditingGlobal) return; // Skip if user is actively editing
             try {
-                const response = await fetch('/api/presentation/shared');
+                // cache: 'no-store' ensures we always get fresh data, never a cached response
+                const response = await fetch('/api/presentation/shared', { cache: 'no-store' });
                 if (response.ok) {
                     const result = await response.json();
                     if (result && result.data) {
@@ -273,7 +274,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
             } catch (err) {
                 console.warn('Polling failed:', err);
             }
-        }, 10000); // Poll every 10s
+        }, 5000); // Poll every 5s for faster sync
 
         return () => clearInterval(interval);
     }, [isEditingGlobal]); // ← only isEditingGlobal, NOT isSaving

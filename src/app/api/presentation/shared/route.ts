@@ -10,10 +10,20 @@ export async function GET() {
         });
         
         if (!snapshot) {
-            return NextResponse.json({ data: null });
+            return NextResponse.json({ data: null }, {
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate',
+                    'Pragma': 'no-cache',
+                }
+            });
         }
         
-        return NextResponse.json(snapshot);
+        return NextResponse.json(snapshot, {
+            headers: {
+                'Cache-Control': 'no-store, no-cache, must-revalidate',
+                'Pragma': 'no-cache',
+            }
+        });
     } catch (error) {
         console.error('Shared presentation fetch error:', error);
         return NextResponse.json({ error: 'Server error' }, { status: 500 });
