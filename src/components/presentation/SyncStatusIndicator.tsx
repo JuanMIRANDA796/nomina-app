@@ -8,9 +8,10 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export default function SyncStatusIndicator() {
-    const { isSaving, lastSyncedAt, syncError, refreshFromServer, isLoading } = usePresentation();
+    const { isSaving, lastSyncedAt, syncError, refreshFromServer, isLoading, syncLog } = usePresentation();
     const [timeAgo, setTimeAgo] = useState<string>('');
     const [isHovered, setIsHovered] = useState(false);
+    const VERSION = 'v2.1.2';
 
     useEffect(() => {
         if (!lastSyncedAt) return;
@@ -58,14 +59,24 @@ export default function SyncStatusIndicator() {
                                     {syncError}
                                 </span>
                             )}
-                            <button
-                                onClick={() => refreshFromServer()}
-                                disabled={isSaving}
-                                className="mt-2 flex items-center justify-center gap-2 w-full py-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-[11px] font-bold text-white transition-all border border-white/5 disabled:opacity-50"
-                            >
-                                <RefreshCw className={`w-3 h-3 ${isSaving ? 'animate-spin' : ''}`} />
-                                Forzar Sincronización
-                            </button>
+                            {syncLog && (
+                                <div className="mt-2 p-2 bg-black/30 rounded-lg border border-white/5">
+                                    <p className="text-[9px] text-slate-300 font-mono leading-tight">
+                                        {syncLog}
+                                    </p>
+                                </div>
+                            )}
+                            <div className="mt-2 flex justify-between items-center">
+                                <span className="text-[9px] font-mono text-slate-600 font-bold">{VERSION}</span>
+                                <button
+                                    onClick={() => refreshFromServer()}
+                                    disabled={isSaving}
+                                    className="flex items-center justify-center gap-2 px-3 py-1 bg-white/5 hover:bg-white/10 rounded-lg text-[10px] font-bold text-white transition-all border border-white/5 disabled:opacity-50"
+                                >
+                                    <RefreshCw className={`w-3 h-3 ${isSaving ? 'animate-spin' : ''}`} />
+                                    Refrescar
+                                </button>
+                            </div>
                         </div>
                     </motion.div>
                 )}

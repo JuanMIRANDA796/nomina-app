@@ -160,6 +160,7 @@ interface PresentationContextType {
     isSaving: boolean;
     lastSyncedAt: Date | null;
     syncError: string | null;
+    syncLog: string | null;
     setGlobalEditing: (editing: boolean) => void;
     refreshFromServer: () => Promise<void>;
 }
@@ -172,6 +173,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     const [isSaving, setIsSaving] = useState(false);
     const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
     const [syncError, setSyncError] = useState<string | null>(null);
+    const [syncLog, setSyncLog] = useState<string | null>('Iniciando...');
     // When true, polling will NOT overwrite local state (user is actively editing)
     const [isEditingGlobal, setIsEditingGlobal] = useState(false);
     const setGlobalEditing = useCallback((editing: boolean) => setIsEditingGlobal(editing), []);
@@ -220,14 +222,20 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                             return merged;
                         });
                         setLastSyncedAt(new Date());
+                        setSyncLog('Datos cargados de la nube ✅');
                         setSyncError(null);
                         setIsLoading(false);
                         return;
+                    } else {
+                        setSyncLog('Servidor vacío. Usando valores predeterminados.');
                     }
+                } else {
+                    setSyncLog(`Error del servidor (${response.status}).`);
                 }
             } catch (err: any) {
                 console.error('Failed to load shared presentation from server:', err);
                 setSyncError(err.message || 'Error de conexión');
+                setSyncLog('Error crítico al conectar con la nube.');
             }
 
             // 2. Fallback to LocalStorage if server fails or is empty
@@ -286,14 +294,20 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                             return newData;
                         });
                         setLastSyncedAt(new Date());
+                        setSyncLog('Sincronizado con la nube ✅');
                         setSyncError(null);
+                    } else {
+                        setSyncLog('Nube vacía.');
                     }
+                } else {
+                    setSyncLog('Servidor no respondió al refresco.');
                 }
             } catch (err: any) {
                 console.warn('Polling failed:', err);
                 setSyncError(err.message || 'Error de sincronización');
+                setSyncLog('Sincronización perdida ⚠️');
             }
-        }, 5000); // Poll every 5s for faster sync
+        }, 4000); // Poll every 4s for faster sync
 
         return () => clearInterval(interval);
     }, [isEditingGlobal]); // ← only isEditingGlobal, NOT isSaving
@@ -309,6 +323,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         saveTimerRef.current = setTimeout(async () => {
             // Lock background updates
             savePendingRef.current = true;
+            setSyncLog('Subiendo cambios a la nube...');
             
             // 1. Save to LocalStorage immediately
             localStorage.setItem('presentation_data_v2', JSON.stringify(data));
@@ -324,16 +339,18 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                 if (response.ok) {
                     const result = await response.json();
                     console.log('✅ Synchronized to server:', result.id);
+                    setSyncLog('Cambios guardados DEFINITIVAMENTE en la nube ✅');
                     // Crucial: Only clear the manual/pending flags on SUCCESS
                     manualChangeRef.current = false;
                     savePendingRef.current = false;
+                } else {
+                    setSyncLog('Error al subir. Reintentando...');
                 }
             } catch (err) {
                 console.error('❌ Failed to sync to server:', err);
+                setSyncLog('Fallo al subir datos a la nube ❌');
             } finally {
                 setIsSaving(false);
-                // Also clear on failure so we don't stay locked forever, 
-                // but keep manual flag so it can retry if needed? Actually better to clear.
                 savePendingRef.current = false;
             }
         }, 1200); // 1.2s debounce
@@ -398,6 +415,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
             isSaving,
             lastSyncedAt,
             syncError,
+            syncLog,
             setGlobalEditing, 
             refreshFromServer 
         }}>
