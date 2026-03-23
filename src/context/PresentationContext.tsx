@@ -171,6 +171,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     const setGlobalEditing = useCallback((editing: boolean) => setIsEditingGlobal(editing), []);
 
     // Initial load: Fetch from Server (Primary) then LocalStorage (Fallback)
+    // Runs ONCE on mount only — never re-runs on save/edit state changes.
     useEffect(() => {
         async function loadData() {
             try {
@@ -250,11 +251,13 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         }
 
         loadData();
+    }, []); // ← empty deps: runs ONLY once on mount
 
-        // 3. Polling for real-time sync across computers
+    // Polling for real-time sync across computers.
+    // Separated from loadData so that saving (isSaving toggle) never triggers a reload.
+    useEffect(() => {
         const interval = setInterval(async () => {
-            if (isSaving) return; // Don't poll if we're currently pushing updates
-            if (isEditingGlobal) return; // DON'T overwrite data if user is actively editing!
+            if (isEditingGlobal) return; // Skip if user is actively editing
             try {
                 const response = await fetch('/api/presentation/shared');
                 if (response.ok) {
@@ -273,7 +276,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         }, 10000); // Poll every 10s
 
         return () => clearInterval(interval);
-    }, [isSaving, isEditingGlobal]);
+    }, [isEditingGlobal]); // ← only isEditingGlobal, NOT isSaving
 
     // Debounced Persist to Server and LocalStorage
     useEffect(() => {
