@@ -180,6 +180,8 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     // Ref to track if the data change came from a user edit (needs server save)
     // or from the polling/initial load (must NOT be saved back)
     const manualChangeRef = React.useRef(false);
+    // Ref specifically for the save process to block polling
+    const savePendingRef = React.useRef(false);
 
     // Initial load: Fetch from Server (Primary) then LocalStorage (Fallback)
     // Runs ONCE on mount only — never re-runs on save/edit state changes.
@@ -187,7 +189,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         async function loadData() {
             try {
                 // 1. Try to get from Server
-                const response = await fetch('/api/presentation/shared');
+                const response = await fetch(`/api/presentation/shared?t=${Date.now()}`, { cache: 'no-store' });
                 if (response.ok) {
                     const result = await response.json();
                     if (result && result.data) {
@@ -271,10 +273,10 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     // Separated from loadData so that saving (isSaving toggle) never triggers a reload.
     useEffect(() => {
         const interval = setInterval(async () => {
-            if (isEditingGlobal) return; // Skip if user is actively editing
+            // Skip polling if editing OR if a save is pending to avoid race conditions
+            if (isEditingGlobal || savePendingRef.current) return; 
             try {
-                // cache: 'no-store' ensures we always get fresh data, never a cached response
-                const response = await fetch('/api/presentation/shared', { cache: 'no-store' });
+                const response = await fetch(`/api/presentation/shared?t=${Date.now()}`, { cache: 'no-store' });
                 if (response.ok) {
                     const result = await response.json();
                     if (result && result.data) {
@@ -305,7 +307,8 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
         
         saveTimerRef.current = setTimeout(async () => {
-            manualChangeRef.current = false; // Reset flag
+            // Lock background updates
+            savePendingRef.current = true;
             
             // 1. Save to LocalStorage immediately
             localStorage.setItem('presentation_data_v2', JSON.stringify(data));
@@ -321,13 +324,19 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                 if (response.ok) {
                     const result = await response.json();
                     console.log('✅ Synchronized to server:', result.id);
+                    // Crucial: Only clear the manual/pending flags on SUCCESS
+                    manualChangeRef.current = false;
+                    savePendingRef.current = false;
                 }
             } catch (err) {
                 console.error('❌ Failed to sync to server:', err);
             } finally {
                 setIsSaving(false);
+                // Also clear on failure so we don't stay locked forever, 
+                // but keep manual flag so it can retry if needed? Actually better to clear.
+                savePendingRef.current = false;
             }
-        }, 1000); // 1s debounce
+        }, 1200); // 1.2s debounce
 
         return () => {
             if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -339,7 +348,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         setIsSaving(true);
         setSyncError(null);
         try {
-            const response = await fetch('/api/presentation/shared', { cache: 'no-store' });
+            const response = await fetch(`/api/presentation/shared?t=${Date.now()}`, { cache: 'no-store' });
             if (response.ok) {
                 const result = await response.json();
                 if (result && result.data) {
