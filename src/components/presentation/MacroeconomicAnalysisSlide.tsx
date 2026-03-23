@@ -27,7 +27,7 @@ export default function MacroeconomicAnalysisSlide() {
     };
 
     return (
-        <div className="w-full h-full flex flex-col p-8 md:p-16 bg-white text-slate-800 relative overflow-hidden group">
+        <div className="w-full h-full flex flex-col p-8 md:p-12 bg-white text-slate-800 relative overflow-hidden group">
             {/* LARGE GRAPHIC ARCH (Semi-circle) */}
             <div className="absolute top-0 right-0 w-[800px] h-[800px] border-[60px] border-pink-500/10 rounded-full translate-x-1/2 -translate-y-1/4" />
 
@@ -46,7 +46,7 @@ export default function MacroeconomicAnalysisSlide() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h2 className="text-4xl md:text-6xl font-black text-[#9D1D5A] tracking-tighter">
+                    <h2 className="text-3xl md:text-5xl font-black text-[#9D1D5A] tracking-tighter">
                         Análisis Macroeconómico
                     </h2>
                 </motion.div>
@@ -54,21 +54,21 @@ export default function MacroeconomicAnalysisSlide() {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    className="w-48 md:w-64"
+                    className="w-40 md:w-56"
                 >
                     <img src="/logo-presente.png" alt="Presente" className="w-full h-auto object-contain" />
-                    <p className="text-right text-[10px] text-pink-600 font-bold uppercase tracking-widest mt-1">Fondo de Empleados</p>
+                    <p className="text-right text-[10px] text-pink-600 font-bold uppercase tracking-widest mt-0.5">Fondo de Empleados</p>
                 </motion.div>
             </div>
 
-            <div className="flex-1 w-full max-w-5xl flex flex-col gap-1 relative z-10 overflow-hidden pr-4">
+            <div className="flex-1 w-full max-w-6xl flex flex-col justify-center gap-4 md:gap-6 relative z-10 pr-4">
                 {paragraphs.map((p: string, idx: number) => (
                     <motion.p
                         key={idx}
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: idx * 0.1 }}
-                        className="text-base md:text-[1.15rem] leading-[1.6] text-slate-700 font-medium text-justify"
+                        className="text-sm md:text-lg leading-[1.5] text-slate-700 font-medium text-justify"
                         dangerouslySetInnerHTML={formatText(p)}
                     />
                 ))}
