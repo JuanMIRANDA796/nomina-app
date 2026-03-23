@@ -28,6 +28,7 @@ import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicA
 import CreditRateProposalTable from '@/components/presentation/CreditRateProposalTable';
 import CreditRateProposalSummaryTable from '@/components/presentation/CreditRateProposalSummaryTable';
 import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
+import SyncStatusIndicator from '@/components/presentation/SyncStatusIndicator';
 
 export default function PresentationPage() {
     const { data, updateSection, resetData, isLoading } = usePresentation();
@@ -121,6 +122,8 @@ export default function PresentationPage() {
                     Restablecer Datos
                 </button>
             </div>
+            
+            <SyncStatusIndicator />
         </main>
     );
 }

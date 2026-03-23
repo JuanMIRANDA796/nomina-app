@@ -157,7 +157,11 @@ interface PresentationContextType {
     updateSection: (section: keyof PresentationData, newData: any) => void;
     resetData: () => void;
     isLoading: boolean;
+    isSaving: boolean;
+    lastSyncedAt: Date | null;
+    syncError: string | null;
     setGlobalEditing: (editing: boolean) => void;
+    refreshFromServer: () => Promise<void>;
 }
 
 const PresentationContext = createContext<PresentationContextType | undefined>(undefined);
@@ -166,6 +170,8 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     const [data, setData] = useState<PresentationData>(ALL_DEFAULTS);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
+    const [syncError, setSyncError] = useState<string | null>(null);
     // When true, polling will NOT overwrite local state (user is actively editing)
     const [isEditingGlobal, setIsEditingGlobal] = useState(false);
     const setGlobalEditing = useCallback((editing: boolean) => setIsEditingGlobal(editing), []);
@@ -211,12 +217,15 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
 
                             return merged;
                         });
+                        setLastSyncedAt(new Date());
+                        setSyncError(null);
                         setIsLoading(false);
                         return;
                     }
                 }
-            } catch (err) {
+            } catch (err: any) {
                 console.error('Failed to load shared presentation from server:', err);
+                setSyncError(err.message || 'Error de conexión');
             }
 
             // 2. Fallback to LocalStorage if server fails or is empty
@@ -274,10 +283,13 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                             if (JSON.stringify(prev) === JSON.stringify(newData)) return prev;
                             return newData;
                         });
+                        setLastSyncedAt(new Date());
+                        setSyncError(null);
                     }
                 }
-            } catch (err) {
+            } catch (err: any) {
                 console.warn('Polling failed:', err);
+                setSyncError(err.message || 'Error de sincronización');
             }
         }, 5000); // Poll every 5s for faster sync
 
@@ -322,6 +334,26 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         };
     }, [data, isLoading]);
 
+    // Force manual refresh from server
+    const refreshFromServer = useCallback(async () => {
+        setIsSaving(true);
+        setSyncError(null);
+        try {
+            const response = await fetch('/api/presentation/shared', { cache: 'no-store' });
+            if (response.ok) {
+                const result = await response.json();
+                if (result && result.data) {
+                    setData(prev => ({ ...prev, ...result.data }));
+                    setLastSyncedAt(new Date());
+                }
+            }
+        } catch (err: any) {
+            setSyncError(err.message || 'Error al actualizar');
+        } finally {
+            setIsSaving(false);
+        }
+    }, []);
+
     // Update section logic
     const updateSection = useCallback((section: keyof PresentationData, newData: any) => {
         manualChangeRef.current = true; // Mark as manual change for the useEffect
@@ -349,13 +381,18 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     }, []);
 
     return (
-        <PresentationContext.Provider value={{ data, updateSection, resetData, isLoading, setGlobalEditing }}>
+        <PresentationContext.Provider value={{ 
+            data, 
+            updateSection, 
+            resetData, 
+            isLoading, 
+            isSaving,
+            lastSyncedAt,
+            syncError,
+            setGlobalEditing, 
+            refreshFromServer 
+        }}>
             {children}
-            {isSaving && (
-                <div className="fixed bottom-4 right-4 bg-emerald-600/80 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm z-50 animate-pulse">
-                    Sincronizando...
-                </div>
-            )}
         </PresentationContext.Provider>
     );
 }

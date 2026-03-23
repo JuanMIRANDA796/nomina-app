@@ -21,6 +21,7 @@ import CreditRateProposalTable from '@/components/presentation/CreditRateProposa
 import BenchmarkingCreditsTable from '@/components/presentation/BenchmarkingCreditsTable';
 import FinancialLeaderAttributionsSlide from '@/components/presentation/FinancialLeaderAttributionsSlide';
 import CDATRateProposalSlide from '@/components/presentation/CDATRateProposalSlide';
+import SyncStatusIndicator from '@/components/presentation/SyncStatusIndicator';
 
 export default function PresentationV2Page() {
     const { data, updateSection, resetData, isLoading } = usePresentation();
@@ -212,7 +213,8 @@ export default function PresentationV2Page() {
                     Restablecer Datos
                 </button>
             </div>
-
+            
+            <SyncStatusIndicator />
         </main>
     );
 }
