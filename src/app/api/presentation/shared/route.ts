@@ -17,16 +17,15 @@ export async function GET() {
                 }
             });
         }
-        
-        return NextResponse.json(snapshot, {
+        return NextResponse.json({ ...snapshot, serverVersion: 'v2.1.3' }, {
             headers: {
                 'Cache-Control': 'no-store, no-cache, must-revalidate',
                 'Pragma': 'no-cache',
             }
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Shared presentation fetch error:', error);
-        return NextResponse.json({ error: 'Server error' }, { status: 500 });
+        return NextResponse.json({ error: 'Server error', status: 500, message: error.message }, { status: 500 });
     }
 }
 
@@ -42,9 +41,9 @@ export async function POST(request: Request) {
             create: { id: SHARED_ID, data }
         });
 
-        return NextResponse.json({ success: true, id: snapshot.id });
-    } catch (error) {
+        return NextResponse.json({ success: true, id: snapshot.id, updatedAt: snapshot.updatedAt });
+    } catch (error: any) {
         console.error('Shared presentation save error:', error);
-        return NextResponse.json({ error: 'Server error' }, { status: 500 });
+        return NextResponse.json({ error: 'Server error', status: 500, message: error.message }, { status: 500 });
     }
 }

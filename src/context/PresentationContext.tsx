@@ -173,7 +173,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     const [isSaving, setIsSaving] = useState(false);
     const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
     const [syncError, setSyncError] = useState<string | null>(null);
-    const [syncLog, setSyncLog] = useState<string | null>('Iniciando...');
+    const [syncLog, setSyncLog] = useState<string | null>('Conectando (v2.1.3)...');
     // When true, polling will NOT overwrite local state (user is actively editing)
     const [isEditingGlobal, setIsEditingGlobal] = useState(false);
     const setGlobalEditing = useCallback((editing: boolean) => setIsEditingGlobal(editing), []);
@@ -227,15 +227,16 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                         setIsLoading(false);
                         return;
                     } else {
-                        setSyncLog('Servidor vacío. Usando valores predeterminados.');
+                        setSyncLog('Nube nueva (vacía). Usando JSON.');
                     }
                 } else {
-                    setSyncLog(`Error del servidor (${response.status}).`);
+                    setSyncLog(`Error Inicial: ${response.status}`);
+                    setSyncError(`Server responded with ${response.status}`);
                 }
             } catch (err: any) {
                 console.error('Failed to load shared presentation from server:', err);
                 setSyncError(err.message || 'Error de conexión');
-                setSyncLog('Error crítico al conectar con la nube.');
+                setSyncLog('Sin conexión a la nube ❌');
             }
 
             // 2. Fallback to LocalStorage if server fails or is empty
@@ -300,12 +301,12 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                         setSyncLog('Nube vacía.');
                     }
                 } else {
-                    setSyncLog('Servidor no respondió al refresco.');
+                    setSyncLog(`Error Sincronización: ${response.status}`);
                 }
             } catch (err: any) {
                 console.warn('Polling failed:', err);
                 setSyncError(err.message || 'Error de sincronización');
-                setSyncLog('Sincronización perdida ⚠️');
+                setSyncLog('Sync perdido ⚠️');
             }
         }, 4000); // Poll every 4s for faster sync
 
@@ -338,13 +339,12 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                 });
                 if (response.ok) {
                     const result = await response.json();
-                    console.log('✅ Synchronized to server:', result.id);
-                    setSyncLog('Cambios guardados DEFINITIVAMENTE en la nube ✅');
+                    setSyncLog(`Cambios fijados en Nube ✅ (${new Date().toLocaleTimeString()})`);
                     // Crucial: Only clear the manual/pending flags on SUCCESS
                     manualChangeRef.current = false;
                     savePendingRef.current = false;
                 } else {
-                    setSyncLog('Error al subir. Reintentando...');
+                    setSyncLog(`Error al Guardar: ${response.status}`);
                 }
             } catch (err) {
                 console.error('❌ Failed to sync to server:', err);

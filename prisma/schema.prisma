@@ -80,4 +80,5 @@ model PresentationSnapshot {
   id        String   @id @default(cuid())
   data      Json     // Aggregated data for all slides
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
