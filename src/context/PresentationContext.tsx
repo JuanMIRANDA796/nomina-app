@@ -246,7 +246,30 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         }
 
         loadData();
-    }, []);
+
+        // 3. Polling for real-time sync across computers
+        const interval = setInterval(async () => {
+            if (isSaving) return; // Don't poll if we're currently pushing updates
+            try {
+                const response = await fetch('/api/presentation/shared');
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result && result.data) {
+                        setData(prev => {
+                            // Only update if data is actually different to avoid unnecessary re-renders
+                            const newData = { ...prev, ...result.data };
+                            if (JSON.stringify(prev) === JSON.stringify(newData)) return prev;
+                            return newData;
+                        });
+                    }
+                }
+            } catch (err) {
+                console.warn('Polling failed:', err);
+            }
+        }, 10000); // Poll every 10s
+
+        return () => clearInterval(interval);
+    }, [isSaving]);
 
     // Debounced Persist to Server and LocalStorage
     useEffect(() => {
