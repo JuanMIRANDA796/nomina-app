@@ -11,14 +11,9 @@ export default function CDATProposalMainTable() {
     const data = globalData.cdatProposalMain;
 
     const handleUpdate = (groupIdx: number, entIdx: number, field: string, value: string) => {
-        const newData = { ...data };
-        newData.groups = [...data.groups];
-        newData.groups[groupIdx] = { ...data.groups[groupIdx] };
-        newData.groups[groupIdx].entities = [...data.groups[groupIdx].entities];
-
+        const newData = JSON.parse(JSON.stringify(data));
         const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value.replace(',', '.'));
-        (newData.groups[groupIdx].entities[entIdx] as any)[field] = val;
-
+        newData.groups[groupIdx].entities[entIdx][field] = val;
         updateSection('cdatProposalMain', newData);
     };
 

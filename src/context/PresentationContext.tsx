@@ -66,6 +66,8 @@ import fsgProposalDefault from '@/data/fsg_proposal.json';
 import cdatProposalMainDefault from '@/data/cdat_proposal_benchmarking.json';
 import cdatRateMatrixProposalDefault from '@/data/cdat_rate_matrix_proposal.json';
 import historicalRatesV2Default from '@/data/historical_rates_v2.json';
+import creditRateProposalsDefault from '@/data/credit_rate_proposal_data.json';
+import benchmarkingSummaryTableDefault from '@/data/benchmarking_summary_table.json';
 
 const metadataDefault = {
     title: 'COMITÉ DE PRECIOS FEBRERO 2026',
@@ -142,6 +144,8 @@ const ALL_DEFAULTS = {
     cdatProposalMain: cdatProposalMainDefault,
     cdatRateMatrixProposal: cdatRateMatrixProposalDefault,
     historicalRatesV2: historicalRatesV2Default,
+    creditRateProposals: creditRateProposalsDefault,
+    benchmarkingSummaryData: benchmarkingSummaryTableDefault,
     metadata: metadataDefault,
     macroAnalysis: macroAnalysisDefault,
 };

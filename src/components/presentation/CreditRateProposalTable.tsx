@@ -1,54 +1,47 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-
-const SECTIONS = [
-    {
-        name: 'CONSUMO',
-        rows: [
-            { modalidad: 'SOAT', actMin: '23,00%', actMax: '23,00%', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Libre Inversión', actMin: '23,00%', actMax: '23,00%', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Viajes', actMin: '23,00%', actMax: '23,00%', propMin: '23,00%', propMax: '25,27%', mvMin: '1,74%', mvMax: '1,89%' },
-            { modalidad: 'Educación, Calam., Salud, Emp.', actMin: '12,00%', actMax: '12,00%', propMin: '12,00%', propMax: '18,67%', mvMin: '0,95%', mvMax: '1,44%' },
-            { modalidad: 'Centro Vacacionales', actMin: '15,00%', actMax: '15,00%', propMin: '15,00%', propMax: '20,94%', mvMin: '1,17%', mvMax: '1,60%' },
-        ]
-    },
-    {
-        name: 'COMPRA DE CARTERA & VEHÍCULO',
-        rows: [
-            { modalidad: 'Compra de Cartera', actMin: '16,10%', actMax: '19,56%', propMin: '16,10%', propMax: '19,56%', mvMin: '1,25%', mvMax: '1,50%' },
-            { modalidad: 'Vehículo', actMin: '15,00%', actMax: '17,00%', propMin: '15,00%', propMax: '17,00%', mvMin: '1,17%', mvMax: '1,32%' },
-        ]
-    },
-    {
-        name: 'VIVIENDA',
-        rows: [
-            { modalidad: 'Plan Mi Casa VIS', actMin: '12,27%', actMax: '12,27%', propMin: '12,27%', propMax: '12,27%', mvMin: '0,97%', mvMax: '0,97%' },
-            { modalidad: 'Plan Mi Casa No VIS', actMin: '12,40%', actMax: '12,40%', propMin: '12,40%', propMax: '12,40%', mvMin: '0,98%', mvMax: '0,98%' },
-            { modalidad: 'Vivienda VIS', actMin: '12,40%', actMax: '12,40%', propMin: '12,40%', propMax: '12,40%', mvMin: '0,98%', mvMax: '0,98%' },
-            { modalidad: 'Vivienda No VIS', actMin: '12,60%', actMax: '12,60%', propMin: '12,60%', propMax: '12,60%', mvMin: '0,99%', mvMax: '0,99%' },
-        ]
-    },
-    {
-        name: 'HIPOTECARIO OTROS USOS',
-        rows: [
-            { modalidad: 'Hipotecario (0-5 Años)', actMin: '16,00%', actMax: '16,00%', propMin: '16,00%', propMax: '16,00%', mvMin: '1,24%', mvMax: '1,24%' },
-            { modalidad: 'Hipotecario (5-10 Años)', actMin: '16,67%', actMax: '16,67%', propMin: '16,67%', propMax: '16,67%', mvMin: '1,29%', mvMax: '1,29%' },
-            { modalidad: 'Hipotecario (10-15 Años)', actMin: '17,33%', actMax: '17,33%', propMin: '17,33%', propMax: '17,33%', mvMin: '1,34%', mvMax: '1,34%' },
-            { modalidad: 'Hipotecario (15-20 Años)', actMin: '18,00%', actMax: '18,00%', propMin: '18,00%', propMax: '18,00%', mvMin: '1,39%', mvMax: '1,39%' },
-        ]
-    }
-];
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { usePresentation } from '@/context/PresentationContext';
 
 export default function CreditRateProposalTable() {
+    const { data, updateSection } = usePresentation();
+    const [isEditing, setIsEditing] = useState(false);
+    
+    // Safely get data or default to empty array
+    const SECTIONS = data?.creditRateProposals || [];
+    
+    const [editValue, setEditValue] = useState(JSON.stringify(SECTIONS, null, 2));
+
+    const handleSaveEdit = () => {
+        try {
+            const parsed = JSON.parse(editValue);
+            updateSection('creditRateProposals', parsed);
+            setIsEditing(false);
+        } catch (e) {
+            alert('Error parsing JSON. Check your syntax.');
+        }
+    };
+
     return (
-        <div className="w-full h-full bg-[#1e1e1e] rounded-3xl border border-white/5 p-4 md:p-6 flex flex-col shadow-2xl font-sans overflow-hidden">
+        <div className="w-full h-full bg-[#1e1e1e] rounded-3xl border border-white/5 p-4 md:p-6 flex flex-col shadow-2xl font-sans overflow-hidden relative">
             <div className="mb-3 flex justify-between items-end border-b border-white/10 pb-2">
                 <div>
                     <h2 className="text-2xl font-black text-white italic tracking-tighter uppercase">Propuesta de Tasas de Crédito</h2>
                     <p className="text-slate-500 text-[10px] mt-1 font-black uppercase tracking-widest">Acuerdo Estratégico Comité Ejecutivo 2026</p>
                 </div>
+                <button
+                    onClick={() => {
+                        setEditValue(JSON.stringify(SECTIONS, null, 2));
+                        setIsEditing(true);
+                    }}
+                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-bold transition-all border border-white/10 flex items-center gap-2"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                    </svg>
+                    Editar Datos
+                </button>
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#0a0a0a] rounded-xl border border-white/10 shadow-inner">
@@ -71,7 +64,7 @@ export default function CreditRateProposalTable() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
-                        {SECTIONS.map((section, sIdx) => (
+                        {SECTIONS.map((section: any, sIdx: number) => (
                             <React.Fragment key={sIdx}>
                                 <tr className="bg-black/50">
                                     <td colSpan={7} className="px-4 py-1 text-[9px] font-black text-pink-500 uppercase tracking-[0.4em] border-y border-white/5 bg-slate-950/40">
@@ -81,7 +74,7 @@ export default function CreditRateProposalTable() {
                                         </div>
                                     </td>
                                 </tr>
-                                {section.rows.map((row, rIdx) => (
+                                {section.rows.map((row: any, rIdx: number) => (
                                     <tr key={`${sIdx}-${rIdx}`} className="hover:bg-white/5 transition-all duration-200">
                                         <td className="px-4 py-1 text-[11px] font-black text-slate-100 uppercase tracking-tight">{row.modalidad}</td>
                                         <td className="px-2 py-1 text-center text-[10px] text-slate-400 border-x border-white/5">{row.actMin}</td>
@@ -102,6 +95,48 @@ export default function CreditRateProposalTable() {
                 <span>Comité de Crédito / Marzo 2026</span>
                 <span className="text-pink-600 font-bold uppercase">Estrictamente Confidencial</span>
             </div>
+
+            {/* EDIT DATA MODAL */}
+            <AnimatePresence>
+                {isEditing && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 z-50 bg-slate-900/95 backdrop-blur-xl rounded-3xl p-8 flex flex-col"
+                    >
+                        <div className="flex justify-between items-center mb-6">
+                            <h4 className="text-2xl font-bold text-white">Editar Datos de Propuestas</h4>
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => setIsEditing(false)}
+                                    className="px-4 py-2 border border-slate-600 hover:bg-slate-800 rounded-lg text-slate-300 transition-all font-bold"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    onClick={handleSaveEdit}
+                                    className="px-4 py-2 bg-pink-600 hover:bg-pink-500 rounded-lg text-white font-bold transition-all"
+                                >
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="flex-1 bg-black/50 border border-white/10 rounded-xl overflow-hidden p-4">
+                            <textarea
+                                value={editValue}
+                                onChange={(e) => setEditValue(e.target.value)}
+                                className="w-full h-full bg-transparent text-slate-300 font-mono text-sm resize-none outline-none custom-scrollbar"
+                                spellCheck="false"
+                            />
+                        </div>
+                        <p className="text-slate-500 text-xs mt-4">
+                            Nota: Asegúrate de mantener el formato JSON válido.
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <style jsx>{`
                 .custom-scrollbar::-webkit-scrollbar {

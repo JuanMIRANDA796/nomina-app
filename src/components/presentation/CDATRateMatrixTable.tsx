@@ -10,26 +10,6 @@ export default function CDATRateMatrixTable() {
 
     const data = globalData.cdatRateMatrixProposal;
 
-    const handleUpdateChange = (type: 'at_maturity' | 'monthly_income', rowIdx: number, field: string, value: string) => {
-        const newData = { ...data };
-        newData[type] = { ...newData[type] };
-
-        if (type === 'at_maturity') {
-            newData.at_maturity.rows = [...newData.at_maturity.rows];
-            newData.at_maturity.rows[rowIdx] = { ...newData.at_maturity.rows[rowIdx] };
-            const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value.replace(',', '.'));
-            (newData.at_maturity.rows[rowIdx] as any)[field] = val;
-        } else {
-            newData.monthly_income.groups = [...newData.monthly_income.groups];
-            // Para mensual es un poco más complejo por los grupos, pero en el JSON actual parece que rows está dentro de groups.
-            // Necesitaría saber qué rowIdx es en qué group.
-            // Supondremos una estructura plana para simplificar o manejar los indices internos.
-            // Revisando JSON: monthly_income tiene groups, cada group tiene rows.
-        }
-
-        updateSection('cdatRateMatrixProposal', newData);
-    };
-
     // Ajuste de handleUpdate para manejar la estructura correcta
     const handleUpdateMaturity = (rowIdx: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(data));
