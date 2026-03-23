@@ -40,7 +40,7 @@ export default function MacroeconomicAnalysisSlide() {
             </button>
 
             {/* HEADER AREA */}
-            <div className="w-full flex justify-between items-start mb-8 relative z-10">
+            <div className="w-full mb-6 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -50,18 +50,9 @@ export default function MacroeconomicAnalysisSlide() {
                         Análisis Macroeconómico
                     </h2>
                 </motion.div>
-
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    className="w-40 md:w-56"
-                >
-                    <img src="/logo-presente.png" alt="Presente" className="w-full h-auto object-contain" />
-                    <p className="text-right text-[10px] text-pink-600 font-bold uppercase tracking-widest mt-0.5">Fondo de Empleados</p>
-                </motion.div>
             </div>
 
-            <div className="flex-1 w-full max-w-6xl flex flex-col justify-center gap-4 md:gap-6 relative z-10 pr-4">
+            <div className="w-full max-w-6xl flex flex-col gap-4 md:gap-6 relative z-10 pr-4 mt-2">
                 {paragraphs.map((p: string, idx: number) => (
                     <motion.p
                         key={idx}
