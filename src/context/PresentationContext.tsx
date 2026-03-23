@@ -169,6 +169,8 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     // When true, polling will NOT overwrite local state (user is actively editing)
     const [isEditingGlobal, setIsEditingGlobal] = useState(false);
     const setGlobalEditing = useCallback((editing: boolean) => setIsEditingGlobal(editing), []);
+    // Debounce timer ref — used so multiple rapid updateSection calls only create 1 server write
+    const saveTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Initial load: Fetch from Server (Primary) then LocalStorage (Fallback)
     // Runs ONCE on mount only — never re-runs on save/edit state changes.
@@ -279,35 +281,35 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         return () => clearInterval(interval);
     }, [isEditingGlobal]); // ← only isEditingGlobal, NOT isSaving
 
-    // Debounced Persist to Server and LocalStorage
-    useEffect(() => {
-        if (isLoading) return;
-
-        const timer = setTimeout(async () => {
-            // Save to LocalStorage immediately for responsiveness
-            localStorage.setItem('presentation_data_v2', JSON.stringify(data));
-
-            // Persist to Server
-            setIsSaving(true);
-            try {
-                await fetch('/api/presentation/shared', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data })
-                });
-            } catch (err) {
-                console.error('Failed to sync presentation to server:', err);
-            } finally {
-                setIsSaving(false);
-            }
-        }, 1500); // 1.5s debounce
-
-        return () => clearTimeout(timer);
-    }, [data, isLoading]);
-
-    // Update section logic
+    // Update section logic — also schedules a server save.
+    // This is the ONLY place that triggers a write to the server.
+    // Polling and loadData NEVER trigger writes.
     const updateSection = useCallback((section: keyof PresentationData, newData: any) => {
-        setData(prev => ({ ...prev, [section]: newData }));
+        setData(prev => {
+            const updated = { ...prev, [section]: newData };
+
+            // Schedule debounced save (clears any pending save first)
+            if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+            saveTimerRef.current = setTimeout(async () => {
+                // Save to LocalStorage
+                localStorage.setItem('presentation_data_v2', JSON.stringify(updated));
+                // Save to Server
+                setIsSaving(true);
+                try {
+                    await fetch('/api/presentation/shared', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ data: updated })
+                    });
+                } catch (err) {
+                    console.error('Failed to sync presentation to server:', err);
+                } finally {
+                    setIsSaving(false);
+                }
+            }, 1000); // 1s debounce
+
+            return updated;
+        });
     }, []);
 
     const resetData = useCallback(async () => {
