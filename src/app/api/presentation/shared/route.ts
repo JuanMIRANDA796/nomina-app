@@ -24,9 +24,9 @@ export async function GET() {
                 'Pragma': 'no-cache',
             }
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Shared presentation fetch error:', error);
-        return NextResponse.json({ error: 'Server error' }, { status: 500 });
+        return NextResponse.json({ error: 'Server error', message: error.message, stack: error.stack }, { status: 500 });
     }
 }
 
@@ -43,8 +43,8 @@ export async function POST(request: Request) {
         });
 
         return NextResponse.json({ success: true, id: snapshot.id });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Shared presentation save error:', error);
-        return NextResponse.json({ error: 'Server error' }, { status: 500 });
+        return NextResponse.json({ error: 'Server error', message: error.message, stack: error.stack }, { status: 500 });
     }
 }
