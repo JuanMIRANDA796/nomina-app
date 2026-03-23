@@ -11,7 +11,7 @@ export default function SyncStatusIndicator() {
     const { isSaving, lastSyncedAt, syncError, refreshFromServer, isLoading, syncLog } = usePresentation();
     const [timeAgo, setTimeAgo] = useState<string>('');
     const [isHovered, setIsHovered] = useState(false);
-    const VERSION = 'v2.1.3';
+    const VERSION = 'v2.1.4';
 
     useEffect(() => {
         if (!lastSyncedAt) return;

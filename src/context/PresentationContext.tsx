@@ -230,8 +230,9 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                         setSyncLog('Nube nueva (vacía). Usando JSON.');
                     }
                 } else {
+                    const errorJson = await response.json().catch(() => ({}));
                     setSyncLog(`Error Inicial: ${response.status}`);
-                    setSyncError(`Server responded with ${response.status}`);
+                    setSyncError(`[${response.status}] ${errorJson.message || 'Error del servidor'}`);
                 }
             } catch (err: any) {
                 console.error('Failed to load shared presentation from server:', err);
@@ -301,7 +302,9 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                         setSyncLog('Nube vacía.');
                     }
                 } else {
-                    setSyncLog(`Error Sincronización: ${response.status}`);
+                    const errorJson = await response.json().catch(() => ({}));
+                    setSyncLog(`Error Sync: ${response.status}`);
+                    setSyncError(`[${response.status}] ${errorJson.message || 'Error del servidor'}`);
                 }
             } catch (err: any) {
                 console.warn('Polling failed:', err);
@@ -344,7 +347,9 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                     manualChangeRef.current = false;
                     savePendingRef.current = false;
                 } else {
-                    setSyncLog(`Error al Guardar: ${response.status}`);
+                    const errorJson = await response.json().catch(() => ({}));
+                    setSyncLog(`Error Guardado: ${response.status}`);
+                    setSyncError(`[${response.status}] ${errorJson.message || 'Error del servidor'}`);
                 }
             } catch (err) {
                 console.error('❌ Failed to sync to server:', err);
