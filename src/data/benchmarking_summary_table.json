@@ -8,7 +8,7 @@
     { "mes": "Diciembre", "segmento": "Vivienda VIS - Hasta 20 años", "entidades": 16, "monto": "$758.78 mil M", "desembolsos": "7.248", "tasaProm": "12,42%", "tasaPresente": "10,93%", "variacion": "↑ 1,49%", "desembolsosPresente": "873 M" },
     { "mes": "Diciembre", "segmento": "Vivienda VIS - Todos los plazos", "entidades": 16, "monto": "$838.45 mil M", "desembolsos": "8.577", "tasaProm": "12,39%", "tasaPresente": "10,95%", "variacion": "↑ 1,44%", "desembolsosPresente": "1213 M" },
 
-    { "mes": "Enero", "segmento": "Hasta 1 SMLV", "entidades": 23, "monto": "$82.54 mil M", "desembolsos": "112.958", "tasaProm": "42,38%", "tasaPresente": "22,86%", "variacion": "↑ 19,52%", "desembolsosPresente": "707 M" },
+    { "mes": "Enero", "segmento": "Hasta 1 SMLV", "entidades": 30, "monto": "$82.54 mil M", "desembolsos": "112.958", "tasaProm": "42,38%", "tasaPresente": "22,86%", "variacion": "↑ 19,52%", "desembolsosPresente": "707 M" },
     { "mes": "Enero", "segmento": "De 1 a 3 SMLV", "entidades": 29, "monto": "$202.00 mil M", "desembolsos": "58.763", "tasaProm": "22,70%", "tasaPresente": "22,47%", "variacion": "↑ 0,23%", "desembolsosPresente": "1633 M" },
     { "mes": "Enero", "segmento": "3 a 6 SMLV", "entidades": 30, "monto": "407.09 mil M", "desembolsos": "53.176", "tasaProm": "22,77%", "tasaPresente": "21,82%", "variacion": "0,0095", "desembolsosPresente": "1465 M" },
     { "mes": "Enero", "segmento": "De 6 a 12 SMLV", "entidades": 31, "monto": "$624.48 mil M", "desembolsos": "42.333", "tasaProm": "22,02%", "tasaPresente": "20,95%", "variacion": "↑ 1,07%", "desembolsosPresente": "1571 M" },
@@ -17,7 +17,7 @@
     { "mes": "Enero", "segmento": "Vivienda VIS - Hasta 20 años", "entidades": 16, "monto": "$816.23 mil M", "desembolsos": "7.821", "tasaProm": "12,43%", "tasaPresente": "11,01%", "variacion": "↑ 1,42%", "desembolsosPresente": "458 M" },
     { "mes": "Enero", "segmento": "Vivienda VIS - Todos los plazos", "entidades": 16, "monto": "$905.80 mil M", "desembolsos": "9.356", "tasaProm": "12,39%", "tasaPresente": "10,96%", "variacion": "↑ 1,43%", "desembolsosPresente": "288 M" },
 
-    { "mes": "Febrero", "segmento": "Hasta 1 SMLV", "entidades": 25, "monto": "$66.29 mil M", "desembolsos": "93.695", "tasaProm": "41,48%", "tasaPresente": "19,01%", "variacion": "↑ 22,47%", "desembolsosPresente": "285 M" },
+    { "mes": "Febrero", "segmento": "Hasta 1 SMLV", "entidades": 30, "monto": "$66.29 mil M", "desembolsos": "93.695", "tasaProm": "41,48%", "tasaPresente": "19,01%", "variacion": "↑ 22,47%", "desembolsosPresente": "285 M" },
     { "mes": "Febrero", "segmento": "De 1 a 3 SMLV", "entidades": 30, "monto": "$179.75 mil M", "desembolsos": "50.623", "tasaProm": "23,36%", "tasaPresente": "22,85%", "variacion": "↑ 0,51%", "desembolsosPresente": "1062 M" },
     { "mes": "Febrero", "segmento": "De 3 a 6 SMLV", "entidades": 30, "monto": "377.03 mil M", "desembolsos": "47.688", "tasaProm": "23,31%", "tasaPresente": "22,22%", "variacion": "↑ 1,09%", "desembolsosPresente": "1291 M" },
     { "mes": "Febrero", "segmento": "De 6 a 12 SMLV", "entidades": 32, "monto": "$601.51 mil M", "desembolsos": "39.444", "tasaProm": "22,61%", "tasaPresente": "21,40%", "variacion": "↑ 1,21%", "desembolsosPresente": "1597 M" },
