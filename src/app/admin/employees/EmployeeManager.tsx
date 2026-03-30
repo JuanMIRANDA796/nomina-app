@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, User, CreditCard, Briefcase, Trash2, Calendar, Pencil, ShieldAlert, ClipboardList } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -40,7 +40,13 @@ export default function EmployeeManager() {
         try {
             const res = await fetch('/api/employees');
             const data = await res.json();
-            setEmployees(data);
+            if (Array.isArray(data)) {
+                setEmployees(data);
+            } else {
+                console.error('Expected format array, got:', data);
+                setEmployees([]);
+                toast.error('Error en el formato de datos de los empleados');
+            }
         } catch (error) {
             console.error('Error fetching employees:', error);
             toast.error('Error al cargar empleados');
@@ -258,9 +264,8 @@ export default function EmployeeManager() {
                                 </tr>
                             ) : (
                                 employees.map((emp) => (
-                                    <>
+                                    <React.Fragment key={emp.id}>
                                         <tr
-                                            key={emp.id}
                                             className={`hover:bg-gray-50/50 transition-colors cursor-pointer ${expandedId === emp.id ? 'bg-blue-50/30' : ''}`}
                                             onClick={() => setExpandedId(expandedId === emp.id ? null : emp.id)}
                                         >
@@ -268,10 +273,10 @@ export default function EmployeeManager() {
                                                 <div className="flex items-center gap-3">
                                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${expandedId === emp.id ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-600'
                                                         }`}>
-                                                        {emp.name.charAt(0)}
+                                                        {emp.name?.charAt(0) || 'E'}
                                                     </div>
                                                     <div>
-                                                        <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">{emp.name}</p>
+                                                        <p className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">{emp.name || 'Sin Nombre'}</p>
                                                         <div className="flex items-center gap-1 text-xs text-gray-400">
                                                             <ShieldAlert className="w-3 h-3" />
                                                             Nivel {emp.riskClass || 'I'}
@@ -279,14 +284,14 @@ export default function EmployeeManager() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="py-4 px-6 text-gray-600 font-mono text-sm">{emp.cedula}</td>
+                                            <td className="py-4 px-6 text-gray-600 font-mono text-sm">{emp.cedula || 'N/A'}</td>
                                             <td className="py-4 px-6">
                                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700">
                                                     {emp.cargo}
                                                 </span>
                                             </td>
                                             <td className="py-4 px-6 text-gray-600 font-medium">
-                                                ${emp.salary.toLocaleString()}
+                                                ${(emp.salary || 0).toLocaleString()}
                                             </td>
                                             <td className="py-4 px-6">
                                                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${emp.status === 'ACTIVE'
@@ -358,7 +363,7 @@ export default function EmployeeManager() {
                                                 </td>
                                             </tr>
                                         )}
-                                    </>
+                                    </React.Fragment>
                                 ))
                             )}
                         </tbody>
