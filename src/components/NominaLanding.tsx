@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { ChevronRight, Clock, X, Lock, User, ShieldCheck, BarChart3 } from 'lucide-react';
+import NominaXLogo from './NominaXLogo';
 
 export default function NominaLanding() {
     const router = useRouter();
@@ -36,12 +37,7 @@ export default function NominaLanding() {
             {/* Header */}
             <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 py-5 md:px-12 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm md:backdrop-blur-none transition-all">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center">
-                        <Clock className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-white tracking-tight">
-                        NóminaApp
-                    </span>
+                    <NominaXLogo className="scale-75 origin-left" lightTheme={true} />
                 </div>
                 <button
                     onClick={() => setShowLogin(true)}

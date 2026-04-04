@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { Clock, LogIn, LogOut, X, Loader2, Lock } from 'lucide-react';
+import NominaXLogo from '@/components/NominaXLogo';
 
 export default function TimeClock() {
     const router = useRouter();
@@ -88,7 +89,10 @@ export default function TimeClock() {
     return (
         <main className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center p-6 relative overflow-hidden">
             {/* Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none flex items-center justify-center">
+                <div className="absolute opacity-[0.04] scale-[3] md:scale-[5] lg:scale-[7] select-none pointer-events-none">
+                    <NominaXLogo lightTheme={true} />
+                </div>
                 <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-3xl" />
                 <div className="absolute top-[40%] -right-[10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-3xl" />
             </div>

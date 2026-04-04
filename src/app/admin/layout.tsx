@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Users, ClipboardList, Settings, LogOut, Headphones, MessageCircle, X, LayoutDashboard } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import NominaXLogo from '@/components/NominaXLogo';
 
 export default function AdminLayout({
     children,
@@ -21,11 +22,9 @@ export default function AdminLayout({
         <div className="flex h-screen bg-gray-50">
             {/* Sidebar */}
             <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-                <div className="p-6 border-b border-gray-100">
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                        NóminaApp
-                    </h1>
-                    <p className="text-xs text-gray-500 mt-1">Panel Administrativo</p>
+                <div className="p-6 border-b border-gray-100 flex flex-col items-start justify-center">
+                    <NominaXLogo className="scale-75 origin-left" />
+                    <p className="text-xs text-gray-500 mt-2">Panel Administrativo</p>
                 </div>
 
                 <nav className="flex-1 p-4 space-y-2">
