@@ -26,8 +26,13 @@ export default function DashboardPage() {
 
     useEffect(() => {
         const fetchStats = async () => {
+            const companyId = localStorage.getItem('company_id');
+            if (!companyId) return;
+
             try {
-                const res = await fetch('/api/dashboard');
+                const res = await fetch('/api/dashboard', {
+                    headers: { 'x-company-id': companyId }
+                });
                 const data = await res.json();
                 setStats(data);
             } catch (error) {

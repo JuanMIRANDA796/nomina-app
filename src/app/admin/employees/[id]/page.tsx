@@ -57,31 +57,28 @@ export default function EmployeeHistoryPage() {
     }, [employeeId, month, year]);
 
     const fetchHistory = async () => {
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         setLoading(true);
         try {
-            const res = await fetch(`/api/employees/${employeeId}/attendance?month=${month}&year=${year}`);
+            const res = await fetch(`/api/employees/${employeeId}/attendance?month=${month}&year=${year}`, {
+                headers: { 'x-company-id': companyId }
+            });
             if (!res.ok) throw new Error('Failed to fetch');
             const json = await res.json();
-
-            // CLIENT-SIDE ALIGNMENT FIX:
-            // The server might map records using UTC-5, but the browser displays them in Local Time.
-            // We re-map the records strictly based on the Local Date of the Entry Time.
-
+            // ... rest ...
             const rawHistory: HistoryRecord[] = json.history;
             const validRecords = rawHistory.filter(r => r.recordId); // Records that actually exist
 
-            // Generate Client-Side Days (1-31)
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const remappedHistory: HistoryRecord[] = [];
 
             for (let d = 1; d <= daysInMonth; d++) {
                 const dayDate = new Date(year, month, d);
 
-                // Find a record that belongs to this day (visually)
                 const match = validRecords.find(r => {
-                    // Priority: Entry Time (Visual Truth) > Date Bucket
                     const checkDate = r.entryTime ? parseISO(r.entryTime) : parseISO(r.date);
-                    // Compare simply by YYYY-MM-DD in local time
                     return checkDate.getDate() === d &&
                         checkDate.getMonth() === month &&
                         checkDate.getFullYear() === year;
@@ -114,6 +111,9 @@ export default function EmployeeHistoryPage() {
     };
 
     const handleUpdate = async (date: string, type: 'entryTime' | 'exitTime', newDateValue: string, newTimeValue: string) => {
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         // Prepare Full ISO String
         let fullISO = null;
         if (newTimeValue && newDateValue) {
@@ -126,7 +126,10 @@ export default function EmployeeHistoryPage() {
         try {
             const res = await fetch(`/api/employees/${employeeId}/attendance`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-company-id': companyId
+                },
                 body: JSON.stringify({
                     date, // Original row date (Anchor)
                     [type]: fullISO
@@ -145,11 +148,17 @@ export default function EmployeeHistoryPage() {
     };
 
     const handleDelete = async (date: string) => {
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         if (!confirm('¿Estás seguro de eliminar este registro?')) return;
         try {
             const res = await fetch(`/api/employees/${employeeId}/attendance`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-company-id': companyId
+                },
                 body: JSON.stringify({ date })
             });
 

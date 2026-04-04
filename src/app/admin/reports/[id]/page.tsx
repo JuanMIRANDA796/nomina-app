@@ -50,15 +50,16 @@ export default function PayrollDetailPage() {
     }, [employeeId, date, period]);
 
     const fetchPayroll = async () => {
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         setLoading(true);
         try {
-            const res = await fetch(`/api/payroll/${employeeId}?date=${date}&period=${period}`);
+            const res = await fetch(`/api/payroll/${employeeId}?date=${date}&period=${period}`, {
+                headers: { 'x-company-id': companyId }
+            });
             const json = await res.json();
-
-            // CLIENT-SIDE ALIGNMENT FIX (Payroll Report):
-            // Re-map records based on Local Browser Timezone of Entry Time.
-            // This ensures "20 Ene 05:00" appears in row "20 Ene".
-
+            // ... rest ...
             if (res.ok) {
                 const yearNum = parseInt(date.split('-')[0]);
                 const monthNum = parseInt(date.split('-')[1]) - 1; // 0-indexed
@@ -116,10 +117,16 @@ export default function PayrollDetailPage() {
     };
 
     const handleAbsenceChange = async (recordDate: string, reason: string) => {
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         try {
             const res = await fetch(`/api/payroll/${employeeId}/absence`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-company-id': companyId
+                },
                 body: JSON.stringify({
                     date: recordDate,
                     reason
@@ -132,12 +139,18 @@ export default function PayrollDetailPage() {
     };
 
     const handleResetDay = async (recordDate: string) => {
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         if (!confirm('¿Estás seguro de restablecer este día a "Sin Registro"? Se borrará la asistencia.')) return;
 
         try {
             const res = await fetch(`/api/employees/${employeeId}/attendance`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-company-id': companyId
+                },
                 body: JSON.stringify({ date: recordDate })
             });
             if (res.ok) fetchPayroll();

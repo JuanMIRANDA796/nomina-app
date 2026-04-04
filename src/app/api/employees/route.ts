@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCompanyId } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const employees = await prisma.employee.findMany({
+            where: { companyId },
             orderBy: { name: 'asc' },
         });
         return NextResponse.json(employees);
@@ -17,10 +22,13 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const body = await request.json();
         const { name, cedula, cargo, salary } = body;
 
-        console.log('Intentando crear empleado:', { name, cedula, cargo, salary });
+        console.log('Intentando crear empleado:', { name, cedula, cargo, salary, companyId });
 
         const employee = await prisma.employee.create({
             data: {
@@ -29,6 +37,7 @@ export async function POST(request: Request) {
                 cargo,
                 salary: parseFloat(salary),
                 status: 'ACTIVE',
+                companyId
             },
         });
 

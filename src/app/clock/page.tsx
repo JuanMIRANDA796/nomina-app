@@ -23,12 +23,12 @@ export default function TimeClock() {
 
     // Simple protection for the prototype
     useEffect(() => {
-        const isAuthenticated = localStorage.getItem('demo_auth');
-        if (!isAuthenticated) {
-            toast.error('Debes iniciar sesión primero');
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) {
+            toast.error('Debes iniciar sesión con tu empresa primero');
             router.push('/');
         }
-    }, []);
+    }, [router]);
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -40,26 +40,48 @@ export default function TimeClock() {
         setShowModal(true);
     };
 
-    const handleAdminLogin = (e: React.FormEvent) => {
+    const handleAdminLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (adminPassword === '12345') {
-            toast.success('Acceso concedido');
-            router.push('/admin/employees');
-        } else {
-            toast.error('Contraseña incorrecta');
-            setAdminPassword('');
+        const companyId = localStorage.getItem('company_id');
+        const companyName = localStorage.getItem('company_name');
+
+        if (!companyId || !companyName) return;
+
+        setIsLoading(true);
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: companyName, password: adminPassword }),
+            });
+
+            if (res.ok) {
+                toast.success('Acceso al panel concedido');
+                router.push('/admin/employees');
+            } else {
+                toast.error('Contraseña administrativa incorrecta');
+                setAdminPassword('');
+            }
+        } catch (error) {
+            toast.error('Error de validación');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!cedula) return;
+        const companyId = localStorage.getItem('company_id');
+        if (!cedula || !companyId) return;
 
         setIsLoading(true);
         try {
             const res = await fetch('/api/clock', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-company-id': companyId
+                },
                 body: JSON.stringify({ cedula, action: actionType }),
             });
 
@@ -155,9 +177,21 @@ export default function TimeClock() {
             </div>
 
             {/* Admin Link (Subtle) */}
-            <div className="absolute bottom-6 text-slate-600 text-sm hover:text-slate-400 transition-colors cursor-pointer">
-                <button onClick={() => { setShowAdminLogin(true); setAdminPassword(''); }} className="hover:underline">
+            <div className="absolute bottom-6 flex flex-col items-center gap-2 z-10">
+                <div className="text-slate-500 text-xs font-medium uppercase tracking-widest opacity-50">
+                    {typeof window !== 'undefined' ? localStorage.getItem('company_name') : ''}
+                </div>
+                <button 
+                    onClick={() => { setShowAdminLogin(true); setAdminPassword(''); }} 
+                    className="text-slate-600 text-sm hover:text-slate-400 transition-colors hover:underline"
+                >
                     Panel Administrativo
+                </button>
+                <button 
+                    onClick={() => { localStorage.clear(); router.push('/'); }} 
+                    className="text-slate-700 text-xs hover:text-red-400 transition-colors mt-2"
+                >
+                    Cerrar Sesión de Empresa
                 </button>
             </div>
 

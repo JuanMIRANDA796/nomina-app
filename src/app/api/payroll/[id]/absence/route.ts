@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCompanyId } from '@/lib/auth';
 import { ABSENCE_CONFIG, getAbsencePercentage } from '@/lib/absence_config';
 
 export async function POST(
@@ -7,8 +8,18 @@ export async function POST(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { id } = await params;
         const employeeId = parseInt(id);
+
+        // Verify Ownership
+        const employee = await prisma.employee.findUnique({ where: { id: employeeId } });
+        if (!employee || employee.companyId !== companyId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+
         const { date, reason } = await request.json();
 
         if (!date) {

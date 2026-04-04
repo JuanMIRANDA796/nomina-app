@@ -36,13 +36,19 @@ export default function ReportsPage() {
     }, [date]);
 
     const fetchReport = async () => {
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/reports?date=${date}`);
+            const res = await fetch(`/api/reports?date=${date}`, {
+                headers: { 'x-company-id': companyId }
+            });
             const data = await res.json();
-            setReport(data);
+            setReport(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Error fetching report:', error);
+            setReport([]);
         } finally {
             setIsLoading(false);
         }

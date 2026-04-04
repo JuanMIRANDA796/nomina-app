@@ -1,17 +1,21 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCompanyId } from '@/lib/auth';
 
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { id } = await params;
         const employee = await prisma.employee.findUnique({
             where: { id: parseInt(id) },
         });
 
-        if (!employee) {
+        if (!employee || employee.companyId !== companyId) {
             return NextResponse.json({ error: 'Empleado no encontrado' }, { status: 404 });
         }
 
@@ -26,9 +30,18 @@ export async function PUT(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { id } = await params;
         const body = await request.json();
         const { name, cedula, cargo, salary, riskClass, status } = body;
+
+        // Verify ownership
+        const employee = await prisma.employee.findUnique({ where: { id: parseInt(id) } });
+        if (!employee || employee.companyId !== companyId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
 
         const updatedEmployee = await prisma.employee.update({
             where: { id: parseInt(id) },
@@ -36,7 +49,7 @@ export async function PUT(
                 name,
                 cedula,
                 cargo,
-                salary: parseFloat(salary), // Ensure number
+                salary: parseFloat(salary),
                 riskClass,
                 status
             },
@@ -54,34 +67,18 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { id } = await params;
-        // Check for dependencies? Prisma might cascade or throw.
-        // If we want to keep history, maybe soft delete?
-        // User asked for "possibility to edit", and UI has trash can.
-        // Hard delete is risky if attendance exists.
-        // Let's try Delete. If it fails due to foreign key constraint (Attendance), we return error.
-        // Ideally we should delete attendances first or Cascade.
-        // Schema doesn't specify Cascade on Attendance relation.
-        // So I'll manually delete attendances first if I want to hard delete.
-        // Or I'll set Status = INACTIVE (Soft Delete).
-        // Given users often prefer "Trash" to actually remove, I'll try hard delete but handle FK error.
 
-        // Let's implement Soft Delete first as it's safer for Payroll.
-        // But UI "Trash" implies removal.
-        // If I soft delete, I need to filter list by ACTIVE.
-        // My list API currently fetches all?
-        // Let's check EmployeeManager fetch.
-        // It fetches `/api/employees`.
-        // Let's check `api/employees/route.ts` to see if it filters.
+        // Verify ownership
+        const employee = await prisma.employee.findUnique({ where: { id: parseInt(id) } });
+        if (!employee || employee.companyId !== companyId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
 
-        // I'll stick to Hard Delete for now (with cascade if possible) or Soft Delete.
-        // To be safe and compliant with user "Delete" expectation:
-        // I'll try `delete`. If it fails, I'll return specific error "Cannot delete active employee with records".
-
-        await prisma.attendance.deleteMany({ where: { employeeId: parseInt(id) } }); // Clean history first?
-        // Actually, deleting history is dangerous.
-        // I'll Soft Delete.
-
+        // Soft Delete
         await prisma.employee.update({
             where: { id: parseInt(id) },
             data: { status: 'INACTIVE' }

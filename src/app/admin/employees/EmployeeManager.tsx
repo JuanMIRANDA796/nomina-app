@@ -37,8 +37,13 @@ export default function EmployeeManager() {
     }, []);
 
     const fetchEmployees = async () => {
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         try {
-            const res = await fetch('/api/employees');
+            const res = await fetch('/api/employees', {
+                headers: { 'x-company-id': companyId }
+            });
             const data = await res.json();
             if (Array.isArray(data)) {
                 setEmployees(data);
@@ -75,9 +80,14 @@ export default function EmployeeManager() {
 
     const handleDelete = async (id: number) => {
         if (!confirm('¿Estás seguro de desactivar este empleado?')) return;
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
 
         try {
-            const res = await fetch(`/api/employees/${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/employees/${id}`, { 
+                method: 'DELETE',
+                headers: { 'x-company-id': companyId }
+            });
             if (res.ok) {
                 toast.success('Empleado desactivado');
                 fetchEmployees();
@@ -91,13 +101,19 @@ export default function EmployeeManager() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
         try {
             const url = editingId ? `/api/employees/${editingId}` : '/api/employees';
             const method = editingId ? 'PUT' : 'POST';
 
             const res = await fetch(url, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-company-id': companyId
+                },
                 body: JSON.stringify(formData),
             });
 

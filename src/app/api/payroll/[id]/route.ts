@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCompanyId } from '@/lib/auth';
 import { startOfMonth, endOfMonth, parseISO, eachDayOfInterval, format, isSameDay, getISOWeek, startOfWeek, isBefore, subHours } from 'date-fns';
 import { calculateShiftHours, ShiftResult, isHoliday } from '@/lib/payroll';
 import { calculatePayroll } from '@/lib/payroll_engine';
@@ -12,6 +13,9 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { id } = await params;
         const { searchParams } = new URL(request.url);
         const dateParam = searchParams.get('date'); // YYYY-MM
@@ -59,7 +63,7 @@ export async function GET(
             }
         });
 
-        if (!employee) {
+        if (!employee || employee.companyId !== companyId) {
             return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
         }
 

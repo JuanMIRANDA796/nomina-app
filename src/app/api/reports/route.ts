@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCompanyId } from '@/lib/auth';
 import { startOfMonth, endOfMonth, parseISO } from 'date-fns';
 import { calculateShiftHours, ShiftResult } from '@/lib/payroll';
 
@@ -20,6 +21,9 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { searchParams } = new URL(request.url);
         const dateParam = searchParams.get('date'); // YYYY-MM
 
@@ -32,6 +36,7 @@ export async function GET(request: Request) {
         const end = endOfMonth(date);
 
         const employees = await prisma.employee.findMany({
+            where: { companyId },
             include: {
                 attendances: {
                     where: {
@@ -55,7 +60,6 @@ export async function GET(request: Request) {
                 if (!att.entryTime || !att.exitTime) return;
 
                 // Determine if Sunday
-                // TODO: Add Holiday Logic (Festivos)
                 const isSunday = att.date.getDay() === 0;
 
                 const hours = calculateShiftHours(att.entryTime, att.exitTime, isSunday);
@@ -72,9 +76,6 @@ export async function GET(request: Request) {
             });
 
             // Calculate Pay
-            // Base Hourly Rate = Salary / 240 (Standard 30 days * 8 hours legacy, or 230 for 46h? 
-            // Standard is still 240 for calculations usually, or 235 for 47h week.
-            // Let's stick to 240 for now unless specified otherwise).
             const hourlyRate = emp.salary / 240;
 
             const payment =

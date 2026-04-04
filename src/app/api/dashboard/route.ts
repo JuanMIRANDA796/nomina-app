@@ -1,27 +1,32 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCompanyId } from '@/lib/auth';
 import { startOfDay, endOfDay, startOfMonth, endOfMonth } from 'date-fns';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const now = new Date();
         const start = startOfDay(now);
         const end = endOfDay(now);
-        const startMonth = startOfMonth(now);
-        const endMonth = endOfMonth(now);
 
         // 1. Employee Stats
         const totalEmployees = await prisma.employee.count({
-            where: { status: 'ACTIVE' }
+            where: { companyId, status: 'ACTIVE' }
         });
 
         const inactiveEmployees = await prisma.employee.count({
-            where: { status: 'INACTIVE' }
+            where: { companyId, status: 'INACTIVE' }
         });
 
         // 2. Attendance Daily Stats
         const attendanceToday = await prisma.attendance.findMany({
             where: {
+                employee: { companyId },
                 date: {
                     gte: start,
                     lte: end
@@ -36,7 +41,7 @@ export async function GET() {
         // 3. Financial Estimates (Rough projection based on monthly salary)
         // Sum of all active employees' salary
         const activeEmployees = await prisma.employee.findMany({
-            where: { status: 'ACTIVE' },
+            where: { companyId, status: 'ACTIVE' },
             select: { salary: true }
         });
 
@@ -46,12 +51,12 @@ export async function GET() {
             employees: {
                 total: totalEmployees,
                 inactive: inactiveEmployees,
-                active: totalEmployees // Assuming total is active filter? No, total is just active count per query above.
+                active: totalEmployees 
             },
             attendance: {
                 present: presentCount,
                 workingNow: activeNowCount,
-                absent: totalEmployees - presentCount // Rough estimate
+                absent: Math.max(0, totalEmployees - presentCount)
             },
             financials: {
                 projectedMonthly: totalMonthlyPayroll

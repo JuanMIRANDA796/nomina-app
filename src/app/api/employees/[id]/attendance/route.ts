@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getCompanyId } from '@/lib/auth';
 import { startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, subHours, addHours, parseISO, format } from 'date-fns';
 
 export const dynamic = 'force-dynamic';
@@ -9,8 +10,18 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { id } = await params;
         const employeeId = parseInt(id);
+
+        // Verify Ownership
+        const employeeCheck = await prisma.employee.findUnique({ where: { id: employeeId } });
+        if (!employeeCheck || employeeCheck.companyId !== companyId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+
         const { searchParams } = new URL(request.url);
 
         // Month/Year selection (Default to current)
@@ -167,8 +178,18 @@ export async function PUT(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { id } = await params;
         const employeeId = parseInt(id);
+
+        // Verify Ownership
+        const employeeCheck = await prisma.employee.findUnique({ where: { id: employeeId } });
+        if (!employeeCheck || employeeCheck.companyId !== companyId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+
         const body = await request.json();
         const { date, entryTime, exitTime } = body;
 
@@ -235,8 +256,18 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const companyId = await getCompanyId();
+        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
         const { id } = await params;
         const employeeId = parseInt(id);
+
+        // Verify Ownership
+        const employeeCheck = await prisma.employee.findUnique({ where: { id: employeeId } });
+        if (!employeeCheck || employeeCheck.companyId !== companyId) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+
         const json = await request.json();
         const date = parseISO(json.date);
 
