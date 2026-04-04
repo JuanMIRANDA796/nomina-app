@@ -11,14 +11,19 @@ datasource db {
 }
 
 model Company {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  password    String       // In a real app we'd use hashing
-  employees   Employee[]
-  holidays    Holiday[]
-  configs     PayrollConfig[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id             Int          @id @default(autoincrement())
+  name           String       @unique
+  password       String       // In a real app we'd use hashing
+  companyName    String?
+  businessName   String?
+  documentType   String?
+  documentNumber String?
+  phone          String?
+  employees      Employee[]
+  holidays       Holiday[]
+  configs        PayrollConfig[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model Employee {
