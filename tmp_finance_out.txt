@@ -1,0 +1,22 @@
+﻿Bases: Promedio 20 empleados por cliente Empresarial.
+--- Escenario: Agresivo (Costos Bajos para penetraci¾n rßpida) ---
+Precios Mensuales: Emprendedor $35,000, Empresarial Base $50,000, Empleado $5,000
+Ingresos Y1: $24,300,000 | Y2: $121,500,000 | Y3: $340,200,000
+EBITDA Y1: $6,300,000 | Y2: $80,500,000 | Y3: $253,200,000
+VPN (15%): $126,340,108
+TIR: 130.7%
+
+--- Escenario: Balanceado (El Propuesto) ---
+Precios Mensuales: Emprendedor $45,000, Empresarial Base $70,000, Empleado $6,000
+Ingresos Y1: $30,900,000 | Y2: $154,500,000 | Y3: $432,600,000
+EBITDA Y1: $12,900,000 | Y2: $113,500,000 | Y3: $345,600,000
+VPN (15%): $185,780,250
+TIR: 168.3%
+
+--- Escenario: Premium (Alta rentabilidad) ---
+Precios Mensuales: Emprendedor $59,000, Empresarial Base $80,000, Empleado $8,000
+Ingresos Y1: $39,420,000 | Y2: $197,100,000 | Y3: $551,880,000
+EBITDA Y1: $21,420,000 | Y2: $156,100,000 | Y3: $464,880,000
+VPN (15%): $262,512,069
+TIR: 211.1%
+

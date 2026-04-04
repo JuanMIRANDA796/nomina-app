@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Users, ClipboardList, Settings, LogOut, Headphones, MessageCircle, X, LayoutDashboard } from 'lucide-react';
+import { Users, ClipboardList, Settings, LogOut, Headphones, MessageCircle, X, LayoutDashboard, Crown } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import NominaXLogo from '@/components/NominaXLogo';
 
@@ -42,6 +42,14 @@ export default function AdminLayout({
                     >
                         <Settings className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         <span className="font-medium">Configuración</span>
+                    </Link>
+
+                    <Link
+                        href="/admin/subscription"
+                        className="flex items-center gap-3 px-4 py-3 text-purple-700 rounded-xl hover:bg-purple-50 hover:text-purple-600 transition-all group font-semibold bg-purple-50/50"
+                    >
+                        <Crown className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <span>Mi Suscripción</span>
                     </Link>
 
                     <button

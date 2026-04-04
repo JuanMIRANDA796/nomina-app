@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { ChevronRight, Clock, X, Lock, User, ShieldCheck, BarChart3 } from 'lucide-react';
@@ -52,12 +53,17 @@ export default function NominaLanding() {
                 <div className="flex items-center gap-2">
                     <NominaXLogo className="scale-75 origin-left" lightTheme={true} />
                 </div>
-                <button
-                    onClick={() => setShowLogin(true)}
-                    className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all shadow-lg shadow-blue-900/20 text-sm md:text-base border border-blue-500/50"
-                >
-                    Iniciar Sesión
-                </button>
+                <div className="flex items-center gap-4 md:gap-6">
+                    <Link href="/planes" className="text-gray-300 hover:text-white font-medium transition-colors text-sm md:text-base hidden sm:block">
+                        Planes
+                    </Link>
+                    <button
+                        onClick={() => setShowLogin(true)}
+                        className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-all shadow-lg shadow-blue-900/20 text-sm md:text-base border border-blue-500/50"
+                    >
+                        Iniciar Sesión
+                    </button>
+                </div>
             </header>
 
             {/* Hero Section */}
@@ -92,16 +98,22 @@ export default function NominaLanding() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="pt-8"
+                        className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4"
                     >
                         <button
                             onClick={() => setShowLogin(true)}
-                            className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-xl font-bold text-white shadow-2xl shadow-blue-900/40 hover:scale-105 transition-all duration-300 flex items-center gap-3 mx-auto"
+                            className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-xl font-bold text-white shadow-2xl shadow-blue-900/40 hover:scale-105 transition-all duration-300 flex items-center gap-3 w-full sm:w-auto justify-center"
                         >
                             Comienza Ahora
                             <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                             <div className="absolute inset-0 rounded-xl ring-2 ring-white/20 group-hover:ring-white/40 transition-all" />
                         </button>
+                        <Link
+                            href="/planes"
+                            className="px-8 py-4 bg-transparent border-2 border-gray-700 hover:border-gray-500 rounded-xl text-xl font-bold text-gray-300 hover:text-white transition-all duration-300 w-full sm:w-auto text-center"
+                        >
+                            Ver Planes
+                        </Link>
                     </motion.div>
                 </div>
             </section>
