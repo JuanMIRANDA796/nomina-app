@@ -151,6 +151,21 @@ export default function NominaLanding() {
                                     </p>
                                 </div>
 
+                                {authMode === 'SIGNUP' && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        className="mb-6 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-center"
+                                    >
+                                        <p className="text-blue-400 text-xs font-bold uppercase tracking-wider mb-1">Plan Inicial Asignado</p>
+                                        <p className="text-white text-sm font-semibold">🌱 Plan Semilla (Gratis)</p>
+                                        <p className="text-gray-400 text-[11px] mt-1 italic">
+                                            Límite máximo de <span className="text-blue-400 font-bold">2 empleados</span>. 
+                                            Podrás mejorar tu plan en cualquier momento desde el panel.
+                                        </p>
+                                    </motion.div>
+                                )}
+
                                 <div className="flex bg-[#0f1014] p-1 rounded-xl mb-6">
                                     <button
                                         onClick={() => setAuthMode('LOGIN')}
