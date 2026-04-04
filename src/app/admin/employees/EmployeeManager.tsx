@@ -123,7 +123,14 @@ export default function EmployeeManager() {
                 fetchEmployees();
             } else {
                 const errorData = await res.json();
-                toast.error('Error: ' + (errorData.error || 'Desconocido'));
+                if (res.status === 403 && errorData.details) {
+                    toast.error(`⚠️ ${errorData.error}`, {
+                        description: errorData.details,
+                        duration: 8000,
+                    });
+                } else {
+                    toast.error('Error: ' + (errorData.error || 'Desconocido'));
+                }
             }
         } catch (error) {
             console.error('Error saving employee:', error);

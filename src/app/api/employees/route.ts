@@ -28,6 +28,39 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { name, cedula, cargo, salary } = body;
 
+        // Fetch company details to check plan limits
+        const company = await prisma.company.findUnique({
+            where: { id: companyId },
+            include: {
+                _count: {
+                    select: { employees: true }
+                }
+            }
+        });
+
+        if (!company) {
+            return NextResponse.json({ error: 'Company not found' }, { status: 404 });
+        }
+
+        // Apply plan limits, except for PERSIFAL
+        if (company.name !== 'PERSIFAL') {
+            const currentEmployeeCount = company._count.employees;
+            
+            if (company.plan === 'SEMILLA' && currentEmployeeCount >= 2) {
+                return NextResponse.json({ 
+                    error: 'Límite alcanzado',
+                    details: 'El plan Semilla permite un máximo de 2 empleados. Por favor, mejora tu suscripción para continuar creciendo.'
+                }, { status: 403 });
+            }
+
+            if (company.plan === 'EMPRENDEDOR' && currentEmployeeCount >= 10) {
+                return NextResponse.json({ 
+                    error: 'Límite alcanzado',
+                    details: 'El plan Emprendedor permite un máximo de 10 empleados. Por favor, mejora a Empresarial para no tener límites.'
+                }, { status: 403 });
+            }
+        }
+
         console.log('Intentando crear empleado:', { name, cedula, cargo, salary, companyId });
 
         const employee = await prisma.employee.create({

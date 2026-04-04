@@ -19,6 +19,7 @@ model Company {
   documentType   String?
   documentNumber String?
   phone          String?
+  plan           String       @default("SEMILLA")
   employees      Employee[]
   holidays       Holiday[]
   configs        PayrollConfig[]
