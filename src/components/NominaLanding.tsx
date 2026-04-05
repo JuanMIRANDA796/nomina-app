@@ -153,16 +153,34 @@ export default function NominaLanding() {
 
                                 {authMode === 'SIGNUP' && (
                                     <motion.div 
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        className="mb-6 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-center"
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mb-6 p-5 rounded-2xl bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/30 text-center relative overflow-hidden group shadow-2xl shadow-blue-500/10"
                                     >
-                                        <p className="text-blue-400 text-xs font-bold uppercase tracking-wider mb-1">Plan Inicial Asignado</p>
-                                        <p className="text-white text-sm font-semibold">🌱 Plan Semilla (Gratis)</p>
-                                        <p className="text-gray-400 text-[11px] mt-1 italic">
-                                            Límite máximo de <span className="text-blue-400 font-bold">2 empleados</span>. 
-                                            Podrás mejorar tu plan en cualquier momento desde el panel.
-                                        </p>
+                                        <div className="relative z-10">
+                                            <p className="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-2">MODALIDAD DE REGISTRO RÁPIDO</p>
+                                            <div className="flex items-center justify-center gap-2 mb-2">
+                                                <span className="text-2xl">🌱</span>
+                                                <h4 className="text-white text-lg font-bold">Plan Semilla (Gratis)</h4>
+                                            </div>
+                                            <p className="text-gray-400 text-xs leading-relaxed mb-4">
+                                                Tendrás un límite máximo de <span className="text-blue-400 font-bold">2 empleados</span>. 
+                                                Ideal para micro-negocios en fase inicial.
+                                            </p>
+                                            
+                                            <div className="flex flex-col gap-2">
+                                                <p className="text-[10px] text-gray-500 font-medium">¿Necesitas más capacidad?</p>
+                                                <Link 
+                                                    href="/planes"
+                                                    className="inline-flex items-center justify-center gap-2 py-2 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white text-xs font-bold transition-all group/btn"
+                                                >
+                                                    🚀 Ver Planes Emprendedor / Empresarial
+                                                    <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                                                </Link>
+                                            </div>
+                                        </div>
+                                        {/* Subtle background glow */}
+                                        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-24 h-24 bg-blue-500/10 blur-[40px] rounded-full"></div>
                                     </motion.div>
                                 )}
 
