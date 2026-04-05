@@ -213,7 +213,7 @@ export default function PricingCards() {
                                             <div className="flex flex-col items-center justify-center bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-6">
                                                 <p className="text-gray-600 mb-4 text-center">Escanea este código QR desde tu App Bancolombia o Nequi para realizar el pago de <strong className="text-gray-900">${(isAnnual ? selectedPlan.monthlyPrice * (1 - discountRate) : selectedPlan.monthlyPrice).toLocaleString()}</strong></p>
                                                 
-                                                <div className="w-full max-w-[200px] aspect-square bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center shadow-inner mb-4 overflow-hidden relative group">
+                                                <div className="w-full max-w-[300px] aspect-square bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center shadow-inner mb-4 overflow-hidden relative group">
                                                     <img 
                                                         src="/qr_bancolombia.png" 
                                                         alt="QR Bancolombia" 
@@ -256,7 +256,7 @@ export default function PricingCards() {
                                             </div>
                                             
                                             <div className="flex flex-col items-center justify-center bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-6 flex-1">
-                                                <div className="w-32 h-32 bg-white border-2 border-gray-200 rounded-2xl flex items-center justify-center mb-4 overflow-hidden shadow-sm">
+                                                <div className="w-48 h-48 bg-white border-2 border-gray-200 rounded-2xl flex items-center justify-center mb-4 overflow-hidden shadow-sm">
                                                     <img 
                                                         src="/qr_whatsapp.png" 
                                                         alt="QR WhatsApp" 
