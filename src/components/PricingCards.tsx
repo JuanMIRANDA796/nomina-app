@@ -56,8 +56,8 @@ export default function PricingCards() {
 
     const openCheckout = (plan: any) => {
         if (plan.isFree) {
-            // Ir al login/registro tradicional
-            window.location.href = '/clock'; // Asumimos que entran o se registran desde la landing
+            // Ir al landing page con el modal de registro abierto
+            window.location.href = '/?mode=signup';
             return;
         }
         setSelectedPlan(plan);
@@ -115,7 +115,7 @@ export default function PricingCards() {
                             
                             <div className="my-6">
                                 <div className="flex items-end gap-1">
-                                    <span className={`text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r ${plan.color}`} style={{ backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))` }}>
+                                    <span className={`text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r ${plan.color}`}>
                                         ${price.toLocaleString()}
                                     </span>
                                     {plan.monthlyPrice > 0 && <span className="text-gray-500 text-lg mb-1">/mes</span>}

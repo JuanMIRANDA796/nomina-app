@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -10,12 +10,17 @@ import NominaXLogo from './NominaXLogo';
 
 export default function NominaLanding() {
     const router = useRouter();
-    const [showLogin, setShowLogin] = useState(false);
-    const [authMode, setAuthMode] = useState<'LOGIN' | 'SIGNUP'>('LOGIN');
+    const searchParams = useSearchParams();
+    
+    // Automatically open signup if mode=signup is in URL, and skip the plan notice since they already chose it
+    const isSignupMode = searchParams.get('mode') === 'signup';
+    
+    const [showLogin, setShowLogin] = useState(isSignupMode);
+    const [authMode, setAuthMode] = useState<'LOGIN' | 'SIGNUP'>(isSignupMode ? 'SIGNUP' : 'LOGIN');
     const [companyName, setCompanyName] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [showPlanNotice, setShowPlanNotice] = useState(true);
+    const [showPlanNotice, setShowPlanNotice] = useState(!isSignupMode);
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
