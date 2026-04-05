@@ -15,6 +15,7 @@ export default function NominaLanding() {
     const [companyName, setCompanyName] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showPlanNotice, setShowPlanNotice] = useState(true);
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -186,7 +187,10 @@ export default function NominaLanding() {
 
                                 <div className="flex bg-[#0f1014] p-1 rounded-xl mb-6">
                                     <button
-                                        onClick={() => setAuthMode('LOGIN')}
+                                        onClick={() => {
+                                            setAuthMode('LOGIN');
+                                            setShowPlanNotice(true); // Reset for next time they click signup
+                                        }}
                                         className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${authMode === 'LOGIN' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
                                     >
                                         Ingresar
@@ -199,47 +203,107 @@ export default function NominaLanding() {
                                     </button>
                                 </div>
 
-                                <form onSubmit={handleAuth} className="space-y-6">
-                                    <div className="space-y-4">
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <User className="h-5 w-5 text-gray-500" />
+                                <AnimatePresence mode="wait">
+                                    {authMode === 'SIGNUP' && showPlanNotice ? (
+                                        <motion.div
+                                            key="plan-notice"
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -20 }}
+                                            className="space-y-6"
+                                        >
+                                            <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/30 text-center relative overflow-hidden shadow-2xl">
+                                                <div className="relative z-10">
+                                                    <p className="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-3">PLAN INICIAL ASIGNADO</p>
+                                                    <div className="flex items-center justify-center gap-3 mb-3">
+                                                        <span className="text-3xl animate-bounce">🌱</span>
+                                                        <h4 className="text-white text-xl font-bold tracking-tight">Plan Semilla (Gratis)</h4>
+                                                    </div>
+                                                    <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                                                        Este plan tiene un límite máximo de <span className="text-blue-400 font-bold">2 empleados</span>. 
+                                                        Ideal para empezar sin costos.
+                                                    </p>
+                                                    
+                                                    <div className="space-y-3">
+                                                        <Link 
+                                                            href="/planes"
+                                                            className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white text-sm font-bold shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all group"
+                                                        >
+                                                            🚀 Ver Planes Emprendedor / Empresarial
+                                                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                                        </Link>
+                                                        
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setShowPlanNotice(false)}
+                                                            className="w-full py-3 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-gray-300 text-sm font-medium transition-all"
+                                                        >
+                                                            Continuar con Plan Semilla
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div className="absolute top-0 right-0 -mr-10 -mt-10 w-24 h-24 bg-blue-500/10 blur-[40px] rounded-full"></div>
                                             </div>
-                                            <input
-                                                type="text"
-                                                placeholder="Nombre de la Empresa"
-                                                className="w-full bg-[#0f1014] border border-gray-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
-                                                value={companyName}
-                                                onChange={(e) => setCompanyName(e.target.value)}
-                                                autoFocus
-                                            />
-                                        </div>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <Lock className="h-5 w-5 text-gray-500" />
+                                        </motion.div>
+                                    ) : (
+                                        <motion.form
+                                            key="auth-form"
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            onSubmit={handleAuth}
+                                            className="space-y-6"
+                                        >
+                                            <div className="space-y-4">
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                        <User className="h-5 w-5 text-gray-500" />
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Nombre de la Empresa"
+                                                        className="w-full bg-[#0f1014] border border-gray-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
+                                                        value={companyName}
+                                                        onChange={(e) => setCompanyName(e.target.value)}
+                                                        autoFocus
+                                                    />
+                                                </div>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                        <Lock className="h-5 w-5 text-gray-500" />
+                                                    </div>
+                                                    <input
+                                                        type="password"
+                                                        placeholder="Contraseña"
+                                                        className="w-full bg-[#0f1014] border border-gray-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
+                                                        value={password}
+                                                        onChange={(e) => setPassword(e.target.value)}
+                                                    />
+                                                </div>
                                             </div>
-                                            <input
-                                                type="password"
-                                                placeholder="Contraseña"
-                                                className="w-full bg-[#0f1014] border border-gray-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
 
-                                    <button
-                                        type="submit"
-                                        disabled={isLoading}
-                                        className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg hover:shadow-lg hover:shadow-blue-600/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                                    >
-                                        {isLoading ? (
-                                            <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        ) : (
-                                            authMode === 'LOGIN' ? "Ingresar" : "Crear Cuenta"
-                                        )}
-                                    </button>
-                                </form>
+                                            <button
+                                                type="submit"
+                                                disabled={isLoading}
+                                                className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg hover:shadow-lg hover:shadow-blue-600/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                                            >
+                                                {isLoading ? (
+                                                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                ) : (
+                                                    authMode === 'LOGIN' ? "Ingresar" : "Crear Cuenta"
+                                                )}
+                                            </button>
+                                            
+                                            {authMode === 'SIGNUP' && (
+                                                <button 
+                                                    onClick={() => setShowPlanNotice(true)}
+                                                    className="w-full text-xs text-gray-500 hover:text-gray-400 underline underline-offset-4"
+                                                >
+                                                    Regresar a información de planes
+                                                </button>
+                                            )}
+                                        </motion.form>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </motion.div>
                     </motion.div>
