@@ -155,7 +155,7 @@ export default function PricingCards() {
                             className="bg-white rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative"
                         >
                             {/* Left Panel - Benefits */}
-                            <div className="w-full md:w-5/12 bg-gray-50 p-8 border-r border-gray-200 hidden md:block">
+                            <div className="w-full md:w-5/12 bg-gray-50 p-6 md:p-8 border-r border-gray-200 hidden md:block overflow-y-auto max-h-[90vh]">
                                 <h3 className="text-gray-500 text-sm font-bold uppercase tracking-wider mb-2">Estás eligiendo</h3>
                                 <h4 className={`text-3xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r ${selectedPlan.color}`}>
                                     {selectedPlan.name}
@@ -179,7 +179,7 @@ export default function PricingCards() {
                             </div>
 
                             {/* Right Panel - Action Steps */}
-                            <div className="w-full md:w-7/12 p-8 relative flex flex-col justify-between min-h-[500px]">
+                            <div className="w-full md:w-7/12 p-6 md:p-8 relative flex flex-col justify-between min-h-[500px] max-h-[90vh] overflow-y-auto">
                                 {/* Mobile Header */}
                                 <div className="md:hidden text-center mb-6">
                                     <h3 className="text-sm font-bold text-gray-500 uppercase">Suscripción a</h3>
@@ -187,13 +187,6 @@ export default function PricingCards() {
                                         {selectedPlan.name}
                                     </h4>
                                 </div>
-
-                                <button 
-                                    onClick={() => setSelectedPlan(null)}
-                                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
-                                >
-                                    <X className="w-6 h-6" />
-                                </button>
 
                                 {/* Step Content */}
                                 <AnimatePresence mode="wait">
@@ -213,7 +206,7 @@ export default function PricingCards() {
                                             <div className="flex flex-col items-center justify-center bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-6">
                                                 <p className="text-gray-600 mb-4 text-center">Escanea este código QR desde tu App Bancolombia o Nequi para realizar el pago de <strong className="text-gray-900">${(isAnnual ? selectedPlan.monthlyPrice * (1 - discountRate) : selectedPlan.monthlyPrice).toLocaleString()}</strong></p>
                                                 
-                                                <div className="w-full max-w-[300px] aspect-square bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center shadow-inner mb-4 overflow-hidden relative group">
+                                                <div className="w-full max-w-[220px] md:max-w-[240px] aspect-square bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center shadow-inner mb-4 overflow-hidden relative group">
                                                     <img 
                                                         src="/qr_bancolombia.png" 
                                                         alt="QR Bancolombia" 
