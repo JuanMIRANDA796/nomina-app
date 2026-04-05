@@ -213,12 +213,17 @@ export default function PricingCards() {
                                             <div className="flex flex-col items-center justify-center bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-6">
                                                 <p className="text-gray-600 mb-4 text-center">Escanea este código QR desde tu App Bancolombia o Nequi para realizar el pago de <strong className="text-gray-900">${(isAnnual ? selectedPlan.monthlyPrice * (1 - discountRate) : selectedPlan.monthlyPrice).toLocaleString()}</strong></p>
                                                 
-                                                <div className="w-48 h-48 bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center shadow-inner mb-4 overflow-hidden relative group">
-                                                    {/* Placeholder QR - Replace with real image later */}
-                                                    <QrCode className="w-32 h-32 text-gray-300" strokeWidth={1} />
-                                                    <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
-                                                        <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full shadow-sm shadow-yellow-900/20">Tu QR Bancolombia</span>
-                                                    </div>
+                                                <div className="w-full max-w-[200px] aspect-square bg-white border-2 border-gray-200 rounded-xl flex items-center justify-center shadow-inner mb-4 overflow-hidden relative group">
+                                                    <img 
+                                                        src="/qr_bancolombia.png" 
+                                                        alt="QR Bancolombia" 
+                                                        className="w-full h-full object-contain p-2"
+                                                    />
+                                                </div>
+
+                                                <div className="text-center mb-4">
+                                                    <p className="text-xs text-gray-400 uppercase font-bold tracking-widest mb-1 text-blue-600">Cuenta de Ahorros Bancolombia</p>
+                                                    <p className="text-xl font-black text-gray-900 tabular-nums">377-856141-10</p>
                                                 </div>
 
                                                 <div className="w-full bg-red-50 border border-red-200 p-4 rounded-xl">
@@ -251,16 +256,20 @@ export default function PricingCards() {
                                             </div>
                                             
                                             <div className="flex flex-col items-center justify-center bg-gray-50 rounded-2xl p-6 border border-gray-200 mb-6 flex-1">
-                                                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                                                    <Phone className="w-8 h-8 text-green-600" />
+                                                <div className="w-32 h-32 bg-white border-2 border-gray-200 rounded-2xl flex items-center justify-center mb-4 overflow-hidden shadow-sm">
+                                                    <img 
+                                                        src="/qr_whatsapp.png" 
+                                                        alt="QR WhatsApp" 
+                                                        className="w-full h-full object-contain p-2"
+                                                    />
                                                 </div>
                                                 <h4 className="text-lg font-bold text-gray-900 text-center mb-2">¡Casi listo!</h4>
-                                                <p className="text-gray-600 text-center mb-6">
-                                                    Envía tu comprobante de pago a nuestra línea de WhatsApp de soporte. Un asesor verificará el pago y activará tu cuenta en pocos minutos.
+                                                <p className="text-gray-600 text-center mb-6 text-sm">
+                                                    Escanea el código o dale clic al botón para enviar tu comprobante a nuestra línea <span className="font-bold text-green-600">320 794 1082</span>.
                                                 </p>
                                                 
                                                 <a 
-                                                    href="https://wa.me/573000000000?text=Hola,%20adjunto%20comprobante%20de%20pago%20para%20la%20suscripción" 
+                                                    href={`https://wa.me/573207941082?text=Hola,%20adjunto%20comprobante%20de%20pago%20de%20$${(isAnnual ? selectedPlan.monthlyPrice * (1 - discountRate) : selectedPlan.monthlyPrice).toLocaleString()}%20para%20activar%20el%20${selectedPlan.name}.`} 
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-full shadow-lg shadow-green-600/30 transition-all hover:scale-105"
