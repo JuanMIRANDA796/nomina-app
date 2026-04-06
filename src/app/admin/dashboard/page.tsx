@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Users, Clock, DollarSign, TrendingUp, Activity, UserCheck, UserX } from 'lucide-react';
+import { Users, Clock, DollarSign, TrendingUp, Activity, UserCheck, UserX, HandCoins, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface DashboardStats {
@@ -17,6 +17,8 @@ interface DashboardStats {
     };
     financials: {
         projectedMonthly: number;
+        totalPrestaciones: number;
+        totalSegSocial: number;
     };
 }
 
@@ -215,6 +217,65 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 </motion.div>
+            </div>
+
+            {/* 4. Prestaciones & Seguridad Social cards row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* Prestaciones Sociales */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="bg-white p-6 rounded-2xl border border-amber-100 shadow-sm relative overflow-hidden group"
+                >
+                    <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-110 transition-transform">
+                        <HandCoins className="w-24 h-24 text-amber-500" />
+                    </div>
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 bg-amber-50 rounded-xl border border-amber-100">
+                                <HandCoins className="w-5 h-5 text-amber-600" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-700 text-sm">Total Prestaciones</h3>
+                                <p className="text-xs text-gray-400">Cesantías + Prima + Vacaciones + Int.</p>
+                            </div>
+                        </div>
+                        <div className="text-3xl font-black text-amber-600 tracking-tight">
+                            ${stats.financials.totalPrestaciones.toLocaleString()}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2">Proyección mes completo (empleador)</p>
+                    </div>
+                </motion.div>
+
+                {/* Seguridad Social */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="bg-white p-6 rounded-2xl border border-green-100 shadow-sm relative overflow-hidden group"
+                >
+                    <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-110 transition-transform">
+                        <ShieldCheck className="w-24 h-24 text-green-500" />
+                    </div>
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 bg-green-50 rounded-xl border border-green-100">
+                                <ShieldCheck className="w-5 h-5 text-green-600" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-700 text-sm">Total Seguridad Social</h3>
+                                <p className="text-xs text-gray-400">Salud + Pensión + ARL + Caja + ICBF + SENA</p>
+                            </div>
+                        </div>
+                        <div className="text-3xl font-black text-green-600 tracking-tight">
+                            ${stats.financials.totalSegSocial.toLocaleString()}
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2">Proyección mes completo (empleador)</p>
+                    </div>
+                </motion.div>
+
             </div>
 
             {/* Recent Activity Section (Placeholder for future) */}
