@@ -36,7 +36,7 @@ export async function POST(request: Request) {
                     select: { employees: true }
                 }
             }
-        });
+        }) as any;
 
         if (!company) {
             return NextResponse.json({ error: 'Company not found' }, { status: 404 });
@@ -45,18 +45,12 @@ export async function POST(request: Request) {
         // Apply plan limits, except for PERSIFAL
         if (company.name !== 'PERSIFAL') {
             const currentEmployeeCount = company._count.employees;
-            
-            if (company.plan === 'SEMILLA' && currentEmployeeCount >= 2) {
-                return NextResponse.json({ 
-                    error: 'Límite alcanzado',
-                    details: 'El plan Semilla permite un máximo de 2 empleados. Por favor, mejora tu suscripción para continuar creciendo.'
-                }, { status: 403 });
-            }
 
-            if (company.plan === 'EMPRENDEDOR' && currentEmployeeCount >= 10) {
+            // SEMILLA is now a 30-day free trial with EMPRENDEDOR features (up to 10 employees)
+            if ((company.plan === 'SEMILLA' || company.plan === 'EMPRENDEDOR') && currentEmployeeCount >= 10) {
                 return NextResponse.json({ 
                     error: 'Límite alcanzado',
-                    details: 'El plan Emprendedor permite un máximo de 10 empleados. Por favor, mejora a Empresarial para no tener límites.'
+                    details: 'Tu plan permite un máximo de 10 empleados. Por favor, mejora a Empresarial para no tener límites.'
                 }, { status: 403 });
             }
         }

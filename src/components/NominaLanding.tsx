@@ -190,12 +190,11 @@ export default function NominaLanding() {
                                                 <div className="relative z-10">
                                                     <p className="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-3">PLAN INICIAL ASIGNADO</p>
                                                     <div className="flex items-center justify-center gap-3 mb-3">
-                                                        <span className="text-3xl animate-bounce">🌱</span>
-                                                        <h4 className="text-white text-xl font-bold tracking-tight">Plan Semilla (Gratis)</h4>
+                                                        <span className="text-3xl animate-bounce">🎁</span>
+                                                        <h4 className="text-white text-xl font-bold tracking-tight">Prueba Gratis (30 días)</h4>
                                                     </div>
                                                     <p className="text-gray-400 text-sm leading-relaxed mb-6">
-                                                        Este plan tiene un límite máximo de <span className="text-blue-400 font-bold">2 empleados</span>. 
-                                                        Ideal para empezar sin costos.
+                                                        Disfruta de todas las funciones del <span className="text-blue-400 font-bold">Plan Emprendedor</span> sin costo por el primer mes.
                                                     </p>
                                                     
                                                     <div className="space-y-3">
@@ -212,7 +211,7 @@ export default function NominaLanding() {
                                                             onClick={() => setShowPlanNotice(false)}
                                                             className="w-full py-3 px-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-gray-300 text-sm font-medium transition-all"
                                                         >
-                                                            Continuar con Plan Semilla
+                                                            Iniciar mi Prueba de 30 días
                                                         </button>
                                                     </div>
                                                 </div>

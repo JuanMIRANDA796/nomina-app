@@ -22,13 +22,13 @@ export default function PricingCards() {
 
     const plans = [
         {
-            name: 'Plan Semilla',
+            name: 'Prueba Gratis',
             monthlyPrice: 0,
-            employees: 'Hasta 2 empleados',
+            employees: 'Hasta 10 empleados (por 30 días)',
             color: 'from-gray-400 to-gray-500',
             popular: false,
             benefits: baseBenefits,
-            buttonText: 'Empezar Gratis',
+            buttonText: 'Empezar mi Prueba',
             isFree: true
         },
         {
