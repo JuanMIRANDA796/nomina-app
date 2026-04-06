@@ -64,7 +64,7 @@ export async function GET() {
 
         const totalMonthlyPayroll = activeEmployees.reduce((acc, emp) => acc + emp.salary, 0);
 
-        // 4. Calculate real prestaciones and seguridad social using exact same logic as payroll reports
+        // 4. Calculate real netPay, prestaciones and seguridad social using exact same logic as payroll reports
         const monthStart = startOfMonth(now);
         const monthEnd = endOfMonth(now);
         const fetchStart = startOfWeek(monthStart, { weekStartsOn: 1 });
@@ -72,6 +72,7 @@ export async function GET() {
 
         let totalPrestaciones = 0;
         let totalSegSocial = 0;
+        let totalNetoPagar = 0;
 
         for (const emp of activeEmployees) {
             // Build a map of attendances keyed by Colombia-local date string
@@ -170,6 +171,7 @@ export async function GET() {
 
             totalPrestaciones += payroll.totalProvisions;
             totalSegSocial += payroll.totalSecurity;
+            totalNetoPagar += payroll.netPay;
         }
 
         return NextResponse.json({
@@ -184,7 +186,7 @@ export async function GET() {
                 absent: Math.max(0, totalEmployees - presentCount)
             },
             financials: {
-                projectedMonthly: totalMonthlyPayroll,
+                projectedMonthly: Math.round(totalNetoPagar),
                 totalPrestaciones: Math.round(totalPrestaciones),
                 totalSegSocial: Math.round(totalSegSocial)
             }

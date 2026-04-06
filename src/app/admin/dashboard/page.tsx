@@ -202,11 +202,11 @@ export default function DashboardPage() {
                             <div className="p-2 bg-white/10 w-fit rounded-lg mb-4">
                                 <TrendingUp className="w-6 h-6 text-green-400" />
                             </div>
-                            <h3 className="text-gray-300 font-medium">Nómina Mensual (Est.)</h3>
+                            <h3 className="text-gray-300 font-medium">Neto a Pagar (Mes)</h3>
                             <div className="mt-2 text-3xl font-bold tracking-tight">
                                 ${stats.financials.projectedMonthly.toLocaleString()}
                             </div>
-                            <p className="text-xs text-gray-400 mt-1">Proyección base salarial</p>
+                            <p className="text-xs text-gray-400 mt-1">Suma real neto todos los empleados</p>
                         </div>
 
                         <div className="mt-8 pt-6 border-t border-white/10">
