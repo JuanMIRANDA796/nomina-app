@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCompanyId } from '@/lib/auth';
-import { startOfDay, endOfDay } from 'date-fns';
-import { calculatePayroll, WORK_HOURS_MONTH } from '@/lib/payroll_engine';
+import { startOfDay, endOfDay, startOfMonth, endOfMonth, startOfWeek, eachDayOfInterval, format, isBefore, subHours, getISOWeek } from 'date-fns';
+import { calculateShiftHours, isHoliday } from '@/lib/payroll';
+import { calculatePayroll } from '@/lib/payroll_engine';
+import { getAbsencePercentage } from '@/lib/absence_config';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,47 +30,153 @@ export async function GET() {
         const attendanceToday = await prisma.attendance.findMany({
             where: {
                 employee: { companyId },
-                date: {
-                    gte: start,
-                    lte: end
-                }
+                date: { gte: start, lte: end }
             },
             include: { employee: true }
         });
 
         const presentCount = attendanceToday.length;
-        const activeNowCount = attendanceToday.filter(a => !a.exitTime).length; // clocked in, not out
+        const activeNowCount = attendanceToday.filter(a => !a.exitTime).length;
 
-        // 3. Financial Estimates (Rough projection based on monthly salary)
-        // Sum of all active employees' salary
+        // 3. Active employees with all data needed for payroll engine
         const activeEmployees = await prisma.employee.findMany({
             where: { companyId, status: 'ACTIVE' },
-            select: { salary: true, riskClass: true }
+            include: {
+                attendances: {
+                    where: {
+                        date: {
+                            gte: startOfWeek(startOfMonth(now), { weekStartsOn: 1 }),
+                            lte: endOfMonth(now)
+                        },
+                        exitTime: { not: null }
+                    }
+                },
+                absences: {
+                    where: {
+                        date: {
+                            gte: startOfWeek(startOfMonth(now), { weekStartsOn: 1 }),
+                            lte: endOfMonth(now)
+                        }
+                    }
+                }
+            }
         });
 
         const totalMonthlyPayroll = activeEmployees.reduce((acc, emp) => acc + emp.salary, 0);
 
-        // Use the payroll engine to calculate exact prestaciones and seguridad social
-        // for a standard full month (no overtime, no absences)
-        const fullMonthHours = { HD: WORK_HOURS_MONTH, HN: 0, HDD: 0, HND: 0, HED: 0, HEN: 0, HEDD: 0, HEND: 0 };
-        
+        // 4. Calculate real prestaciones and seguridad social using exact same logic as payroll reports
+        const monthStart = startOfMonth(now);
+        const monthEnd = endOfMonth(now);
+        const fetchStart = startOfWeek(monthStart, { weekStartsOn: 1 });
+        const allDays = eachDayOfInterval({ start: fetchStart, end: monthEnd });
+
         let totalPrestaciones = 0;
         let totalSegSocial = 0;
 
         for (const emp of activeEmployees) {
-            const payroll = calculatePayroll(emp, fullMonthHours, 0, 0, 0, 30);
+            // Build a map of attendances keyed by Colombia-local date string
+            const mappedRecords = emp.attendances.reduce((acc, att) => {
+                const dateToUse = att.entryTime ? new Date(att.entryTime) : new Date(att.date);
+                const colombiaTime = subHours(dateToUse, 5);
+                const key = format(colombiaTime, 'yyyy-MM-dd');
+                acc[key] = att;
+                return acc;
+            }, {} as Record<string, typeof emp.attendances[0]>);
+
+            let totalHours = { HD: 0, HN: 0, HDD: 0, HND: 0, HED: 0, HEN: 0, HEDD: 0, HEND: 0 };
+            let daysAbsent = 0;
+            let daysIncapacity = 0;
+            let daysVacation = 0;
+            let workedDaysInWeek = 0;
+            let currentWeek = getISOWeek(fetchStart);
+
+            for (const day of allDays) {
+                const dateStr = format(day, 'yyyy-MM-dd');
+                const att = mappedRecords[dateStr];
+                const abs = emp.absences.find(a => format(new Date(a.date), 'yyyy-MM-dd') === dateStr);
+                const isWithinPeriod = !isBefore(day, monthStart);
+                const isSunday = day.getDay() === 0;
+                const isFestivo = isHoliday(day);
+
+                const dayWeek = getISOWeek(day);
+                if (dayWeek !== currentWeek) {
+                    currentWeek = dayWeek;
+                    workedDaysInWeek = 0;
+                }
+
+                let dayHours = { HD: 0, HN: 0, HDD: 0, HND: 0, HED: 0, HEN: 0, HEDD: 0, HEND: 0 };
+                let isPaidDay = false;
+
+                if (att && att.entryTime && att.exitTime) {
+                    const isSpecialDay = isSunday || isFestivo;
+                    const calculated = calculateShiftHours(att.entryTime, att.exitTime, isSpecialDay);
+                    if (day.getDate() === 31) {
+                        dayHours = { ...calculated, HD: 0, HN: 0 };
+                    } else {
+                        dayHours = calculated;
+                    }
+                    workedDaysInWeek++;
+                    isPaidDay = true;
+                } else if (abs) {
+                    const reason = abs.reason;
+                    const percentage = getAbsencePercentage(reason);
+                    if (isWithinPeriod) {
+                        if (reason.toLowerCase().includes('vacaciones')) daysVacation++;
+                        else if (percentage > 0 && percentage < 1) daysIncapacity++;
+                        else if (percentage === 0) daysAbsent++;
+                    }
+                    if (percentage === 1) workedDaysInWeek++;
+                    if (percentage > 0) {
+                        dayHours.HD = 8 * percentage;
+                        isPaidDay = true;
+                    }
+                } else if (isFestivo) {
+                    dayHours.HD = 8;
+                    isPaidDay = true;
+                }
+
+                // Sunday rest entitlement
+                if (isSunday && !att && workedDaysInWeek >= 6) {
+                    dayHours.HD = 8;
+                    isPaidDay = true;
+                }
+
+                if (isWithinPeriod) {
+                    totalHours.HD += dayHours.HD;
+                    totalHours.HN += dayHours.HN;
+                    totalHours.HDD += dayHours.HDD;
+                    totalHours.HND += dayHours.HND;
+                    totalHours.HED += dayHours.HED;
+                    totalHours.HEN += dayHours.HEN;
+                    totalHours.HEDD += dayHours.HEDD;
+                    totalHours.HEND += dayHours.HEND;
+                }
+            }
+
+            // February commercial adjustment
+            if (now.getMonth() === 1) {
+                const daysInFeb = monthEnd.getDate();
+                totalHours.HD += (30 - daysInFeb) * 8;
+            }
+
+            const payroll = calculatePayroll(
+                { salary: emp.salary, riskClass: emp.riskClass },
+                totalHours,
+                daysAbsent,
+                daysIncapacity,
+                daysVacation,
+                30
+            );
+
             totalPrestaciones += payroll.totalProvisions;
             totalSegSocial += payroll.totalSecurity;
         }
-
-        totalPrestaciones = Math.round(totalPrestaciones);
-        totalSegSocial = Math.round(totalSegSocial);
 
         return NextResponse.json({
             employees: {
                 total: totalEmployees,
                 inactive: inactiveEmployees,
-                active: totalEmployees 
+                active: totalEmployees
             },
             attendance: {
                 present: presentCount,
@@ -77,8 +185,8 @@ export async function GET() {
             },
             financials: {
                 projectedMonthly: totalMonthlyPayroll,
-                totalPrestaciones,
-                totalSegSocial
+                totalPrestaciones: Math.round(totalPrestaciones),
+                totalSegSocial: Math.round(totalSegSocial)
             }
         });
     } catch (error) {
