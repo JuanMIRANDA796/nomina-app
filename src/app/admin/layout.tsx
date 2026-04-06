@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Users, ClipboardList, Settings, LogOut, Headphones, MessageCircle, X, LayoutDashboard, Crown, Eye, ArrowRight } from 'lucide-react';
