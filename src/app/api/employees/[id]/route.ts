@@ -71,6 +71,8 @@ export async function DELETE(
         if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const { id } = await params;
+        const { searchParams } = new URL(request.url);
+        const permanent = searchParams.get('permanent') === 'true';
 
         // Verify ownership
         const employee = await prisma.employee.findUnique({ where: { id: parseInt(id) } });
@@ -78,13 +80,22 @@ export async function DELETE(
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
-        // Soft Delete
-        await prisma.employee.update({
-            where: { id: parseInt(id) },
-            data: { status: 'INACTIVE' }
-        });
-
-        return NextResponse.json({ message: 'Empleado desactivado (Eliminado logicamente)' });
+        if (permanent) {
+            // Hard Delete: First clean up related data to avoid foreign key violations
+            await prisma.$transaction([
+                prisma.attendance.deleteMany({ where: { employeeId: parseInt(id) } }),
+                prisma.absence.deleteMany({ where: { employeeId: parseInt(id) } }),
+                prisma.employee.delete({ where: { id: parseInt(id) } })
+            ]);
+            return NextResponse.json({ message: 'Empleado eliminado permanentemente' });
+        } else {
+            // Soft Delete
+            await prisma.employee.update({
+                where: { id: parseInt(id) },
+                data: { status: 'INACTIVE' }
+            });
+            return NextResponse.json({ message: 'Empleado desactivado (Eliminado logicamente)' });
+        }
     } catch (error) {
         console.error('Error deleting employee:', error);
         return NextResponse.json({ error: 'Error al eliminar empleado' }, { status: 500 });

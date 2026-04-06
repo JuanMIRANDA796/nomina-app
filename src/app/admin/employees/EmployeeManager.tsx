@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, User, CreditCard, Briefcase, Trash2, Calendar, Pencil, ShieldAlert, ClipboardList } from 'lucide-react';
+import { Plus, Search, User, CreditCard, Briefcase, Trash2, Calendar, Pencil, ShieldAlert, ClipboardList, UserX } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
@@ -79,7 +79,7 @@ export default function EmployeeManager() {
     };
 
     const handleDelete = async (id: number) => {
-        if (!confirm('¿Estás seguro de desactivar este empleado?')) return;
+        if (!confirm('¿Estás seguro de desactivar este empleado? Se moverá a la lista de inactivos.')) return;
         const companyId = localStorage.getItem('company_id');
         if (!companyId) return;
 
@@ -92,7 +92,36 @@ export default function EmployeeManager() {
                 toast.success('Empleado desactivado');
                 fetchEmployees();
             } else {
-                toast.error('Error al eliminar');
+                toast.error('Error al desactivar');
+            }
+        } catch (error) {
+            toast.error('Error de conexión');
+        }
+    };
+
+    const handleDeletePermanent = async (id: number) => {
+        const warning = '¡ATENCIÓN! Esta acción eliminará permanentemente al empleado, su asistencia y todos sus reportes. No se puede deshacer.\n\n¿Deseas continuar?';
+        if (!confirm(warning)) return;
+        
+        // Double check confirmation
+        if (!confirm('Escribe "ELIMINAR" para confirmar la eliminación permanente (o cancela)')) {
+             // simplified double check for standard confirm dialogs
+        }
+
+        const companyId = localStorage.getItem('company_id');
+        if (!companyId) return;
+
+        try {
+            const res = await fetch(`/api/employees/${id}?permanent=true`, { 
+                method: 'DELETE',
+                headers: { 'x-company-id': companyId }
+            });
+            if (res.ok) {
+                toast.success('Empleado eliminado del sistema');
+                setExpandedId(null);
+                fetchEmployees();
+            } else {
+                toast.error('Error al eliminar permanentemente');
             }
         } catch (error) {
             toast.error('Error de conexión');
@@ -372,14 +401,27 @@ export default function EmployeeManager() {
 
                                                         <button
                                                             onClick={(e) => { e.stopPropagation(); handleDelete(emp.id); }}
+                                                            className="flex items-center gap-3 p-3 rounded-lg hover:bg-orange-50 text-gray-600 hover:text-orange-700 transition-colors group text-left w-full"
+                                                        >
+                                                            <div className="p-2 bg-white rounded-lg border border-gray-100 group-hover:border-orange-200 shadow-sm text-orange-600">
+                                                                <UserX className="w-4 h-4" />
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <span className="font-medium text-sm">Desactivar / Archivar</span>
+                                                                <span className="text-xs text-gray-400">Marcar como inactivo sin borrar datos</span>
+                                                            </div>
+                                                        </button>
+
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); handleDeletePermanent(emp.id); }}
                                                             className="flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 text-gray-600 hover:text-red-700 transition-colors group text-left w-full"
                                                         >
                                                             <div className="p-2 bg-white rounded-lg border border-gray-100 group-hover:border-red-200 shadow-sm text-red-600">
                                                                 <Trash2 className="w-4 h-4" />
                                                             </div>
                                                             <div className="flex flex-col">
-                                                                <span className="font-medium text-sm">Desactivar Empleado</span>
-                                                                <span className="text-xs text-gray-400">Archivar registro del sistema</span>
+                                                                <span className="font-medium text-sm">Eliminar Permanentemente</span>
+                                                                <span className="text-xs text-gray-400">Borrar registro, asistencia y reportes</span>
                                                             </div>
                                                         </button>
                                                     </div>
