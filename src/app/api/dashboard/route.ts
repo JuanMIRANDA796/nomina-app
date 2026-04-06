@@ -14,8 +14,11 @@ export async function GET() {
         if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const now = new Date();
-        const start = startOfDay(now);
-        const end = endOfDay(now);
+        const colombiaOffset = 5;
+        const colombiaTime = subHours(now, colombiaOffset);
+        
+        const start = startOfDay(colombiaTime);
+        const end = endOfDay(colombiaTime);
 
         // 1. Employee Stats
         const totalEmployees = await prisma.employee.count({
