@@ -29,7 +29,7 @@ export default function AdminLayout({
                 });
                 const data = await res.json();
                 setSession(data);
-                if (data.plan === 'SEMILLA') {
+                if (data.plan === 'SEMILLA' && data.name !== 'PERSIFAL') {
                     setIsTrialActive(true);
                 }
             } catch (error) {
