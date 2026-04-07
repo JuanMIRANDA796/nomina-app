@@ -232,7 +232,7 @@ export default function PricingCards() {
                                                     onClick={() => setCheckoutStep(2)}
                                                     className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02]"
                                                 >
-                                                    Ya pagué, continuar <ChevronRight className="w-5 h-5" />
+                                                    Continuar con el proceso <ChevronRight className="w-5 h-5" />
                                                 </button>
                                             </div>
                                         </motion.div>
