@@ -7,8 +7,6 @@ import { es } from 'date-fns/locale';
 import { ArrowLeft, Save, AlertCircle, Calendar as CalendarIcon, Download, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 
 interface DailyRecord {
     date: string;
@@ -219,34 +217,39 @@ export default function PayrollDetailPage() {
         if (!input) return;
 
         try {
-            toast.info('Generando PDF...', { duration: 2000 });
+            toast.info('Generando PDF...', { duration: 4000 });
+            
+            const html2canvasModule = await import('html2canvas');
+            const jsPDFModule = await import('jspdf');
+            
+            const html2canvas = html2canvasModule.default;
+            const jsPDF = jsPDFModule.jsPDF || jsPDFModule.default;
             
             // Add a small delay to ensure rendering is complete before capture
-            await new Promise(resolve => setTimeout(resolve, 300));
+            await new Promise(resolve => setTimeout(resolve, 500));
             
             const canvas = await html2canvas(input, {
-                scale: 2, // Higher quality
+                scale: 2, 
                 backgroundColor: '#ffffff',
                 logging: false,
                 useCORS: true
             });
             
-            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+            const imgData = canvas.toDataURL('image/png', 1.0);
             
-            // Generate PDF
             const pdf = new jsPDF('p', 'mm', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
             
-            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
             
             const periodName = period === 'month' ? 'Mensual' : (period === 'q1' ? 'Q1' : 'Q2');
             pdf.save(`Resumen_Nomina_${employee.name.replace(/\s+/g, '_')}_${periodName}.pdf`);
             
             toast.success('PDF exportado correctamente');
-        } catch (error) {
-            console.error('Error generando PDF', error);
-            toast.error('Error al generar el PDF');
+        } catch (error: any) {
+            console.error('Error generando PDF:', error);
+            toast.error(`Error al generar el PDF: ${error.message || 'Desconocido'}`);
         }
     };
 
