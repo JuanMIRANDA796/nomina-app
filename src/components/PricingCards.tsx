@@ -34,7 +34,8 @@ export default function PricingCards() {
         {
             name: 'Plan Emprendedor',
             monthlyPrice: 50000,
-            employees: 'Hasta 10 empleados',
+            extraEmployee: 5000,
+            employees: 'Hasta 10 empleados (+$5.000 / empleado adicional)',
             color: 'from-blue-500 to-purple-600',
             popular: true,
             benefits: [{ icon: Check, text: 'Hasta 10 Empleados' }, ...baseBenefits],
@@ -43,12 +44,12 @@ export default function PricingCards() {
         },
         {
             name: 'Plan Empresarial',
-            monthlyPrice: 75000,
-            extraEmployee: 7000,
-            employees: 'Empleados sin límite ($7,000 por empleado extra despúes de 10)',
+            monthlyPrice: 79000,
+            extraEmployee: 4000,
+            employees: 'Hasta 20 empleados (+$4.000 / empleado extra después de 20)',
             color: 'from-indigo-600 to-violet-800',
             popular: false,
-            benefits: [{ icon: Check, text: 'Empleados sin límite' }, ...baseBenefits],
+            benefits: [{ icon: Check, text: 'Hasta 20 Empleados' }, ...baseBenefits],
             buttonText: 'Usar este plan',
             isFree: false
         }
