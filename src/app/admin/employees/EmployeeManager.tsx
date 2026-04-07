@@ -167,7 +167,10 @@ export default function EmployeeManager() {
                         duration: 8000,
                     });
                 } else {
-                    toast.error('Error: ' + (errorData.error || 'Desconocido'));
+                    toast.error(`Error: ${errorData.error || 'Desconocido'}`, {
+                        description: errorData.details,
+                        duration: 8000,
+                    });
                 }
             }
         } catch (error) {

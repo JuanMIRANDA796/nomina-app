@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const body = await request.json();
-        const { name, cedula, cargo, salary } = body;
+        const { name, cedula, cargo, salary, riskClass } = body;
 
         // Fetch company details to check plan limits
         const company = await prisma.company.findUnique({
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
             }
         }
 
-        console.log('Intentando crear empleado:', { name, cedula, cargo, salary, companyId });
+        console.log('Intentando crear empleado:', { name, cedula, cargo, salary, riskClass, companyId });
 
         const employee = await prisma.employee.create({
             data: {
@@ -73,6 +73,7 @@ export async function POST(request: Request) {
                 cedula,
                 cargo,
                 salary: parseFloat(salary),
+                riskClass: riskClass || 'I',
                 status: 'ACTIVE',
                 companyId
             },
@@ -82,6 +83,14 @@ export async function POST(request: Request) {
         return NextResponse.json(employee);
     } catch (error: any) {
         console.error('Error detallado al crear empleado:', error);
+        
+        if (error.code === 'P2002') {
+            return NextResponse.json({
+                error: 'Cédula duplicada',
+                details: 'Ya existe un empleado con esta cédula en tu empresa.'
+            }, { status: 400 });
+        }
+
         return NextResponse.json({
             error: 'Failed to create employee',
             details: error.message || String(error)

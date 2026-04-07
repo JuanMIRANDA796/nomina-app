@@ -56,9 +56,17 @@ export async function PUT(
         });
 
         return NextResponse.json(updatedEmployee);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error updating employee:', error);
-        return NextResponse.json({ error: 'Error al actualizar empleado' }, { status: 500 });
+        
+        if (error.code === 'P2002') {
+            return NextResponse.json({
+                error: 'Cédula duplicada',
+                details: 'Ya existe un empleado con esta cédula en tu empresa.'
+            }, { status: 400 });
+        }
+
+        return NextResponse.json({ error: 'Error al actualizar empleado', details: error.message || String(error) }, { status: 500 });
     }
 }
 
