@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, User, CreditCard, Briefcase, Trash2, Calendar, Pencil, ShieldAlert, ClipboardList, UserX } from 'lucide-react';
+import { Plus, Search, User, CreditCard, Briefcase, Trash2, Calendar, Pencil, ShieldAlert, ClipboardList, UserX, X, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Employee {
     id: number;
@@ -21,6 +22,8 @@ export default function EmployeeManager() {
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [expandedId, setExpandedId] = useState<number | null>(null);
+    const [showExtraModal, setShowExtraModal] = useState(false);
+    const [extraPlan, setExtraPlan] = useState<'EMPRENDEDOR' | 'EMPRESARIAL' | null>(null);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -152,7 +155,13 @@ export default function EmployeeManager() {
                 fetchEmployees();
             } else {
                 const errorData = await res.json();
-                if (res.status === 403 && errorData.details) {
+                if (errorData.error === 'LIMIT_REACHED_EMPRENDEDOR') {
+                    setExtraPlan('EMPRENDEDOR');
+                    setShowExtraModal(true);
+                } else if (errorData.error === 'LIMIT_REACHED_EMPRESARIAL') {
+                    setExtraPlan('EMPRESARIAL');
+                    setShowExtraModal(true);
+                } else if (res.status === 403 && errorData.details) {
                     toast.error(`⚠️ ${errorData.error}`, {
                         description: errorData.details,
                         duration: 8000,
@@ -435,6 +444,61 @@ export default function EmployeeManager() {
                     </table>
                 </div>
             </div>
+
+            {/* Extra Employee Modal */}
+            <AnimatePresence>
+                {showExtraModal && extraPlan && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/60 backdrop-blur-sm">
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative p-8 text-center"
+                        >
+                            <button
+                                onClick={() => setShowExtraModal(false)}
+                                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+
+                            <ShieldAlert className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+                            <h3 className="text-2xl font-black text-gray-900 mb-2">Límite de empleados alcanzado</h3>
+                            <p className="text-gray-600 mb-6 font-medium">
+                                Has llegado al límite de tu plan {extraPlan === 'EMPRENDEDOR' ? 'Emprendedor (10)' : 'Empresarial (20)'}.
+                            </p>
+
+                            <div className="bg-blue-50 border border-blue-100 p-6 rounded-2xl mb-6 text-center shadow-inner">
+                                <p className="text-blue-900 mb-2">Para registrar a un empleado adicional, realiza este pago por tu nuevo cupo (mensual).</p>
+                                <span className="text-4xl font-black text-blue-700 block mb-4">
+                                    ${extraPlan === 'EMPRENDEDOR' ? '5.000' : '4.000'} <span className="text-sm text-blue-500 font-normal">/mes extra</span>
+                                </span>
+
+                                <p className="text-gray-600 mb-4 text-sm max-w-md mx-auto">Escanea este código QR desde tu App Bancolombia o Nequi para realizar el pago por tu empleado extra.</p>
+                                
+                                <div className="w-48 aspect-square bg-white border-2 border-blue-200 rounded-xl flex items-center justify-center shadow-md mx-auto mb-4 overflow-hidden p-2">
+                                    <img src="/qr_bancolombia.png" alt="QR Bancolombia" className="w-full h-full object-contain" />
+                                </div>
+
+                                <div className="text-center mb-4">
+                                    <p className="text-xs text-gray-400 uppercase font-bold tracking-widest mb-1 text-blue-600">Ahorros Bancolombia</p>
+                                    <p className="text-xl font-black text-gray-900 tabular-nums">377-856141-10</p>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={() => {
+                                    window.open('https://wa.me/573207941082?text=' + encodeURIComponent(`Hola, acabo de pagar un cupo adicional de empleado para mi plan ${extraPlan}. Aquí dejo mi comprobante:`), '_blank');
+                                    setShowExtraModal(false);
+                                }}
+                                className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-transform hover:scale-[1.02]"
+                            >
+                                Ya pagué, enviar comprobante <ChevronRight className="w-5 h-5" />
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

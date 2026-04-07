@@ -45,12 +45,22 @@ export async function POST(request: Request) {
         // Apply plan limits, except for PERSIFAL
         if (company.name !== 'PERSIFAL') {
             const currentEmployeeCount = company._count.employees;
+            const extraEmployees = company.extraEmployees || 0;
 
-            // SEMILLA is now a 30-day free trial (up to 10 employees). Paid plans can add extra.
             if (company.plan === 'SEMILLA' && currentEmployeeCount >= 10) {
                 return NextResponse.json({ 
-                    error: 'Límite alcanzado',
+                    error: 'LIMIT_REACHED_SEMILLA',
                     details: 'La prueba gratuita permite un máximo de 10 empleados. Activa tu plan para añadir más.'
+                }, { status: 403 });
+            } else if (company.plan === 'EMPRENDEDOR' && currentEmployeeCount >= (10 + extraEmployees)) {
+                return NextResponse.json({ 
+                    error: 'LIMIT_REACHED_EMPRENDEDOR',
+                    details: 'Límite del plan alcanzado. Adquiere un cupo adicional para continuar.'
+                }, { status: 403 });
+            } else if (company.plan === 'EMPRESARIAL' && currentEmployeeCount >= (20 + extraEmployees)) {
+                return NextResponse.json({ 
+                    error: 'LIMIT_REACHED_EMPRESARIAL',
+                    details: 'Límite del plan alcanzado. Adquiere un cupo adicional para continuar.'
                 }, { status: 403 });
             }
         }
