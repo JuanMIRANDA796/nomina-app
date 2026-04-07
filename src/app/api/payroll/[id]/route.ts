@@ -49,7 +49,7 @@ export async function GET(
         const employee = await prisma.employee.findUnique({
             where: { id: employeeId },
             include: {
-                company: { select: { plan: true } },
+                company: { select: { plan: true, name: true } },
                 attendances: {
                     where: {
                         date: { gte: fetchStart, lte: end },

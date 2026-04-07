@@ -7,6 +7,8 @@ import { es } from 'date-fns/locale';
 import { ArrowLeft, Save, AlertCircle, Calendar as CalendarIcon, Download, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 interface DailyRecord {
     date: string;
@@ -196,6 +198,58 @@ export default function PayrollDetailPage() {
         window.open(`https://wa.me/${phoneNum}?text=${encodedMessage}`, '_blank');
     };
 
+    const handleExportPDF = async () => {
+        if (!data || !data.employee) return;
+        const { employee, period } = data;
+
+        if (!employee.company) {
+            toast.error('Error al verificar el plan de tu empresa.');
+            return;
+        }
+
+        if (employee.company.plan !== 'EMPRESARIAL' && employee.company.name !== 'PERSIFAL') {
+            toast.error('💳 Función Premium', {
+                description: 'La exportación a PDF del resumen es exclusiva del Plan Empresarial. ¡Mejora tu plan para usarlo!',
+                duration: 6000
+            });
+            return;
+        }
+
+        const input = document.getElementById('payroll-summary-card');
+        if (!input) return;
+
+        try {
+            toast.info('Generando PDF...', { duration: 2000 });
+            
+            // Add a small delay to ensure rendering is complete before capture
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
+            const canvas = await html2canvas(input, {
+                scale: 2, // Higher quality
+                backgroundColor: '#ffffff',
+                logging: false,
+                useCORS: true
+            });
+            
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+            
+            // Generate PDF
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+            
+            const periodName = period === 'month' ? 'Mensual' : (period === 'q1' ? 'Q1' : 'Q2');
+            pdf.save(`Resumen_Nomina_${employee.name.replace(/\s+/g, '_')}_${periodName}.pdf`);
+            
+            toast.success('PDF exportado correctamente');
+        } catch (error) {
+            console.error('Error generando PDF', error);
+            toast.error('Error al generar el PDF');
+        }
+    };
+
     if (loading) return <div className="p-8 text-center">Cargando nómina detallada...</div>;
     if (!data) return <div className="p-8 text-center text-red-600">No se encontró información del empleado</div>;
 
@@ -251,7 +305,11 @@ export default function PayrollDetailPage() {
                         <MessageCircle className="w-4 h-4" />
                         <span className="hidden sm:inline">WhatsApp</span>
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <button 
+                        onClick={handleExportPDF}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        title="Exportar resumen a PDF"
+                    >
                         <Download className="w-4 h-4" />
                         <span className="hidden sm:inline">Exportar PDF</span>
                     </button>
@@ -380,7 +438,7 @@ export default function PayrollDetailPage() {
                 {/* Right Column: Payroll Summary */}
                 <div className="space-y-6">
                     {/* Main Totals */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div id="payroll-summary-card" className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 className="font-bold text-gray-900 mb-4 text-lg">Resumen de Pago</h3>
 
                         <div className="space-y-3 text-sm">
