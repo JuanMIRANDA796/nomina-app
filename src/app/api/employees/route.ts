@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const body = await request.json();
-        const { name, cedula, cargo, salary, riskClass } = body;
+        const { name, cedula, cargo, salary, riskClass, phone } = body;
 
         // Fetch company details to check plan limits
         const company = await prisma.company.findUnique({
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
             }
         }
 
-        console.log('Intentando crear empleado:', { name, cedula, cargo, salary, riskClass, companyId });
+        console.log('Intentando crear empleado:', { name, cedula, cargo, salary, riskClass, phone, companyId });
 
         const employee = await prisma.employee.create({
             data: {
@@ -74,6 +74,7 @@ export async function POST(request: Request) {
                 cargo,
                 salary: parseFloat(salary),
                 riskClass: riskClass || 'I',
+                phone: phone || null,
                 status: 'ACTIVE',
                 companyId
             },

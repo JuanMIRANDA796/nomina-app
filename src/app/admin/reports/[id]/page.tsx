@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ArrowLeft, Save, AlertCircle, Calendar as CalendarIcon, Download } from 'lucide-react';
+import { ArrowLeft, Save, AlertCircle, Calendar as CalendarIcon, Download, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 interface DailyRecord {
     date: string;
@@ -159,6 +160,42 @@ export default function PayrollDetailPage() {
         }
     };
 
+    const handleWhatsAppSend = () => {
+        if (!data || !data.employee) return;
+        const { employee, payroll } = data;
+        
+        if (!employee.company) {
+            toast.error('Error al verificar el plan de tu empresa.');
+            return;
+        }
+
+        if (employee.company.plan !== 'EMPRESARIAL' && employee.company.name !== 'PERSIFAL') {
+            toast.error('💳 Función Premium', {
+                description: 'El envío automatizado por WhatsApp es exclusivo del Plan Empresarial. ¡Mejora tu plan para usarlo!',
+                duration: 6000
+            });
+            return;
+        }
+
+        if (!employee.phone) {
+            toast.error('Sin número de teléfono', {
+                description: 'Edita el perfil del empleado y agrega su número de WhatsApp primero.',
+                duration: 5000
+            });
+            return;
+        }
+
+        let phoneNum = employee.phone.replace(/\D/g, '');
+        if (phoneNum.length === 10) phoneNum = '57' + phoneNum;
+
+        const periodName = period === 'month' ? `Mes de ${format(parseISO(date + '-01'), 'MMMM yyyy', { locale: es })}` : (period === 'q1' ? `Primera Quincena de ${format(parseISO(date + '-01'), 'MMMM', { locale: es })}` : `Segunda Quincena de ${format(parseISO(date + '-01'), 'MMMM', { locale: es })}`);
+
+        const message = `🏢 *Resumen de Nómina*\n\nHola *${employee.name}*,\nAdjunto el resumen de tu pago para el periodo: *${periodName}*.\n\n💰 *Salario Base:* $${employee.salary.toLocaleString()}\n📈 *Total Devengado:* $${Math.round(payroll.totalDevengado).toLocaleString()}\n📉 *Total Deducciones:* -$${Math.round(payroll.totalDeductions).toLocaleString()}\n\n💵 *Neto a Pagar:* *$${Math.round(payroll.netPay).toLocaleString()}*\n\nCualquier duda, comunícate con administración.`;
+
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/${phoneNum}?text=${encodedMessage}`, '_blank');
+    };
+
     if (loading) return <div className="p-8 text-center">Cargando nómina detallada...</div>;
     if (!data) return <div className="p-8 text-center text-red-600">No se encontró información del empleado</div>;
 
@@ -206,9 +243,17 @@ export default function PayrollDetailPage() {
                         onChange={(e) => setDate(e.target.value)}
                         className="p-2 border border-gray-200 rounded-lg text-black"
                     />
+                    <button 
+                        onClick={handleWhatsAppSend}
+                        className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                        title="Enviar resumen por WhatsApp"
+                    >
+                        <MessageCircle className="w-4 h-4" />
+                        <span className="hidden sm:inline">WhatsApp</span>
+                    </button>
                     <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                         <Download className="w-4 h-4" />
-                        Exportar PDF
+                        <span className="hidden sm:inline">Exportar PDF</span>
                     </button>
                 </div>
             </div>

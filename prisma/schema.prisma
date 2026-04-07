@@ -36,6 +36,7 @@ model Employee {
   cedula      String       
   cargo       String
   salary      Float
+  phone       String?
   riskClass   String       @default("I") // I, II, III, IV, V
   status      String       @default("ACTIVE") // ACTIVE, INACTIVE
   createdAt   DateTime     @default(now())

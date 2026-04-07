@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, User, CreditCard, Briefcase, Trash2, Calendar, Pencil, ShieldAlert, ClipboardList, UserX, X, ChevronRight } from 'lucide-react';
+import { Plus, Search, User, CreditCard, Briefcase, Trash2, Calendar, Pencil, ShieldAlert, ClipboardList, UserX, X, ChevronRight, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,6 +12,7 @@ interface Employee {
     cedula: string;
     cargo: string;
     salary: number;
+    phone?: string;
     riskClass: string;
     status: string;
 }
@@ -30,6 +31,7 @@ export default function EmployeeManager() {
         cedula: '',
         cargo: '',
         salary: '',
+        phone: '',
         riskClass: 'I'
     });
 
@@ -70,6 +72,7 @@ export default function EmployeeManager() {
             cedula: emp.cedula,
             cargo: emp.cargo,
             salary: emp.salary.toString(),
+            phone: emp.phone || '',
             riskClass: emp.riskClass || 'I'
         });
         setShowForm(true);
@@ -77,7 +80,7 @@ export default function EmployeeManager() {
 
     const handleNew = () => {
         setEditingId(null);
-        setFormData({ name: '', cedula: '', cargo: '', salary: '', riskClass: 'I' });
+        setFormData({ name: '', cedula: '', cargo: '', salary: '', phone: '', riskClass: 'I' });
         setShowForm(true);
     };
 
@@ -237,18 +240,33 @@ export default function EmployeeManager() {
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-700">Cargo</label>
-                                <div className="relative">
-                                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        required
-                                        type="text"
-                                        placeholder="Ej. Vendedor"
-                                        className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
-                                        value={formData.cargo}
-                                        onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
-                                    />
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">Cargo</label>
+                                    <div className="relative">
+                                        <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            required
+                                            type="text"
+                                            placeholder="Ej. Vendedor"
+                                            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
+                                            value={formData.cargo}
+                                            onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700">WhatsApp (Opcional)</label>
+                                    <div className="relative">
+                                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            type="tel"
+                                            placeholder="Ej. 3001234567"
+                                            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
+                                            value={formData.phone}
+                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
