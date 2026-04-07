@@ -274,7 +274,9 @@ export async function GET(
                 cedula: employee.cedula,
                 salary: employee.salary,
                 riskClass: employee.riskClass,
-                cargo: employee.cargo
+                cargo: employee.cargo,
+                phone: employee.phone,
+                company: employee.company
             },
             period: payroll.period,
             dailyRecords,
