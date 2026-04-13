@@ -5,6 +5,7 @@ import { Plus, Search, User, CreditCard, Briefcase, Trash2, Calendar, Pencil, Sh
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 interface Employee {
     id: number;
@@ -24,30 +25,12 @@ interface Employee {
 }
 
 export default function EmployeeManager() {
+    const router = useRouter();
     const [employees, setEmployees] = useState<Employee[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [showForm, setShowForm] = useState(false);
-    const [editingId, setEditingId] = useState<number | null>(null);
     const [expandedId, setExpandedId] = useState<number | null>(null);
     const [showExtraModal, setShowExtraModal] = useState(false);
     const [extraPlan, setExtraPlan] = useState<'EMPRENDEDOR' | 'EMPRESARIAL' | null>(null);
-
-    const [formData, setFormData] = useState({
-        name: '',
-        cedula: '',
-        cargo: '',
-        salary: '',
-        phone: '',
-        riskClass: 'I',
-        email: '',
-        contractType: '1',
-        workerType: '01',
-        workerSubtype: '00',
-        paymentMethod: '1',
-        paymentMeans: '10'
-    });
-
-    const RISK_CLASSES = ['I', 'II', 'III', 'IV', 'V'];
 
     useEffect(() => {
         fetchEmployees();
@@ -78,31 +61,11 @@ export default function EmployeeManager() {
     };
 
     const handleEdit = (emp: Employee) => {
-        setEditingId(emp.id);
-        setFormData({
-            name: emp.name,
-            cedula: emp.cedula,
-            cargo: emp.cargo,
-            salary: emp.salary.toString(),
-            phone: emp.phone || '',
-            riskClass: emp.riskClass || 'I',
-            email: emp.email || '',
-            contractType: emp.contractType || '1',
-            workerType: emp.workerType || '01',
-            workerSubtype: emp.workerSubtype || '00',
-            paymentMethod: emp.paymentMethod || '1',
-            paymentMeans: emp.paymentMeans || '10'
-        });
-        setShowForm(true);
+        router.push(`/admin/employees/form?id=${emp.id}`);
     };
 
     const handleNew = () => {
-        setEditingId(null);
-        setFormData({ 
-            name: '', cedula: '', cargo: '', salary: '', phone: '', riskClass: 'I',
-            email: '', contractType: '1', workerType: '01', workerSubtype: '00', paymentMethod: '1', paymentMeans: '10' 
-        });
-        setShowForm(true);
+        router.push('/admin/employees/form');
     };
 
     const handleDelete = async (id: number) => {
@@ -155,53 +118,7 @@ export default function EmployeeManager() {
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const companyId = localStorage.getItem('company_id');
-        if (!companyId) return;
-
-        try {
-            const url = editingId ? `/api/employees/${editingId}` : '/api/employees';
-            const method = editingId ? 'PUT' : 'POST';
-
-            const res = await fetch(url, {
-                method,
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'x-company-id': companyId
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (res.ok) {
-                toast.success(editingId ? 'Empleado actualizado' : 'Empleado registrado');
-                setShowForm(false);
-                fetchEmployees();
-            } else {
-                const errorData = await res.json();
-                if (errorData.error === 'LIMIT_REACHED_EMPRENDEDOR') {
-                    setExtraPlan('EMPRENDEDOR');
-                    setShowExtraModal(true);
-                } else if (errorData.error === 'LIMIT_REACHED_EMPRESARIAL') {
-                    setExtraPlan('EMPRESARIAL');
-                    setShowExtraModal(true);
-                } else if (res.status === 403 && errorData.details) {
-                    toast.error(`⚠️ ${errorData.error}`, {
-                        description: errorData.details,
-                        duration: 8000,
-                    });
-                } else {
-                    toast.error(`Error: ${errorData.error || 'Desconocido'}`, {
-                        description: errorData.details,
-                        duration: 8000,
-                    });
-                }
-            }
-        } catch (error) {
-            console.error('Error saving employee:', error);
-            toast.error('Error de conexión');
-        }
-    };
+    // (handleSubmit was moved to the the respective form page)
 
     return (
         <div className="space-y-6">
@@ -220,206 +137,7 @@ export default function EmployeeManager() {
                 </button>
             </div>
 
-            {/* Form Modal */}
-            {showForm && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-                        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                            <h3 className="text-xl font-bold text-gray-900">
-                                {editingId ? 'Editar Empleado' : 'Registrar Empleado'}
-                            </h3>
-                            <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600">✕</button>
-                        </div>
-                        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-700">Nombre Completo</label>
-                                <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        required
-                                        type="text"
-                                        placeholder="Ej. Juan Pérez"
-                                        className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
-                                        value={formData.name}
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-700">Cédula</label>
-                                <div className="relative">
-                                    <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        required
-                                        type="text"
-                                        placeholder="Ej. 1234567890"
-                                        className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
-                                        value={formData.cedula}
-                                        onChange={(e) => setFormData({ ...formData, cedula: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">Cargo</label>
-                                    <div className="relative">
-                                        <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            required
-                                            type="text"
-                                            placeholder="Ej. Vendedor"
-                                            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
-                                            value={formData.cargo}
-                                            onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">WhatsApp (Opcional)</label>
-                                    <div className="relative">
-                                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <input
-                                            type="tel"
-                                            placeholder="Ej. 3001234567"
-                                            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
-                                            value={formData.phone}
-                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">Salario Base</label>
-                                    <div className="relative">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
-                                        <input
-                                            required
-                                            type="number"
-                                            placeholder="0"
-                                            className="w-full pl-8 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
-                                            value={formData.salary}
-                                            onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">Clase Riesgo (ARL)</label>
-                                    <div className="relative">
-                                        <ShieldAlert className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                        <select
-                                            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 appearance-none bg-white"
-                                            value={formData.riskClass}
-                                            onChange={(e) => setFormData({ ...formData, riskClass: e.target.value })}
-                                        >
-                                            {RISK_CLASSES.map(r => (
-                                                <option key={r} value={r}>{r}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* DIAN Integration Fields */}
-                            <div className="pt-4 border-t border-gray-100">
-                                <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                                    Datos para Facturación Electrónica DIAN
-                                </h4>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-700">Email Empleado</label>
-                                        <input
-                                            type="email"
-                                            placeholder="correo@ejemplo.com"
-                                            className="w-full px-4 py-2 flex-1 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
-                                            value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-700">Tipo de Contrato</label>
-                                        <select
-                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
-                                            value={formData.contractType}
-                                            onChange={(e) => setFormData({ ...formData, contractType: e.target.value })}
-                                        >
-                                            <option value="1">Término Fijo</option>
-                                            <option value="2">Término Indefinido</option>
-                                            <option value="3">Obra o Labor</option>
-                                            <option value="4">Aprendizaje</option>
-                                            <option value="5">Prácticas o Pasantías</option>
-                                        </select>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-700">Tipo Trabajador</label>
-                                        <select
-                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
-                                            value={formData.workerType}
-                                            onChange={(e) => setFormData({ ...formData, workerType: e.target.value })}
-                                        >
-                                            <option value="01">Dependiente</option>
-                                            <option value="02">Servicio Doméstico</option>
-                                            <option value="18">Dependiente Extranjero</option>
-                                        </select>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-700">Subtipo Trabajador</label>
-                                        <select
-                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
-                                            value={formData.workerSubtype}
-                                            onChange={(e) => setFormData({ ...formData, workerSubtype: e.target.value })}
-                                        >
-                                            <option value="00">No aplica</option>
-                                        </select>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-700">Método de Pago</label>
-                                        <select
-                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
-                                            value={formData.paymentMethod}
-                                            onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-                                        >
-                                            <option value="1">Contado</option>
-                                            <option value="2">Crédito</option>
-                                        </select>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-700">Medio de Pago</label>
-                                        <select
-                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
-                                            value={formData.paymentMeans}
-                                            onChange={(e) => setFormData({ ...formData, paymentMeans: e.target.value })}
-                                        >
-                                            <option value="10">Efectivo</option>
-                                            <option value="42">Consignación bancaria</option>
-                                            <option value="47">Transferencia débito (PSE)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex gap-3 pt-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowForm(false)}
-                                    className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors font-medium"
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="flex-1 px-4 py-2.5 text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors font-medium shadow-lg shadow-blue-600/20"
-                                >
-                                    {editingId ? 'Actualizar' : 'Guardar'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+            {/* Removed Form Modal as it is now a separate page */}
 
             {/* Employee List */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
