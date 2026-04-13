@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Users, ClipboardList, Settings, LogOut, Headphones, MessageCircle, X, LayoutDashboard, Crown, Eye, ArrowRight } from 'lucide-react';
+import { Users, ClipboardList, Settings, LogOut, Headphones, MessageCircle, X, LayoutDashboard, Crown, Eye, ArrowRight, CircleDollarSign } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import NominaXLogo from '@/components/NominaXLogo';
 import { differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds, addDays } from 'date-fns';
@@ -109,6 +109,14 @@ export default function AdminLayout({
                     >
                         <Settings className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         <span>Configuración</span>
+                    </Link>
+
+                    <Link
+                        href="/admin/payroll-electronic"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 rounded-xl hover:bg-purple-50 hover:text-purple-600 transition-all group lg:text-sm font-medium"
+                    >
+                        <CircleDollarSign className="w-5 h-5 text-purple-500 group-hover:scale-110 transition-transform" />
+                        <span>Nómina electrónica</span>
                     </Link>
 
                     <Link
