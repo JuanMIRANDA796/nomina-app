@@ -16,6 +16,11 @@ export default function CompanySettingsPage() {
         documentType: 'Cédula de ciudadanía',
         documentNumber: '',
         phone: '',
+        nit: '',
+        dv: '',
+        departmentCode: '',
+        cityCode: '',
+        taxResponsibility: 'O-48',
     });
 
     useEffect(() => {
@@ -31,6 +36,11 @@ export default function CompanySettingsPage() {
                         documentType: data.documentType || 'Cédula de ciudadanía',
                         documentNumber: data.documentNumber || '',
                         phone: data.phone || '',
+                        nit: data.nit || '',
+                        dv: data.dv || '',
+                        departmentCode: data.departmentCode || '',
+                        cityCode: data.cityCode || '',
+                        taxResponsibility: data.taxResponsibility || 'O-48',
                     });
                 }
             } catch (error) {
@@ -176,6 +186,93 @@ export default function CompanySettingsPage() {
                             required
                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                         />
+                    </div>
+
+                    {/* Detalles DIAN Integracion */}
+                    <div className="pt-4 border-t border-gray-100">
+                        <h4 className="text-md font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                            <Building2 className="w-4 h-4 text-purple-500" />
+                            Datos para Facturación Electrónica DIAN
+                        </h4>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            {/* NIT */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    NIT (Sin DV)
+                                </label>
+                                <input
+                                    type="text"
+                                    name="nit"
+                                    value={formData.nit}
+                                    onChange={handleChange}
+                                    placeholder="Ej. 901234567"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                                />
+                            </div>
+
+                            {/* DV */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Dígito de Verificación (DV)
+                                </label>
+                                <input
+                                    type="text"
+                                    name="dv"
+                                    value={formData.dv}
+                                    onChange={handleChange}
+                                    maxLength={1}
+                                    placeholder="Ej. 1"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                                />
+                            </div>
+                            
+                            {/* Código de Departamento */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Código Departamento (DIAN)
+                                </label>
+                                <input
+                                    type="text"
+                                    name="departmentCode"
+                                    value={formData.departmentCode}
+                                    onChange={handleChange}
+                                    placeholder="Ej. 11 (Bogotá)"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                                />
+                            </div>
+
+                            {/* Código de Municipio */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Código Municipio (DIAN)
+                                </label>
+                                <input
+                                    type="text"
+                                    name="cityCode"
+                                    value={formData.cityCode}
+                                    onChange={handleChange}
+                                    placeholder="Ej. 11001"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                                />
+                            </div>
+                            
+                            {/* Responsabilidad Tributaria */}
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Responsabilidades Fiscales
+                                </label>
+                                <input
+                                    type="text"
+                                    name="taxResponsibility"
+                                    value={formData.taxResponsibility}
+                                    onChange={handleChange}
+                                    placeholder="Ej. O-48, O-47"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                                />
+                                <span className="text-xs text-gray-500">Separadas por coma si son varias. Usualmente 'O-48' (Impuesto sobre las ventas - IVA).</span>
+                            </div>
+                        </div>
                     </div>
 
                     {/* RUT */}

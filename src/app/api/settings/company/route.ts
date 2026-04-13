@@ -24,6 +24,11 @@ export async function GET(req: Request) {
                 documentType: true,
                 documentNumber: true,
                 phone: true,
+                nit: true,
+                dv: true,
+                departmentCode: true,
+                cityCode: true,
+                taxResponsibility: true,
             }
         });
 
@@ -41,7 +46,7 @@ export async function GET(req: Request) {
 export async function PUT(req: Request) {
     try {
         const body = await req.json();
-        const { id, companyName, businessName, documentType, documentNumber, phone } = body;
+        const { id, companyName, businessName, documentType, documentNumber, phone, nit, dv, departmentCode, cityCode, taxResponsibility } = body;
 
         const companyId = id ? parseInt(id) : 1;
 
@@ -52,7 +57,12 @@ export async function PUT(req: Request) {
                 businessName,
                 documentType,
                 documentNumber,
-                phone
+                phone,
+                nit,
+                dv,
+                departmentCode,
+                cityCode,
+                taxResponsibility
             }
         });
 

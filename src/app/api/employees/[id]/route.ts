@@ -35,7 +35,7 @@ export async function PUT(
 
         const { id } = await params;
         const body = await request.json();
-        const { name, cedula, cargo, salary, riskClass, status, phone } = body;
+        const { name, cedula, cargo, salary, riskClass, status, phone, email, contractType, workerType, workerSubtype, paymentMethod, paymentMeans } = body;
 
         // Verify ownership
         const employee = await prisma.employee.findUnique({ where: { id: parseInt(id) } });
@@ -52,6 +52,12 @@ export async function PUT(
                 salary: parseFloat(salary),
                 riskClass,
                 phone: phone || null,
+                email: email || null,
+                contractType,
+                workerType,
+                workerSubtype,
+                paymentMethod,
+                paymentMeans,
                 status
             },
         });

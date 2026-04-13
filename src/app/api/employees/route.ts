@@ -26,7 +26,7 @@ export async function POST(request: Request) {
         if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
         const body = await request.json();
-        const { name, cedula, cargo, salary, riskClass, phone } = body;
+        const { name, cedula, cargo, salary, riskClass, phone, email, contractType, workerType, workerSubtype, paymentMethod, paymentMeans } = body;
 
         // Fetch company details to check plan limits
         const company = await prisma.company.findUnique({
@@ -75,6 +75,12 @@ export async function POST(request: Request) {
                 salary: parseFloat(salary),
                 riskClass: riskClass || 'I',
                 phone: phone || null,
+                email: email || null,
+                contractType: contractType || '1',
+                workerType: workerType || '01',
+                workerSubtype: workerSubtype || '00',
+                paymentMethod: paymentMethod || '1',
+                paymentMeans: paymentMeans || '10',
                 status: 'ACTIVE',
                 companyId
             },

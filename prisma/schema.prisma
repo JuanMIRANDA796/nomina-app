@@ -6,43 +6,62 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Company {
-  id             Int          @id @default(autoincrement())
-  name           String       @unique
-  password       String       // In a real app we'd use hashing
+  id             Int     @id @default(autoincrement())
+  name           String  @unique
+  password       String // In a real app we'd use hashing
   companyName    String?
   businessName   String?
   documentType   String?
   documentNumber String?
   phone          String?
-  plan           String       @default("SEMILLA")
-  extraEmployees Int          @default(0)
-  employees      Employee[]
-  holidays       Holiday[]
-  configs        PayrollConfig[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  plan           String  @default("SEMILLA")
+  extraEmployees Int     @default(0)
+
+  // DIAN Integration Fields
+  nit               String?
+  dv                String?
+  departmentCode    String?
+  cityCode          String?
+  taxResponsibility String?
+
+  employees          Employee[]
+  holidays           Holiday[]
+  payrollSubmissions PayrollSubmission[]
+  configs            PayrollConfig[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 }
 
 model Employee {
-  id          Int          @id @default(autoincrement())
-  companyId   Int          @default(1)
-  company     Company      @relation(fields: [companyId], references: [id])
-  name        String
-  cedula      String       
-  cargo       String
-  salary      Float
-  phone       String?
-  riskClass   String       @default("I") // I, II, III, IV, V
-  status      String       @default("ACTIVE") // ACTIVE, INACTIVE
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  attendances Attendance[]
-  absences    Absence[]
+  id        Int     @id @default(autoincrement())
+  companyId Int     @default(1)
+  company   Company @relation(fields: [companyId], references: [id])
+  name      String
+  cedula    String
+  cargo     String
+  salary    Float
+  phone     String?
+
+  // DIAN Integration Fields
+  contractType  String? @default("1") // 1: Termino fijo, 2: Indefinido...
+  workerType    String? @default("01") // 01: Dependiente
+  workerSubtype String? @default("00") // 00: No aplica
+  email         String?
+  paymentMethod String? @default("1") // 1: Contado
+  paymentMeans  String? @default("10") // 10: Efectivo
+
+  riskClass          String              @default("I") // I, II, III, IV, V
+  status             String              @default("ACTIVE") // ACTIVE, INACTIVE
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  attendances        Attendance[]
+  absences           Absence[]
+  payrollSubmissions PayrollSubmission[]
 
   @@unique([companyId, cedula])
 }
@@ -51,26 +70,26 @@ model Attendance {
   id         Int       @id @default(autoincrement())
   employeeId Int
   employee   Employee  @relation(fields: [employeeId], references: [id])
-  date       DateTime  // The date of the shift (without time)
+  date       DateTime // The date of the shift (without time)
   entryTime  DateTime? // Full timestamp
   exitTime   DateTime? // Full timestamp
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
+  @@unique([employeeId, date])
   @@index([employeeId])
   @@index([date])
-  @@unique([employeeId, date])
 }
 
 model Absence {
-  id          Int      @id @default(autoincrement())
-  employeeId  Int
-  employee    Employee @relation(fields: [employeeId], references: [id])
-  date        DateTime
-  reason      String   // e.g., "Incapacidad médica", "Vacaciones"
-  paidPercentage Float @default(0) // 0.0 to 1.0 (e.g. 0.6667)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  employeeId     Int
+  employee       Employee @relation(fields: [employeeId], references: [id])
+  date           DateTime
+  reason         String // e.g., "Incapacidad médica", "Vacaciones"
+  paidPercentage Float    @default(0) // 0.0 to 1.0 (e.g. 0.6667)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@unique([employeeId, date])
 }
@@ -79,18 +98,18 @@ model Holiday {
   id        Int      @id @default(autoincrement())
   companyId Int      @default(1)
   company   Company  @relation(fields: [companyId], references: [id])
-  date      DateTime 
+  date      DateTime
   name      String
 
   @@unique([companyId, date])
 }
 
 model PayrollConfig {
-  id          Int      @id @default(autoincrement())
-  companyId   Int      @default(1)
-  company     Company  @relation(fields: [companyId], references: [id])
-  key         String   // e.g., "AUX_TRANSPORTE", "SMLV"
-  value       String   // e.g., "162000"
+  id          Int     @id @default(autoincrement())
+  companyId   Int     @default(1)
+  company     Company @relation(fields: [companyId], references: [id])
+  key         String // e.g., "AUX_TRANSPORTE", "SMLV"
+  value       String // e.g., "162000"
   description String?
 
   @@unique([companyId, key])
@@ -100,15 +119,34 @@ model PresentationSlide {
   id        Int      @id @default(autoincrement())
   slug      String   @unique // e.g. "slide-1-intro", "slide-2-history"
   title     String
-  type      String   // "text", "chart-bar", "chart-line", "heatmap"
-  content   String?  // Markdown text for text slides
-  data      Json?    // Flexible JSON structure for charts: [{ name: "2020", value: 100 }]
+  type      String // "text", "chart-bar", "chart-line", "heatmap"
+  content   String? // Markdown text for text slides
+  data      Json? // Flexible JSON structure for charts: [{ name: "2020", value: 100 }]
   order     Int      @default(0)
   updatedAt DateTime @updatedAt
 }
+
 model PresentationSnapshot {
   id        String   @id @default(cuid())
-  data      Json     // Aggregated data for all slides
+  data      Json // Aggregated data for all slides
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PayrollSubmission {
+  id         Int      @id @default(autoincrement())
+  companyId  Int
+  company    Company  @relation(fields: [companyId], references: [id])
+  employeeId Int
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  date       DateTime // Mes/Ano de la nomina
+  cune       String?  @unique
+  trackId    String?  @unique
+  status     String   @default("PENDING") // PENDING, SUCCESS, ERROR
+  pdfUrl     String?
+  xmlUrl     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([companyId, employeeId, date])
 }

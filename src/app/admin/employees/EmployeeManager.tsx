@@ -15,6 +15,12 @@ interface Employee {
     phone?: string;
     riskClass: string;
     status: string;
+    email?: string;
+    contractType?: string;
+    workerType?: string;
+    workerSubtype?: string;
+    paymentMethod?: string;
+    paymentMeans?: string;
 }
 
 export default function EmployeeManager() {
@@ -32,7 +38,13 @@ export default function EmployeeManager() {
         cargo: '',
         salary: '',
         phone: '',
-        riskClass: 'I'
+        riskClass: 'I',
+        email: '',
+        contractType: '1',
+        workerType: '01',
+        workerSubtype: '00',
+        paymentMethod: '1',
+        paymentMeans: '10'
     });
 
     const RISK_CLASSES = ['I', 'II', 'III', 'IV', 'V'];
@@ -73,14 +85,23 @@ export default function EmployeeManager() {
             cargo: emp.cargo,
             salary: emp.salary.toString(),
             phone: emp.phone || '',
-            riskClass: emp.riskClass || 'I'
+            riskClass: emp.riskClass || 'I',
+            email: emp.email || '',
+            contractType: emp.contractType || '1',
+            workerType: emp.workerType || '01',
+            workerSubtype: emp.workerSubtype || '00',
+            paymentMethod: emp.paymentMethod || '1',
+            paymentMeans: emp.paymentMeans || '10'
         });
         setShowForm(true);
     };
 
     const handleNew = () => {
         setEditingId(null);
-        setFormData({ name: '', cedula: '', cargo: '', salary: '', phone: '', riskClass: 'I' });
+        setFormData({ 
+            name: '', cedula: '', cargo: '', salary: '', phone: '', riskClass: 'I',
+            email: '', contractType: '1', workerType: '01', workerSubtype: '00', paymentMethod: '1', paymentMeans: '10' 
+        });
         setShowForm(true);
     };
 
@@ -297,6 +318,84 @@ export default function EmployeeManager() {
                                             {RISK_CLASSES.map(r => (
                                                 <option key={r} value={r}>{r}</option>
                                             ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* DIAN Integration Fields */}
+                            <div className="pt-4 border-t border-gray-100">
+                                <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                                    Datos para Facturación Electrónica DIAN
+                                </h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Email Empleado</label>
+                                        <input
+                                            type="email"
+                                            placeholder="correo@ejemplo.com"
+                                            className="w-full px-4 py-2 flex-1 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
+                                            value={formData.email}
+                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Tipo de Contrato</label>
+                                        <select
+                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                            value={formData.contractType}
+                                            onChange={(e) => setFormData({ ...formData, contractType: e.target.value })}
+                                        >
+                                            <option value="1">Término Fijo</option>
+                                            <option value="2">Término Indefinido</option>
+                                            <option value="3">Obra o Labor</option>
+                                            <option value="4">Aprendizaje</option>
+                                            <option value="5">Prácticas o Pasantías</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Tipo Trabajador</label>
+                                        <select
+                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                            value={formData.workerType}
+                                            onChange={(e) => setFormData({ ...formData, workerType: e.target.value })}
+                                        >
+                                            <option value="01">Dependiente</option>
+                                            <option value="02">Servicio Doméstico</option>
+                                            <option value="18">Dependiente Extranjero</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Subtipo Trabajador</label>
+                                        <select
+                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                            value={formData.workerSubtype}
+                                            onChange={(e) => setFormData({ ...formData, workerSubtype: e.target.value })}
+                                        >
+                                            <option value="00">No aplica</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Método de Pago</label>
+                                        <select
+                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                            value={formData.paymentMethod}
+                                            onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
+                                        >
+                                            <option value="1">Contado</option>
+                                            <option value="2">Crédito</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-700">Medio de Pago</label>
+                                        <select
+                                            className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                            value={formData.paymentMeans}
+                                            onChange={(e) => setFormData({ ...formData, paymentMeans: e.target.value })}
+                                        >
+                                            <option value="10">Efectivo</option>
+                                            <option value="42">Consignación bancaria</option>
+                                            <option value="47">Transferencia débito (PSE)</option>
                                         </select>
                                     </div>
                                 </div>
