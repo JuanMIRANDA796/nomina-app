@@ -20,15 +20,30 @@ export default function PayrollTransmission() {
     const [isLoading, setIsLoading] = useState(true);
     const [isTransmitting, setIsTransmitting] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState('2026-04');
+    const [dianEnabled, setDianEnabled] = useState<boolean | null>(null);
 
     useEffect(() => {
-        fetchEmployees();
+        fetchData();
     }, []);
 
-    const fetchEmployees = async () => {
+    const fetchData = async () => {
         try {
             setIsLoading(true);
             const companyId = localStorage.getItem('company_id') || '1';
+            
+            // Check enablement
+            const compRes = await fetch(`/api/settings/company?companyId=${companyId}`);
+            if (compRes.ok) {
+                const compData = await compRes.json();
+                setDianEnabled(compData.dianEnabled === true);
+                
+                // If not enabled, don't bother fetching employees for the board yet
+                if (compData.dianEnabled !== true) {
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
             const res = await fetch(`/api/employees?companyId=${companyId}`);
             if (res.ok) {
                 const data = await res.json();
@@ -110,6 +125,27 @@ export default function PayrollTransmission() {
     const pendingCount = employees.filter(e => e.dianStatus === 'PENDING').length;
     const successCount = employees.filter(e => e.dianStatus === 'SUCCESS').length;
     const errorCount = employees.filter(e => e.dianStatus === 'ERROR').length;
+
+    if (dianEnabled === false) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[70vh] max-w-2xl mx-auto text-center px-4">
+                <div className="w-24 h-24 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-8 shadow-inner ring-8 ring-white">
+                    <AlertCircle className="w-12 h-12" />
+                </div>
+                <h1 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">¡Módulo Bloqueado!</h1>
+                <p className="text-xl text-gray-600 mb-10 leading-relaxed">
+                    Estás a un paso de reportar tu nómina. Debes habilitarte ante la DIAN y registrar la información legal de tu empresa primero.
+                </p>
+                <button 
+                    onClick={() => window.location.href = '/admin/payroll-electronic'}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-5 rounded-full font-bold text-lg transition-all shadow-xl shadow-blue-600/30 hover:-translate-y-1 hover:shadow-2xl flex items-center gap-2 mx-auto"
+                >
+                    <Building2 className="w-6 h-6" />
+                    Iniciar Configuración de DIAN
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-6xl mx-auto space-y-6">

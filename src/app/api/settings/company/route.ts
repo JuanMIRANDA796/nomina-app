@@ -29,6 +29,10 @@ export async function GET(req: Request) {
                 departmentCode: true,
                 cityCode: true,
                 taxResponsibility: true,
+                dianEnabled: true,
+                dianTestSetId: true,
+                dianPrefix: true,
+                dianStartNumber: true,
             }
         });
 
@@ -46,7 +50,7 @@ export async function GET(req: Request) {
 export async function PUT(req: Request) {
     try {
         const body = await req.json();
-        const { id, companyName, businessName, documentType, documentNumber, phone, nit, dv, departmentCode, cityCode, taxResponsibility } = body;
+        const { id, companyName, businessName, documentType, documentNumber, phone, nit, dv, departmentCode, cityCode, taxResponsibility, dianEnabled, dianTestSetId, dianPrefix, dianStartNumber } = body;
 
         const companyId = id ? parseInt(id) : 1;
 
@@ -62,7 +66,11 @@ export async function PUT(req: Request) {
                 dv,
                 departmentCode,
                 cityCode,
-                taxResponsibility
+                taxResponsibility,
+                dianEnabled: dianEnabled !== undefined ? dianEnabled : undefined,
+                dianTestSetId,
+                dianPrefix,
+                dianStartNumber
             }
         });
 

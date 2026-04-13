@@ -29,6 +29,11 @@ model Company {
   cityCode          String?
   taxResponsibility String?
 
+  dianEnabled       Boolean @default(false)
+  dianTestSetId     String?
+  dianPrefix        String?
+  dianStartNumber   String?
+
   employees          Employee[]
   holidays           Holiday[]
   payrollSubmissions PayrollSubmission[]

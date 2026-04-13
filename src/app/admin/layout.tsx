@@ -112,10 +112,10 @@ export default function AdminLayout({
                     </Link>
 
                     <Link
-                        href="/admin/payroll-electronic"
-                        className="flex items-center gap-3 px-4 py-3 text-gray-700 rounded-xl hover:bg-purple-50 hover:text-purple-600 transition-all group lg:text-sm font-medium"
+                        href="/admin/payroll-electronic/transmission"
+                        className="flex items-center gap-3 px-4 py-3 text-gray-700 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all group lg:text-sm font-medium"
                     >
-                        <CircleDollarSign className="w-5 h-5 text-purple-500 group-hover:scale-110 transition-transform" />
+                        <CircleDollarSign className="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform" />
                         <span>Nómina electrónica</span>
                     </Link>
 

@@ -359,6 +359,37 @@ export default function PayrollElectronicOnboarding() {
         </div>
     );
 
+    const handleFinalize = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        try {
+            const companyId = localStorage.getItem('company_id') || '1';
+            const res = await fetch('/api/settings/company', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: companyId,
+                    dianEnabled: true,
+                    dianTestSetId: formData.testSetId,
+                    dianPrefix: formData.prefix,
+                    dianStartNumber: formData.startNumber
+                })
+            });
+
+            if (res.ok) {
+                toast.success('¡Configuración completada con éxito!');
+                handleNext();
+            } else {
+                toast.error('Hubo un error al guardar la habilitación');
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Error de conexión');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     // STEP 5
     const renderStep5 = () => (
         <div className="max-w-4xl mx-auto">
@@ -367,7 +398,7 @@ export default function PayrollElectronicOnboarding() {
                 <p className="text-gray-500">Define cómo se estructurará tu consecutivo legal para los envíos mensuales.</p>
             </div>
 
-            <div className="bg-white rounded-3xl p-10 shadow-sm border border-gray-100 space-y-8">
+            <form onSubmit={handleFinalize} className="bg-white rounded-3xl p-10 shadow-sm border border-gray-100 space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
                         <label className="text-sm font-bold text-gray-700">Prefijo</label>
@@ -402,21 +433,24 @@ export default function PayrollElectronicOnboarding() {
 
                 <div className="flex gap-4 pt-6">
                     <button 
-                        type="button" 
-                        onClick={(e) => handleNext(e)}
-                        className="flex-1 px-8 py-4 rounded-full font-bold text-white bg-green-600 hover:bg-green-700 shadow-green-600/20 transition-all shadow-lg text-center"
+                        type="submit" 
+                        disabled={isLoading}
+                        className={`flex-1 px-8 py-4 rounded-full font-bold text-white transition-all shadow-lg text-center ${
+                            isLoading ? 'bg-gray-400 cursor-wait' : 'bg-green-600 hover:bg-green-700 shadow-green-600/20'
+                        }`}
                     >
-                        ¡Finalizar Configuración!
+                        {isLoading ? 'Guardando...' : '¡Finalizar Configuración!'}
                     </button>
                     <button 
                         type="button" 
                         onClick={handleBack}
-                        className="px-8 py-4 rounded-full font-bold text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all"
+                        disabled={isLoading}
+                        className="px-8 py-4 rounded-full font-bold text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all font-medium"
                     >
                         Regresar
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 
