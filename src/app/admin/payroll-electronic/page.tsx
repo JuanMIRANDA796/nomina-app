@@ -443,10 +443,10 @@ export default function PayrollElectronicOnboarding() {
             </div>
 
             <button 
-                onClick={() => window.location.href = '/admin/dashboard'}
+                onClick={() => window.location.href = '/admin/payroll-electronic/transmission'}
                 className="w-full mt-10 bg-gray-900 hover:bg-black text-white px-8 py-4 rounded-full font-bold transition-all shadow-xl"
             >
-                Ir al Dashboard
+                Ir a Transmitir Nómina
             </button>
         </div>
     );
