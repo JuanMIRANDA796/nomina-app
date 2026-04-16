@@ -84,6 +84,8 @@ import cdatRateMatrixProposalDefault from '@/data/cdat_rate_matrix_proposal.json
 import historicalRatesV2Default from '@/data/historical_rates_v2.json';
 import creditRateProposalsDefault from '@/data/credit_rate_proposal_data.json';
 import benchmarkingSummaryTableDefault from '@/data/benchmarking_summary_table.json';
+import financialLeaderAttributionsDefault from '@/data/financial_leader_attributions.json';
+import cdatTextProposalDefault from '@/data/cdat_text_proposal.json';
 
 const metadataDefault = {
     title: 'COMITÉ DE PRECIOS FEBRERO 2026',
@@ -178,6 +180,8 @@ const ALL_DEFAULTS = {
     historicalRatesV2: historicalRatesV2Default,
     creditRateProposals: creditRateProposalsDefault,
     benchmarkingSummaryData: benchmarkingSummaryTableDefault,
+    financialLeaderAttributions: financialLeaderAttributionsDefault,
+    cdatTextProposal: cdatTextProposalDefault,
     metadata: metadataDefault,
     macroAnalysis: macroAnalysisDefault,
 };
@@ -243,8 +247,10 @@ const applyForcedOverrides = (merged: any) => {
         merged[key] = (ALL_DEFAULTS as any)[key];
     });
 
-    // 4. FORCE OVERRIDE summary table
+    // 4. FORCE OVERRIDE summary table and text slides
     merged.benchmarkingSummaryData = ALL_DEFAULTS.benchmarkingSummaryData;
+    merged.financialLeaderAttributions = merged.financialLeaderAttributions || ALL_DEFAULTS.financialLeaderAttributions;
+    merged.cdatTextProposal = merged.cdatTextProposal || ALL_DEFAULTS.cdatTextProposal;
 
     return merged;
 };

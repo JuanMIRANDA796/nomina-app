@@ -1,0 +1,14 @@
+[
+    {
+        "id": "consumo",
+        "title": "Consumo",
+        "description": "Se solicita otorgar atribuciones al Líder Financiero para negociar la tasa de interés de créditos de consumo que generen un buen negocio para el Fondo.",
+        "formula": "Tasa marginal de la deuda + 300 puntos básicos."
+    },
+    {
+        "id": "vivienda",
+        "title": "Vivienda",
+        "description": "Se solicita otorgar atribuciones al Líder Financiero para negociar la tasa de interés de créditos de vivienda que generen un buen negocio para el Fondo.",
+        "formula": "Tasa marginal de la deuda + 50 puntos básicos."
+    }
+]
