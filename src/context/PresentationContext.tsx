@@ -274,13 +274,8 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                                 merged[key] = (ALL_DEFAULTS as any)[key];
                             });
 
-                            // FORCE OVERRIDE summary table to include Marzo entries
-                            if (merged.benchmarkingSummaryData && Array.isArray(merged.benchmarkingSummaryData)) {
-                                const hasMarzo = merged.benchmarkingSummaryData.some((r: any) => r.mes === 'Marzo');
-                                if (!hasMarzo) {
-                                    merged.benchmarkingSummaryData = ALL_DEFAULTS.benchmarkingSummaryData;
-                                }
-                            }
+                            // FORCE OVERRIDE summary table to ensure March data is present and up to date
+                            merged.benchmarkingSummaryData = ALL_DEFAULTS.benchmarkingSummaryData;
 
                             return merged;
                         });
