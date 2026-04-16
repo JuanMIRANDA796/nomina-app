@@ -1,0 +1,50 @@
+[
+  {
+    "entity": "17 entidades",
+    "disbursements_num": 4329,
+    "amount": 943740,
+    "tpp": 13.50
+  },
+  {
+    "entity": "Bancolombia",
+    "disbursements_num": 895,
+    "amount": 249488,
+    "tpp": 14.00
+  },
+  {
+    "entity": "Banco Davivienda",
+    "disbursements_num": 970,
+    "amount": 211770,
+    "tpp": 13.42
+  },
+  {
+    "entity": "Banco de Bogotá",
+    "disbursements_num": 864,
+    "amount": 157934,
+    "tpp": 13.92
+  },
+  {
+    "entity": "Banco Caja Social S.A.",
+    "disbursements_num": 436,
+    "amount": 75129,
+    "tpp": 11.81
+  },
+  {
+    "entity": "Banco de Occidente",
+    "disbursements_num": 232,
+    "amount": 62097,
+    "tpp": 13.87
+  },
+  {
+    "entity": "Banco Davibank",
+    "disbursements_num": 243,
+    "amount": 52619,
+    "tpp": 13.94
+  },
+  {
+    "entity": "PRESENTE",
+    "disbursements_num": 6,
+    "amount": 772,
+    "tpp": 11.96
+  }
+]

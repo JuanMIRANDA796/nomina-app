@@ -20,20 +20,24 @@ import EditableStatsSidebar from './EditableStatsSidebar';
 
 export default function BenchmarkingViviendaNoVisUvrHasta20Chart() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('febrero');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo'>('marzo');
     const [isEditing, setIsEditing] = useState(false);
 
     const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingViviendaNoVisUvrHasta20
         : selectedMonth === 'enero'
             ? globalData.benchmarkingViviendaNoVisUvrHasta20Enero
-            : globalData.benchmarkingViviendaNoVisUvrHasta20Febrero;
+            : selectedMonth === 'febrero'
+                ? globalData.benchmarkingViviendaNoVisUvrHasta20Febrero
+                : globalData.benchmarkingViviendaNoVisUvrHasta20Marzo;
 
-    const sectionKey = selectedMonth === 'diciembre' 
-        ? 'benchmarkingViviendaNoVisUvrHasta20' 
-        : selectedMonth === 'enero' 
-            ? 'benchmarkingViviendaNoVisUvrHasta20Enero' 
-            : 'benchmarkingViviendaNoVisUvrHasta20Febrero';
+    const sectionKey = selectedMonth === 'diciembre'
+        ? 'benchmarkingViviendaNoVisUvrHasta20'
+        : selectedMonth === 'enero'
+            ? 'benchmarkingViviendaNoVisUvrHasta20Enero'
+            : selectedMonth === 'febrero'
+                ? 'benchmarkingViviendaNoVisUvrHasta20Febrero'
+                : 'benchmarkingViviendaNoVisUvrHasta20Marzo';
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
@@ -54,7 +58,7 @@ export default function BenchmarkingViviendaNoVisUvrHasta20Chart() {
                 <EditableChartTitle
                     mainTitle="Benchmarking - Compra de vivienda NO VIS UVR"
                     subtitle="Hasta 20 años"
-                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}
+                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : selectedMonth === 'febrero' ? 'Febrero' : 'Marzo'}
                     subtitleColor="text-fuchsia-500 font-semibold text-lg"
                 />
                 <div className="flex gap-3 items-center">
@@ -62,6 +66,7 @@ export default function BenchmarkingViviendaNoVisUvrHasta20Chart() {
                         <button onClick={() => setSelectedMonth('diciembre')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'diciembre' ? 'bg-yellow-600 text-white' : 'text-slate-400 hover:text-white'}`}>Dic</button>
                         <button onClick={() => setSelectedMonth('enero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'enero' ? 'bg-yellow-600 text-white' : 'text-slate-400 hover:text-white'}`}>Ene</button>
                         <button onClick={() => setSelectedMonth('febrero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'febrero' ? 'bg-yellow-600 text-white' : 'text-slate-400 hover:text-white'}`}>Feb</button>
+                        <button onClick={() => setSelectedMonth('marzo')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'marzo' ? 'bg-pink-600 text-white' : 'text-slate-400 hover:text-white'}`}>Mar</button>
                     </div>
                     <RateBox 
                         presenteTpp={presenteTpp} 

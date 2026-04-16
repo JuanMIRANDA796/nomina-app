@@ -1,0 +1,50 @@
+[
+  {
+    "entity": "34 entidades",
+    "disbursements_num": 43097,
+    "amount": 338200,
+    "tpp": 23.71
+  },
+  {
+    "entity": "Bancolombia",
+    "disbursements_num": 11641,
+    "amount": 94371,
+    "tpp": 22.64
+  },
+  {
+    "entity": "Banco de Bogotá",
+    "disbursements_num": 10563,
+    "amount": 75871,
+    "tpp": 24.54
+  },
+  {
+    "entity": "Banco Falabella S.A.",
+    "disbursements_num": 6614,
+    "amount": 54172,
+    "tpp": 24.0
+  },
+  {
+    "entity": "Banco Davivienda",
+    "disbursements_num": 5724,
+    "amount": 45706,
+    "tpp": 22.87
+  },
+  {
+    "entity": "BBVA Colombia",
+    "disbursements_num": 3655,
+    "amount": 31458,
+    "tpp": 24.55
+  },
+  {
+    "entity": "Banco Caja Social S.A.",
+    "disbursements_num": 2189,
+    "amount": 17640,
+    "tpp": 23.81
+  },
+  {
+    "entity": "PRESENTE",
+    "disbursements_num": 166,
+    "amount": 1406,
+    "tpp": 23.12
+  }
+]

@@ -6,20 +6,24 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCDATsTable() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('febrero');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo'>('marzo');
     const [isEditing, setIsEditing] = useState(false);
 
     const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingCDATs
         : selectedMonth === 'enero'
             ? globalData.benchmarkingCDATsEnero
-            : globalData.benchmarkingCDATsFebrero;
+            : selectedMonth === 'febrero'
+                ? globalData.benchmarkingCDATsFebrero
+                : globalData.benchmarkingCDATsMarzo;
 
     const sectionKey = selectedMonth === 'diciembre'
         ? 'benchmarkingCDATs'
         : selectedMonth === 'enero'
             ? 'benchmarkingCDATsEnero'
-            : 'benchmarkingCDATsFebrero';
+            : selectedMonth === 'febrero'
+                ? 'benchmarkingCDATsFebrero'
+                : 'benchmarkingCDATsMarzo';
 
     const handleUpdate = (groupIdx: number, entIdx: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(data));

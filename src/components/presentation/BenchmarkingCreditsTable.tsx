@@ -6,20 +6,24 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCreditsTable() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('febrero');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo'>('marzo');
     const [isEditing, setIsEditing] = useState(false);
 
     const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingCredits
         : selectedMonth === 'enero'
             ? globalData.benchmarkingCreditsEnero
-            : globalData.benchmarkingCreditsFebrero;
+            : selectedMonth === 'febrero'
+                ? globalData.benchmarkingCreditsFebrero
+                : globalData.benchmarkingCreditsMarzo;
 
     const sectionKey = selectedMonth === 'diciembre'
         ? 'benchmarkingCredits'
         : selectedMonth === 'enero'
             ? 'benchmarkingCreditsEnero'
-            : 'benchmarkingCreditsFebrero';
+            : selectedMonth === 'febrero'
+                ? 'benchmarkingCreditsFebrero'
+                : 'benchmarkingCreditsMarzo';
 
     const handleUpdate = (type: 'banks' | 'cooperatives', index: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(data));
@@ -164,12 +168,12 @@ export default function BenchmarkingCreditsTable() {
                         Benchmarking Vivienda y Consumo
                     </h3>
                     <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">
-                        Tasas de cartelera al {selectedMonth === 'febrero' ? '16/03/2026' : selectedMonth === 'enero' ? '10/01/2026' : '10/12/2025'}
+                        Tasas de cartelera al {selectedMonth === 'marzo' ? '16/04/2026' : selectedMonth === 'febrero' ? '16/03/2026' : selectedMonth === 'enero' ? '10/01/2026' : '10/12/2025'}
                     </p>
                 </div>
                 <div className="flex gap-4 items-center">
                     <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner">
-                        {(['diciembre', 'enero', 'febrero'] as const).map(m => (
+                        {(['diciembre', 'enero', 'febrero', 'marzo'] as const).map(m => (
                             <button
                                 key={m}
                                 onClick={() => setSelectedMonth(m)}

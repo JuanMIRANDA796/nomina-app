@@ -1,0 +1,26 @@
+[
+    {
+        "entity": "4 entidades",
+        "disbursements_num": 152,
+        "amount": 42080,
+        "tpp": 13.24
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 90,
+        "amount": 25774,
+        "tpp": 12.19
+    },
+    {
+        "entity": "Fondo Nacional del Ahorro",
+        "disbursements_num": 51,
+        "amount": 13499,
+        "tpp": 10.00
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 0,
+        "amount": 0,
+        "tpp": 0.00
+    }
+]

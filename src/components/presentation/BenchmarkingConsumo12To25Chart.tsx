@@ -20,20 +20,24 @@ import EditableStatsSidebar from './EditableStatsSidebar';
 
 export default function BenchmarkingConsumo12To25Chart() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero'>('febrero');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo'>('marzo');
     const [isEditing, setIsEditing] = useState(false);
 
     const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingConsumo12To25
         : selectedMonth === 'enero'
             ? globalData.benchmarkingConsumo12To25Enero
-            : globalData.benchmarkingConsumo12To25Febrero;
+            : selectedMonth === 'febrero'
+                ? globalData.benchmarkingConsumo12To25Febrero
+                : globalData.benchmarkingConsumo12To25Marzo;
 
     const sectionKey = selectedMonth === 'diciembre' 
         ? 'benchmarkingConsumo12To25' 
         : selectedMonth === 'enero' 
             ? 'benchmarkingConsumo12To25Enero' 
-            : 'benchmarkingConsumo12To25Febrero';
+            : selectedMonth === 'febrero'
+                ? 'benchmarkingConsumo12To25Febrero'
+                : 'benchmarkingConsumo12To25Marzo';
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
@@ -53,7 +57,7 @@ export default function BenchmarkingConsumo12To25Chart() {
                 <EditableChartTitle
                     mainTitle="Benchmarking Desembolsos - Consumo Créditos"
                     subtitle="De 12 a 25 SMLV"
-                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : 'Febrero'}
+                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : selectedMonth === 'febrero' ? 'Febrero' : 'Marzo'}
                     subtitleColor="text-rose-400 font-semibold text-lg"
                 />
                 <div className="flex gap-3 items-center">
@@ -61,6 +65,7 @@ export default function BenchmarkingConsumo12To25Chart() {
                         <button onClick={() => setSelectedMonth('diciembre')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'diciembre' ? 'bg-violet-600 text-white' : 'text-slate-400 hover:text-white'}`}>Dic</button>
                         <button onClick={() => setSelectedMonth('enero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'enero' ? 'bg-violet-600 text-white' : 'text-slate-400 hover:text-white'}`}>Ene</button>
                         <button onClick={() => setSelectedMonth('febrero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'febrero' ? 'bg-violet-600 text-white' : 'text-slate-400 hover:text-white'}`}>Feb</button>
+                        <button onClick={() => setSelectedMonth('marzo')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'marzo' ? 'bg-pink-600 text-white' : 'text-slate-400 hover:text-white'}`}>Mar</button>
                     </div>
                     <RateBox 
                         presenteTpp={presenteTpp} 
