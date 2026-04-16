@@ -251,6 +251,37 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                                 });
                             }
 
+                            // FORCE OVERRIDE for March 2026 benchmarking data — inject defaults if missing or stale
+                            const marzoKeys = [
+                                'benchmarkingViviendaVisHasta20Marzo',
+                                'benchmarkingViviendaVisSup20Marzo',
+                                'benchmarkingViviendaNoVisHasta20Marzo',
+                                'benchmarkingViviendaNoVisSup20Marzo',
+                                'benchmarkingViviendaNoVisUvrHasta20Marzo',
+                                'benchmarkingViviendaNoVisUvrSup20Marzo',
+                                'benchmarkingViviendaVisUvrHasta20Marzo',
+                                'benchmarkingViviendaVisUvrSup20Marzo',
+                                'benchmarkingConsumoHasta1Marzo',
+                                'benchmarkingConsumo1To3Marzo',
+                                'benchmarkingConsumo3To6Marzo',
+                                'benchmarkingConsumo6To12Marzo',
+                                'benchmarkingConsumo12To25Marzo',
+                                'benchmarkingConsumoTodosMarzo',
+                                'benchmarkingCDATsMarzo',
+                                'benchmarkingCreditsMarzo',
+                            ] as const;
+                            marzoKeys.forEach((key) => {
+                                merged[key] = (ALL_DEFAULTS as any)[key];
+                            });
+
+                            // FORCE OVERRIDE summary table to include Marzo entries
+                            if (merged.benchmarkingSummaryData && Array.isArray(merged.benchmarkingSummaryData)) {
+                                const hasMarzo = merged.benchmarkingSummaryData.some((r: any) => r.mes === 'Marzo');
+                                if (!hasMarzo) {
+                                    merged.benchmarkingSummaryData = ALL_DEFAULTS.benchmarkingSummaryData;
+                                }
+                            }
+
                             return merged;
                         });
                         setLastSyncedAt(new Date());
