@@ -34,7 +34,7 @@ export default function BenchmarkingCreditsTable() {
 
     const getVariation = (type: 'banks' | 'cooperatives', entityName: string, field: string, currentVal: number | null) => {
         if (selectedMonth === 'diciembre' || currentVal === null) return null;
-        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCredits : globalData.benchmarkingCreditsEnero;
+        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCredits : selectedMonth === 'febrero' ? globalData.benchmarkingCreditsEnero : globalData.benchmarkingCreditsFebrero;
         if (!prevData) return null;
         const section = (prevData as any)[type];
         if (!section) return null;
