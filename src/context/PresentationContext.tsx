@@ -199,6 +199,56 @@ interface PresentationContextType {
 
 const PresentationContext = createContext<PresentationContextType | undefined>(undefined);
 
+const applyForcedOverrides = (merged: any) => {
+    // 1. Migration: Ensure macroAnalysis is always an array of strings
+    if (merged.macroAnalysis && Array.isArray(merged.macroAnalysis)) {
+        merged.macroAnalysis = merged.macroAnalysis.map((item: any) =>
+            typeof item === 'string' ? item : (item.phrase || item.title || '...')
+        );
+        if (merged.macroAnalysis.length > 4 || (typeof merged.macroAnalysis[0] === 'string' && merged.macroAnalysis[0].includes('Salario a 2 millones'))) {
+            merged.macroAnalysis = ALL_DEFAULTS.macroAnalysis;
+        }
+    }
+
+    // 2. FORCE OVERRIDE for 2026-02-01 inflation value
+    if (merged.inflationRepo && Array.isArray(merged.inflationRepo)) {
+        merged.inflationRepo = merged.inflationRepo.map((item: any) => {
+            if (item.date === "2026-02-01" && (item.inflation === 5.42 || item.inflation === "5.42")) {
+                return { ...item, inflation: 5.29 };
+            }
+            return item;
+        });
+    }
+
+    // 3. FORCE OVERRIDE for March 2026 benchmarking data
+    const marzoKeys = [
+        'benchmarkingViviendaVisHasta20Marzo',
+        'benchmarkingViviendaVisSup20Marzo',
+        'benchmarkingViviendaNoVisHasta20Marzo',
+        'benchmarkingViviendaNoVisSup20Marzo',
+        'benchmarkingViviendaNoVisUvrHasta20Marzo',
+        'benchmarkingViviendaNoVisUvrSup20Marzo',
+        'benchmarkingViviendaVisUvrHasta20Marzo',
+        'benchmarkingViviendaVisUvrSup20Marzo',
+        'benchmarkingConsumoHasta1Marzo',
+        'benchmarkingConsumo1To3Marzo',
+        'benchmarkingConsumo3To6Marzo',
+        'benchmarkingConsumo6To12Marzo',
+        'benchmarkingConsumo12To25Marzo',
+        'benchmarkingConsumoTodosMarzo',
+        'benchmarkingCDATsMarzo',
+        'benchmarkingCreditsMarzo',
+    ] as const;
+    marzoKeys.forEach((key) => {
+        merged[key] = (ALL_DEFAULTS as any)[key];
+    });
+
+    // 4. FORCE OVERRIDE summary table
+    merged.benchmarkingSummaryData = ALL_DEFAULTS.benchmarkingSummaryData;
+
+    return merged;
+};
+
 export function PresentationProvider({ children }: { children: React.ReactNode }) {
     const [data, setData] = useState<PresentationData>(ALL_DEFAULTS);
     const [isLoading, setIsLoading] = useState(true);
@@ -206,126 +256,39 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
     const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
     const [syncError, setSyncError] = useState<string | null>(null);
     const [syncLog, setSyncLog] = useState<string | null>('Conectando (v2.1.3)...');
-    // When true, polling will NOT overwrite local state (user is actively editing)
     const [isEditingGlobal, setIsEditingGlobal] = useState(false);
     const setGlobalEditing = useCallback((editing: boolean) => setIsEditingGlobal(editing), []);
-    // Debounce timer ref — used so multiple rapid updateSection calls only create 1 server write
     const saveTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-    // Ref to track if the data change came from a user edit (needs server save)
-    // or from the polling/initial load (must NOT be saved back)
     const manualChangeRef = React.useRef(false);
-    // Ref specifically for the save process to block polling
     const savePendingRef = React.useRef(false);
+    const savePendingInternalRef = React.useRef(false);
 
-    // Initial load: Fetch from Server (Primary) then LocalStorage (Fallback)
-    // Runs ONCE on mount only — never re-runs on save/edit state changes.
     useEffect(() => {
         async function loadData() {
             try {
-                // 1. Try to get from Server
                 const response = await fetch(`/api/presentation/shared?t=${Date.now()}`, { cache: 'no-store' });
                 if (response.ok) {
                     const result = await response.json();
                     if (result && result.data) {
                         setData(prev => {
-                            const merged = { ...prev, ...result.data };
-                            // Migration: Ensure macroAnalysis is always an array of strings
-                            if (merged.macroAnalysis && Array.isArray(merged.macroAnalysis)) {
-                                merged.macroAnalysis = merged.macroAnalysis.map((item: any) =>
-                                    typeof item === 'string' ? item : (item.phrase || item.title || '...')
-                                );
-
-                                // FORCE NEW DATA if old structure/text detected
-                                if (merged.macroAnalysis.length > 4 || (typeof merged.macroAnalysis[0] === 'string' && merged.macroAnalysis[0].includes('Salario a 2 millones'))) {
-                                    merged.macroAnalysis = ALL_DEFAULTS.macroAnalysis;
-                                }
-                            }
-
-                            // FORCE OVERRIDE for 2026-02-01 inflation value (if stuck at 5.42)
-                            if (merged.inflationRepo && Array.isArray(merged.inflationRepo)) {
-                                merged.inflationRepo = merged.inflationRepo.map((item: any) => {
-                                    if (item.date === "2026-02-01" && (item.inflation === 5.42 || item.inflation === "5.42")) {
-                                        return { ...item, inflation: 5.29 };
-                                    }
-                                    return item;
-                                });
-                            }
-
-                            // FORCE OVERRIDE for March 2026 benchmarking data — inject defaults if missing or stale
-                            const marzoKeys = [
-                                'benchmarkingViviendaVisHasta20Marzo',
-                                'benchmarkingViviendaVisSup20Marzo',
-                                'benchmarkingViviendaNoVisHasta20Marzo',
-                                'benchmarkingViviendaNoVisSup20Marzo',
-                                'benchmarkingViviendaNoVisUvrHasta20Marzo',
-                                'benchmarkingViviendaNoVisUvrSup20Marzo',
-                                'benchmarkingViviendaVisUvrHasta20Marzo',
-                                'benchmarkingViviendaVisUvrSup20Marzo',
-                                'benchmarkingConsumoHasta1Marzo',
-                                'benchmarkingConsumo1To3Marzo',
-                                'benchmarkingConsumo3To6Marzo',
-                                'benchmarkingConsumo6To12Marzo',
-                                'benchmarkingConsumo12To25Marzo',
-                                'benchmarkingConsumoTodosMarzo',
-                                'benchmarkingCDATsMarzo',
-                                'benchmarkingCreditsMarzo',
-                            ] as const;
-                            marzoKeys.forEach((key) => {
-                                merged[key] = (ALL_DEFAULTS as any)[key];
-                            });
-
-                            // FORCE OVERRIDE summary table to ensure March data is present and up to date
-                            merged.benchmarkingSummaryData = ALL_DEFAULTS.benchmarkingSummaryData;
-
+                            const merged = applyForcedOverrides({ ...prev, ...result.data });
                             return merged;
                         });
                         setLastSyncedAt(new Date());
                         setSyncLog('Datos cargados de la nube ✅');
-                        setSyncError(null);
                         setIsLoading(false);
                         return;
-                    } else {
-                        setSyncLog('Nube nueva (vacía). Usando JSON.');
                     }
-                } else {
-                    const errorJson = await response.json().catch(() => ({}));
-                    setSyncLog(`Error Inicial: ${response.status}`);
-                    setSyncError(`[${response.status}] ${errorJson.message || 'Error del servidor'}`);
                 }
             } catch (err: any) {
                 console.error('Failed to load shared presentation from server:', err);
-                setSyncError(err.message || 'Error de conexión');
                 setSyncLog('Sin conexión a la nube ❌');
             }
 
-            // 2. Fallback to LocalStorage if server fails or is empty
             const saved = localStorage.getItem('presentation_data_v2');
             if (saved) {
                 try {
-                    const parsed = JSON.parse(saved);
-
-                    // Migration: Ensure macroAnalysis is always an array of strings
-                    if (parsed.macroAnalysis && Array.isArray(parsed.macroAnalysis)) {
-                        parsed.macroAnalysis = parsed.macroAnalysis.map((item: any) =>
-                            typeof item === 'string' ? item : (item.phrase || item.title || '...')
-                        );
-
-                        // FORCE NEW DATA if old structure/text detected
-                        if (parsed.macroAnalysis.length > 4 || (typeof parsed.macroAnalysis[0] === 'string' && parsed.macroAnalysis[0].includes('Salario a 2 millones'))) {
-                            parsed.macroAnalysis = ALL_DEFAULTS.macroAnalysis;
-                        }
-                    }
-
-                    // FORCE OVERRIDE for 2026-02-01 inflation value (if stuck at 5.42)
-                    if (parsed.inflationRepo && Array.isArray(parsed.inflationRepo)) {
-                        parsed.inflationRepo = parsed.inflationRepo.map((item: any) => {
-                            if (item.date === "2026-02-01" && (item.inflation === 5.42 || item.inflation === "5.42")) {
-                                return { ...item, inflation: 5.29 };
-                            }
-                            return item;
-                        });
-                    }
-
+                    const parsed = applyForcedOverrides(JSON.parse(saved));
                     setData(prev => ({ ...prev, ...parsed }));
                 } catch (e) {
                     console.error('Error parsing local storage data', e);
@@ -333,49 +296,34 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
             }
             setIsLoading(false);
         }
-
         loadData();
-    }, []); // ← empty deps: runs ONLY once on mount
+    }, []);
 
-    // Polling for real-time sync across computers.
-    // Separated from loadData so that saving (isSaving toggle) never triggers a reload.
     useEffect(() => {
         const interval = setInterval(async () => {
-            // Skip polling if editing OR if a save is pending to avoid race conditions
-            if (isEditingGlobal || savePendingRef.current) return; 
+            if (isEditingGlobal || savePendingInternalRef.current) return; 
             try {
                 const response = await fetch(`/api/presentation/shared?t=${Date.now()}`, { cache: 'no-store' });
                 if (response.ok) {
                     const result = await response.json();
                     if (result && result.data) {
                         setData(prev => {
-                            const newData = { ...prev, ...result.data };
+                            const newData = applyForcedOverrides({ ...prev, ...result.data });
                             if (JSON.stringify(prev) === JSON.stringify(newData)) return prev;
                             return newData;
                         });
                         setLastSyncedAt(new Date());
-                        setSyncLog('Sincronizado con la nube ✅');
-                        setSyncError(null);
-                    } else {
-                        setSyncLog('Nube vacía.');
+                        setSyncLog('Sincronizado ✅');
                     }
-                } else {
-                    const errorJson = await response.json().catch(() => ({}));
-                    setSyncLog(`Error Sync: ${response.status}`);
-                    setSyncError(`[${response.status}] ${errorJson.message || 'Error del servidor'}`);
                 }
             } catch (err: any) {
                 console.warn('Polling failed:', err);
-                setSyncError(err.message || 'Error de sincronización');
-                setSyncLog('Sync perdido ⚠️');
             }
-        }, 4000); // Poll every 4s for faster sync
+        }, 4000);
 
         return () => clearInterval(interval);
-    }, [isEditingGlobal]); // ← only isEditingGlobal, NOT isSaving
+    }, [isEditingGlobal]);
 
-    // Debounced Persist to Server and LocalStorage
-    // ONLY triggers when manualChangeRef is true (user edited something)
     useEffect(() => {
         if (isLoading) return;
         if (!manualChangeRef.current) return;
@@ -383,14 +331,8 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
         
         saveTimerRef.current = setTimeout(async () => {
-            // Lock background updates
-            savePendingRef.current = true;
-            setSyncLog('Subiendo cambios a la nube...');
-            
-            // 1. Save to LocalStorage immediately
+            savePendingInternalRef.current = true;
             localStorage.setItem('presentation_data_v2', JSON.stringify(data));
-
-            // 2. Persist to Server
             setIsSaving(true);
             try {
                 const response = await fetch('/api/presentation/shared', {
@@ -399,88 +341,64 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
                     body: JSON.stringify({ data })
                 });
                 if (response.ok) {
-                    const result = await response.json();
-                    setSyncLog(`Cambios fijados en Nube ✅ (${new Date().toLocaleTimeString()})`);
-                    // Crucial: Only clear the manual/pending flags on SUCCESS
+                    setSyncLog(`Guardado ✅ (${new Date().toLocaleTimeString()})`);
                     manualChangeRef.current = false;
-                    savePendingRef.current = false;
-                } else {
-                    const errorJson = await response.json().catch(() => ({}));
-                    setSyncLog(`Error Guardado: ${response.status}`);
-                    setSyncError(`[${response.status}] ${errorJson.message || 'Error del servidor'}`);
                 }
             } catch (err) {
                 console.error('❌ Failed to sync to server:', err);
-                setSyncLog('Fallo al subir datos a la nube ❌');
             } finally {
                 setIsSaving(false);
-                savePendingRef.current = false;
+                savePendingInternalRef.current = false;
             }
-        }, 1200); // 1.2s debounce
+        }, 1200);
 
         return () => {
             if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
         };
     }, [data, isLoading]);
 
-    // Force manual refresh from server
     const refreshFromServer = useCallback(async () => {
         setIsSaving(true);
-        setSyncError(null);
         try {
             const response = await fetch(`/api/presentation/shared?t=${Date.now()}`, { cache: 'no-store' });
             if (response.ok) {
                 const result = await response.json();
                 if (result && result.data) {
-                    setData(prev => ({ ...prev, ...result.data }));
+                    setData(prev => applyForcedOverrides({ ...prev, ...result.data }));
                     setLastSyncedAt(new Date());
                 }
             }
         } catch (err: any) {
-            setSyncError(err.message || 'Error al actualizar');
+             console.error(err);
         } finally {
             setIsSaving(false);
         }
     }, []);
 
-    // Update section logic
     const updateSection = useCallback((section: keyof PresentationData, newData: any) => {
-        manualChangeRef.current = true; // Mark as manual change for the useEffect
+        manualChangeRef.current = true;
         setData(prev => ({ ...prev, [section]: newData }));
     }, []);
 
-    const resetData = useCallback(async () => {
-        if (confirm('¿Estás seguro de restablecer todos los datos a los valores iniciales para TODOS los usuarios?')) {
-            localStorage.removeItem('presentation_data_v2');
-
-            // Also reset server state
-            try {
-                await fetch('/api/presentation/shared', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ data: ALL_DEFAULTS })
-                });
-            } catch (err) {
-                console.error('Failed to reset server state:', err);
-            }
-
+    const resetData = useCallback(() => {
+        if (confirm('¿Estás seguro de restablecer todos los datos a sus valores originales?')) {
+            manualChangeRef.current = true;
             setData(ALL_DEFAULTS);
-            window.location.reload();
         }
     }, []);
 
     return (
-        <PresentationContext.Provider value={{ 
-            data, 
-            updateSection, 
-            resetData, 
-            isLoading, 
+        <PresentationContext.Provider value={{
+            data,
+            updateSection,
+            resetData,
+            isLoading,
             isSaving,
             lastSyncedAt,
             syncError,
             syncLog,
-            setGlobalEditing, 
-            refreshFromServer 
+            setGlobalEditing,
+            refreshFromServer
         }}>
             {children}
         </PresentationContext.Provider>
@@ -489,6 +407,8 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
 
 export const usePresentation = () => {
     const context = useContext(PresentationContext);
-    if (!context) throw new Error('usePresentation must be used within a PresentationProvider');
+    if (context === undefined) {
+        throw new Error('usePresentation must be used within a PresentationProvider');
+    }
     return context;
 };
