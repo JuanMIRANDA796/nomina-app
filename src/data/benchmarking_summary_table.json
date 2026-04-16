@@ -33,5 +33,5 @@
     { "mes": "Marzo", "segmento": "De 12 a 25 SMLV", "entidades": 31, "monto": "655.89 mil M", "desembolsos": "21.840", "tasaProm": "22,28%", "tasaPresente": "18,99%", "variacion": "↑ 3,29%", "desembolsosPresente": "1379 M" },
     { "mes": "Marzo", "segmento": "Consumo - Todos los montos", "entidades": 35, "monto": "3,27 bill.", "desembolsos": "307.248", "tasaProm": "22,95%", "tasaPresente": "20,00%", "variacion": "↑ 2,95%", "desembolsosPresente": "8527 M" },
     { "mes": "Marzo", "segmento": "Vivienda VIS - Hasta 20 años", "entidades": 17, "monto": "590.110 mil M", "desembolsos": "5.730", "tasaProm": "13,13%", "tasaPresente": "11,16%", "variacion": "↑ 1,97%", "desembolsosPresente": "577 M" },
-    { "mes": "Marzo", "segmento": "Vivienda NO VIS pesos - 20 años", "entidades": 18, "monto": "884.330 mil M", "desembolsos": "4.054", "tasaProm": "13,88%", "tasaPresente": "10,48%", "variacion": "↑ 3,40%", "desembolsosPresente": "1630 M" }
+    { "mes": "Marzo", "segmento": "Vivienda VIS - Todos los plazos", "entidades": 18, "monto": "884.330 mil M", "desembolsos": "4.054", "tasaProm": "13,88%", "tasaPresente": "10,48%", "variacion": "↑ 3,40%", "desembolsosPresente": "1630 M" }
 ]
