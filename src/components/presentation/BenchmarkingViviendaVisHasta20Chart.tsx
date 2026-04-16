@@ -23,6 +23,7 @@ export default function BenchmarkingViviendaVisHasta20Chart() {
     const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo'>('marzo');
     const [isEditing, setIsEditing] = useState(false);
 
+    const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingViviendaVisHasta20
         : selectedMonth === 'enero'
             ? globalData.benchmarkingViviendaVisHasta20Enero

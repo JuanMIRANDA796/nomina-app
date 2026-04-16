@@ -1,0 +1,30 @@
+=== TAGS EN LA PAGINA ===
+  a: 28
+  b: 2
+  body: 1
+  br: 1
+  button: 15
+  div: 147
+  h2: 1
+  h6: 2
+  head: 1
+  html: 1
+  input: 12
+  li: 19
+  line: 1
+  link: 4
+  meta: 5
+  nav: 1
+  option: 10
+  p: 8
+  path: 18
+  script: 10
+  select: 2
+  span: 67
+  style: 15
+  svg: 19
+  title: 1
+  ul: 4
+
+=== HTML MUESTRA DE LA TABLA ===
+Ninguno encontrado
