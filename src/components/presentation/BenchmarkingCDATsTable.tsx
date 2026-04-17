@@ -5,9 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCDATsTable() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo'>('marzo');
     const [isEditing, setIsEditing] = useState(false);
+
+    // Sync editing state with global provider to prevent polling overwrites
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingCDATs
@@ -28,7 +33,20 @@ export default function BenchmarkingCDATsTable() {
     const handleUpdate = (groupIdx: number, entIdx: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(data));
         const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value);
-        (newData.groups[groupIdx].entities[entIdx] as any)[field] = val;
+        
+        const currentEntity = newData.groups[groupIdx].entities[entIdx];
+        currentEntity[field] = val;
+
+        // If the entity is "PRESENTE", sync with all other "PRESENTE" rows in all groups
+        if (currentEntity.entity === 'PRESENTE') {
+            newData.groups.forEach((group: any) => {
+                group.entities.forEach((entity: any) => {
+                    if (entity.entity === 'PRESENTE') {
+                        entity[field] = val;
+                    }
+                });
+            });
+        }
 
         updateSection(sectionKey as any, newData);
     };

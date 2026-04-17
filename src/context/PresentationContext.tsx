@@ -224,31 +224,9 @@ const applyForcedOverrides = (merged: any) => {
         });
     }
 
-    // 3. FORCE OVERRIDE for March 2026 benchmarking data
-    const marzoKeys = [
-        'benchmarkingViviendaVisHasta20Marzo',
-        'benchmarkingViviendaVisSup20Marzo',
-        'benchmarkingViviendaNoVisHasta20Marzo',
-        'benchmarkingViviendaNoVisSup20Marzo',
-        'benchmarkingViviendaNoVisUvrHasta20Marzo',
-        'benchmarkingViviendaNoVisUvrSup20Marzo',
-        'benchmarkingViviendaVisUvrHasta20Marzo',
-        'benchmarkingViviendaVisUvrSup20Marzo',
-        'benchmarkingConsumoHasta1Marzo',
-        'benchmarkingConsumo1To3Marzo',
-        'benchmarkingConsumo3To6Marzo',
-        'benchmarkingConsumo6To12Marzo',
-        'benchmarkingConsumo12To25Marzo',
-        'benchmarkingConsumoTodosMarzo',
-        'benchmarkingCDATsMarzo',
-        'benchmarkingCreditsMarzo',
-    ] as const;
-    marzoKeys.forEach((key) => {
-        merged[key] = (ALL_DEFAULTS as any)[key];
-    });
+    // 3. REMOVED FORCE OVERRIDE for March 2026 benchmarking data to allow edits
 
-    // 4. FORCE OVERRIDE summary table and text slides
-    merged.benchmarkingSummaryData = ALL_DEFAULTS.benchmarkingSummaryData;
+    // 4. REMOVED FORCE OVERRIDE summary table to allow edits
     merged.financialLeaderAttributions = merged.financialLeaderAttributions || ALL_DEFAULTS.financialLeaderAttributions;
     merged.cdatTextProposal = merged.cdatTextProposal || ALL_DEFAULTS.cdatTextProposal;
 

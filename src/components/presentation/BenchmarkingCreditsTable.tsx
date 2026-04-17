@@ -5,9 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCreditsTable() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo'>('marzo');
     const [isEditing, setIsEditing] = useState(false);
+
+    // Sync editing state with global provider to prevent polling overwrites
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingCredits
@@ -28,7 +33,23 @@ export default function BenchmarkingCreditsTable() {
     const handleUpdate = (type: 'banks' | 'cooperatives', index: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(data));
         const val = value === '' || value === 'N/A' || value === '-' ? null : parseFloat(value.replace('%', ''));
-        (newData as any)[type][index][field] = val;
+        
+        const currentEntity = (newData as any)[type][index];
+        currentEntity[field] = val;
+
+        // If the entity is "PRESENTE", sync with all other "PRESENTE" rows in both sections
+        if (currentEntity.entity === 'PRESENTE') {
+            ['banks', 'cooperatives'].forEach((t) => {
+                if ((newData as any)[t]) {
+                    (newData as any)[t].forEach((row: any) => {
+                        if (row.entity === 'PRESENTE') {
+                            row[field] = val;
+                        }
+                    });
+                }
+            });
+        }
+
         updateSection(sectionKey as any, newData);
     };
 
