@@ -19,6 +19,9 @@ import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2C
 import BenchmarkingSummaryTable from '@/components/presentation/BenchmarkingSummaryTable';
 import BenchmarkingCreditsTable from '@/components/presentation/BenchmarkingCreditsTable';
 import CDATRateProposalSlide from '@/components/presentation/CDATRateProposalSlide';
+import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabilitiesBalanceChart';
+import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
+import EarlyCancellationsChart from '@/components/presentation/EarlyCancellationsChart';
 import SyncStatusIndicator from '@/components/presentation/SyncStatusIndicator';
 
 export default function PresentationV2Page() {
@@ -176,6 +179,15 @@ export default function PresentationV2Page() {
                     <BenchmarkingCreditsTable />
                 </motion.div>
             </section>
+
+            {/* NEW SLIDES ADDED BY REQUEST */}
+            {[TotalLiabilitiesBalanceChart, TPPCaptacionSaldosChart, EarlyCancellationsChart].map((Chart, i) => (
+                <section key={`extra-chart-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
+                        <Chart />
+                    </motion.div>
+                </section>
+            ))}
 
 
             {/* NEW: CDAT RATE PROPOSAL (Image 5) */}
