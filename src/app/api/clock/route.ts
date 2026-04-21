@@ -1,38 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma, withRetry } from '@/lib/prisma';
 import { getCompanyId } from '@/lib/auth';
 import { startOfDay, endOfDay, subHours, addHours } from 'date-fns';
 import { Prisma } from '@prisma/client';
-
-// Prisma error codes that indicate a transient connection issue (safe to retry)
-const RETRYABLE_CODES = new Set(['P1001', 'P1002', 'P1008', 'P1017', 'P2024']);
-
-/**
- * Retries a Prisma operation up to `maxAttempts` times on transient connection errors.
- * Other errors (e.g. constraint violations) are thrown immediately without retrying.
- */
-async function withRetry<T>(fn: () => Promise<T>, maxAttempts = 3): Promise<T> {
-    let lastError: unknown;
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        try {
-            return await fn();
-        } catch (err) {
-            lastError = err;
-            const isRetryable =
-                (err instanceof Prisma.PrismaClientKnownRequestError && RETRYABLE_CODES.has(err.code)) ||
-                err instanceof Prisma.PrismaClientInitializationError ||
-                err instanceof Prisma.PrismaClientRustPanicError;
-
-            if (!isRetryable) throw err; // Non-transient error — fail immediately
-
-            if (attempt < maxAttempts) {
-                console.warn(`[CLOCK API] DB connection error (attempt ${attempt}/${maxAttempts}), retrying...`);
-                await new Promise(resolve => setTimeout(resolve, 300 * attempt)); // 300ms, 600ms
-            }
-        }
-    }
-    throw lastError;
-}
 
 /**
  * Calculates the canonical "date key" for a given moment in Colombia time.
