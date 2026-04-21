@@ -154,12 +154,19 @@ export async function PUT(
         }
 
         const targetDate = parseISO(date);
+        
+        // Extract the target calendar day (Vercel generates targetDate as 00:00 UTC)
+        const year = targetDate.getUTCFullYear();
+        const month = targetDate.getUTCMonth();
+        const day = targetDate.getUTCDate();
+        
+        // The /api/clock endpoint always stores 'date' as exactly 12:00:00 UTC 
+        // (noon of that calendar day) to avoid edge cases.
+        const canonicalDate = new Date(Date.UTC(year, month, day, 12, 0, 0, 0));
 
         const combineDateTime = (dateObj: Date, value: string) => {
             if (!value) return null;
-            // Check if it's already an ISO string (contains 'T')
             if (value.includes('T')) return new Date(value);
-            // Legacy HH:mm format
             if (value === '00:00') return null;
             const [hours, minutes] = value.split(':').map(Number);
             const newDate = new Date(dateObj);
@@ -174,7 +181,6 @@ export async function PUT(
                 return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
             }
 
-            // Prepare Update Data dynamically to avoid overwriting undefined fields with null
             const updateData: { entryTime?: Date | null; exitTime?: Date | null } = {};
             if (entryTime !== undefined) {
                 updateData.entryTime = entryTime ? combineDateTime(targetDate, entryTime) : null;
@@ -183,14 +189,15 @@ export async function PUT(
                 updateData.exitTime = exitTime ? combineDateTime(targetDate, exitTime) : null;
             }
 
+            // Upsert using the EXACT canonical date so it matches what /api/clock generates
             const record = await prisma.attendance.upsert({
                 where: {
-                    employeeId_date: { employeeId, date: targetDate }
+                    employeeId_date: { employeeId, date: canonicalDate }
                 },
                 update: updateData,
                 create: {
                     employeeId,
-                    date: targetDate,
+                    date: canonicalDate,
                     entryTime: updateData.entryTime ?? null,
                     exitTime: updateData.exitTime ?? null
                 }
@@ -234,13 +241,25 @@ export async function DELETE(
                 return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
             }
 
-            // ROBUST DELETE: Use Range instead of Exact Match to avoid timezone mismatches
-            const targetDay = parseISO(json.date);
-            const start = new Date(targetDay);
-            start.setHours(0, 0, 0, 0);
-            const end = new Date(targetDay);
-            end.setHours(23, 59, 59, 999);
+            // ROBUST DELETE: Find the canonical date
+            const year = targetDay.getUTCFullYear();
+            const month = targetDay.getUTCMonth();
+            const day = targetDay.getUTCDate();
+            
+            // Delete the canonical attendance record (12:00 UTC)
+            const canonicalDate = new Date(Date.UTC(year, month, day, 12, 0, 0, 0));
 
+            await prisma.attendance.deleteMany({
+                where: {
+                    employeeId,
+                    date: canonicalDate
+                }
+            });
+
+            // Also delete any exact matches just in case buggy ones were created
+            const start = new Date(Date.UTC(year, month, day, 0, 0, 0));
+            const end = new Date(Date.UTC(year, month, day, 23, 59, 59));
+            
             await prisma.attendance.deleteMany({
                 where: {
                     employeeId,
@@ -249,7 +268,7 @@ export async function DELETE(
             });
 
             await prisma.absence.deleteMany({
-                where: { employeeId, date }
+                where: { employeeId, date: targetDay }
             });
 
             return NextResponse.json({ success: true });
