@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
@@ -16,6 +16,11 @@ export default function TimeClock() {
     const [actionType, setActionType] = useState<'ENTRY' | 'EXIT' | null>(null);
     const [cedula, setCedula] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    // Synchronous mutex — prevents race condition on rapid double-clicks.
+    // Unlike useState (async), useRef updates are immediate and block concurrent calls
+    // before React has a chance to re-render with the new isLoading=true value.
+    const isSubmittingRef = useRef(false);
 
     // Admin Login State
     const [showAdminLogin, setShowAdminLogin] = useState(false);
@@ -42,10 +47,17 @@ export default function TimeClock() {
 
     const handleAdminLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Synchronous guard: block concurrent submissions before React re-renders
+        if (isSubmittingRef.current) return;
+        isSubmittingRef.current = true;
+
         const companyId = localStorage.getItem('company_id');
         const companyName = localStorage.getItem('company_name');
 
-        if (!companyId || !companyName) return;
+        if (!companyId || !companyName) {
+            isSubmittingRef.current = false;
+            return;
+        }
 
         setIsLoading(true);
         try {
@@ -66,13 +78,22 @@ export default function TimeClock() {
             toast.error('Error de validación');
         } finally {
             setIsLoading(false);
+            isSubmittingRef.current = false;
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Synchronous guard: block concurrent submissions before React re-renders.
+        // This prevents the P2002 race condition caused by rapid double-clicks.
+        if (isSubmittingRef.current) return;
+        isSubmittingRef.current = true;
+
         const companyId = localStorage.getItem('company_id');
-        if (!cedula || !companyId) return;
+        if (!cedula || !companyId) {
+            isSubmittingRef.current = false;
+            return;
+        }
 
         setIsLoading(true);
         try {
@@ -105,6 +126,7 @@ export default function TimeClock() {
             });
         } finally {
             setIsLoading(false);
+            isSubmittingRef.current = false;
         }
     };
 
@@ -216,8 +238,9 @@ export default function TimeClock() {
                                         {actionType === 'ENTRY' ? 'Registrar Entrada' : 'Registrar Salida'}
                                     </h3>
                                     <button
-                                        onClick={() => setShowModal(false)}
-                                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                        onClick={() => !isLoading && setShowModal(false)}
+                                        disabled={isLoading}
+                                        className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                                     >
                                         <X className="w-6 h-6 text-gray-500" />
                                     </button>
