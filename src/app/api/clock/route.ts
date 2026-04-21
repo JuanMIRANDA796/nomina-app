@@ -2,11 +2,28 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCompanyId } from '@/lib/auth';
 import { startOfDay, endOfDay, subHours, addHours } from 'date-fns';
+import { Prisma } from '@prisma/client';
+
+/**
+ * Calculates the canonical "date key" for a given moment in Colombia time.
+ * Always stored as noon UTC-offset to be deterministic and timezone-safe.
+ */
+function getColombiaDateKey(now: Date): { today: Date; todayStart: Date; todayEnd: Date } {
+    const COLOMBIA_OFFSET = 5; // UTC-5, no DST
+    const colombiaTime = subHours(now, COLOMBIA_OFFSET);
+    const todayStart = startOfDay(colombiaTime);
+    const todayEnd = endOfDay(colombiaTime);
+    // Store canonical date as noon of the Colombia day to avoid edge cases at midnight
+    const today = addHours(todayStart, 12);
+    return { today, todayStart, todayEnd };
+}
 
 export async function POST(request: Request) {
     try {
         const companyId = await getCompanyId();
-        if (!companyId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        if (!companyId) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
 
         const { cedula, action } = await request.json(); // action: 'ENTRY' | 'EXIT'
 
@@ -14,11 +31,9 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing data' }, { status: 400 });
         }
 
-        // 1. Find Employee for this company
+        // Find the employee for this company
         const employee = await prisma.employee.findUnique({
-            where: { 
-                companyId_cedula: { companyId, cedula }
-            },
+            where: { companyId_cedula: { companyId, cedula } },
         });
 
         if (!employee) {
@@ -26,151 +41,129 @@ export async function POST(request: Request) {
         }
 
         const now = new Date();
-        const colombiaOffset = 5;
-        const colombiaTime = subHours(now, colombiaOffset);
+        const { today, todayStart, todayEnd } = getColombiaDateKey(now);
 
-        const todayStart = startOfDay(colombiaTime);
-        const today = addHours(todayStart, 12);
-
-        let attendance = await prisma.attendance.findFirst({
-            where: {
-                employeeId: employee.id,
-                date: {
-                    gte: todayStart,
-                    lt: endOfDay(colombiaTime)
-                }
-            },
-        });
-
+        // ── ENTRY ────────────────────────────────────────────────────────────────
         if (action === 'ENTRY') {
-            if (attendance && attendance.entryTime && !attendance.exitTime) {
-                attendance = await prisma.attendance.update({
-                    where: { id: attendance.id },
-                    data: { entryTime: now }
-                });
-                return NextResponse.json({ message: 'Hora de entrada actualizada', time: now });
-            }
-
-            if (!attendance) {
-                attendance = await prisma.attendance.create({
-                    data: {
-                        employeeId: employee.id,
-                        date: today,
-                        entryTime: now,
-                    },
-                });
-                return NextResponse.json({ message: 'Hora de entrada registrada', time: now });
-            } else {
-                if (attendance.entryTime && attendance.exitTime) {
-                    attendance = await prisma.attendance.update({
-                        where: { id: attendance.id },
-                        data: {
-                            entryTime: now,
-                            exitTime: null
-                        },
-                    });
-                    return NextResponse.json({
-                        message: 'Hora de entrada actualizada (Turno reiniciado)',
-                        time: now,
-                        warning: 'Se sobreescribió el registro anterior.'
-                    });
-                }
-                else if (!attendance.entryTime) {
-                    attendance = await prisma.attendance.update({
-                        where: { id: attendance.id },
-                        data: { entryTime: now },
-                    });
-                    return NextResponse.json({ message: 'Hora de entrada registrada', time: now });
-                }
-                else {
-                    attendance = await prisma.attendance.update({
-                        where: { id: attendance.id },
-                        data: { entryTime: now }
-                    });
-                    return NextResponse.json({ message: 'Hora de entrada actualizada', time: now });
-                }
-            }
-        }
-        else if (action === 'EXIT') {
-            const yesterday = subHours(today, 24);
-            const yesterdayAttendance = await prisma.attendance.findFirst({
+            // Read existing record to determine the right response message
+            const existing = await prisma.attendance.findFirst({
                 where: {
                     employeeId: employee.id,
-                    date: yesterday,
-                }
+                    date: { gte: todayStart, lte: todayEnd },
+                },
             });
 
-            let isOvernightShift = false;
+            // UPSERT is atomic: creates if not found, updates if found.
+            // This permanently eliminates the race-condition / P2002 bug.
+            await prisma.attendance.upsert({
+                where: {
+                    employeeId_date: { employeeId: employee.id, date: today },
+                },
+                update: {
+                    entryTime: now,
+                    exitTime: null, // Reset exit so the shift starts fresh
+                },
+                create: {
+                    employeeId: employee.id,
+                    date: today,
+                    entryTime: now,
+                },
+            });
 
-            if (yesterdayAttendance && yesterdayAttendance.entryTime && !yesterdayAttendance.exitTime) {
-                const entryTime = new Date(yesterdayAttendance.entryTime);
-                const durationHours = (now.getTime() - entryTime.getTime()) / (1000 * 60 * 60);
+            if (!existing) {
+                return NextResponse.json({ message: 'Hora de entrada registrada', time: now });
+            }
+            if (existing.entryTime && existing.exitTime) {
+                return NextResponse.json({
+                    message: 'Hora de entrada actualizada (Turno reiniciado)',
+                    time: now,
+                    warning: 'Se sobreescribió el registro anterior.',
+                });
+            }
+            return NextResponse.json({ message: 'Hora de entrada actualizada', time: now });
+        }
 
-                if (durationHours < 14) {
-                    isOvernightShift = true;
+        // ── EXIT ─────────────────────────────────────────────────────────────────
+        if (action === 'EXIT') {
+            const yesterday = subHours(today, 24);
+
+            // Check for an open overnight shift from yesterday
+            const yesterdayRecord = await prisma.attendance.findUnique({
+                where: { employeeId_date: { employeeId: employee.id, date: yesterday } },
+            });
+
+            if (yesterdayRecord?.entryTime && !yesterdayRecord?.exitTime) {
+                const hoursElapsed =
+                    (now.getTime() - new Date(yesterdayRecord.entryTime).getTime()) / 3_600_000;
+
+                if (hoursElapsed < 14) {
+                    // Close the overnight shift on yesterday's record
                     await prisma.attendance.update({
-                        where: { id: yesterdayAttendance.id },
+                        where: { id: yesterdayRecord.id },
                         data: { exitTime: now },
                     });
-
                     return NextResponse.json({
                         message: 'Salida registrada (Turno nocturno cerrado)',
                         time: now,
-                        warning: 'Cierre de turno del día anterior (< 14h).'
+                        warning: 'Cierre de turno del día anterior (< 14h).',
                     });
                 }
             }
 
-            if (!isOvernightShift) {
-                if (!attendance) {
-                    const estimatedEntry = subHours(now, 8);
-                    attendance = await prisma.attendance.create({
-                        data: {
-                            employeeId: employee.id,
-                            date: today,
-                            entryTime: estimatedEntry,
-                            exitTime: now,
-                        },
-                    });
-                    return NextResponse.json({
-                        message: 'Salida registrada (Entrada estimada hace 8h)',
-                        time: now,
-                        warning: 'Se asumió turno de 8 horas.'
-                    });
-                } else {
-                    if (!attendance.entryTime && attendance.exitTime) {
-                        const estimatedEntry = subHours(now, 8);
-                        attendance = await prisma.attendance.update({
-                            where: { id: attendance.id },
-                            data: {
-                                entryTime: estimatedEntry,
-                                exitTime: now
-                            },
-                        });
-                        return NextResponse.json({ message: 'Salida actualizada', time: now });
-                    }
-                    else if (attendance.entryTime && !attendance.exitTime) {
-                        attendance = await prisma.attendance.update({
-                            where: { id: attendance.id },
-                            data: { exitTime: now },
-                        });
-                        return NextResponse.json({ message: 'Hora de salida registrada', time: now });
-                    }
-                    else {
-                        attendance = await prisma.attendance.update({
-                            where: { id: attendance.id },
-                            data: { exitTime: now },
-                        });
-                        return NextResponse.json({ message: 'Hora de salida actualizada', time: now });
-                    }
-                }
+            // Normal exit flow — find today's existing record
+            const todayRecord = await prisma.attendance.findFirst({
+                where: {
+                    employeeId: employee.id,
+                    date: { gte: todayStart, lte: todayEnd },
+                },
+            });
+
+            if (todayRecord) {
+                // Update the existing record's exit time
+                await prisma.attendance.update({
+                    where: { id: todayRecord.id },
+                    data: { exitTime: now },
+                });
+                const msg = todayRecord.exitTime
+                    ? 'Hora de salida actualizada'
+                    : 'Hora de salida registrada';
+                return NextResponse.json({ message: msg, time: now });
+            } else {
+                // No entry found today — upsert with estimated 8-hour entry
+                const estimatedEntry = subHours(now, 8);
+                await prisma.attendance.upsert({
+                    where: {
+                        employeeId_date: { employeeId: employee.id, date: today },
+                    },
+                    update: { exitTime: now },
+                    create: {
+                        employeeId: employee.id,
+                        date: today,
+                        entryTime: estimatedEntry,
+                        exitTime: now,
+                    },
+                });
+                return NextResponse.json({
+                    message: 'Salida registrada (Entrada estimada hace 8h)',
+                    time: now,
+                    warning: 'Se asumió turno de 8 horas.',
+                });
             }
         }
 
         return NextResponse.json({ error: 'Acción no válida' }, { status: 400 });
 
     } catch (error) {
-        console.error(error);
+        console.error('[CLOCK API ERROR]', error);
+
+        // Should never happen with upsert, but kept as last-resort safety net
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+            return NextResponse.json(
+                { error: 'Conflicto de registro de asistencia. Intenta de nuevo.' },
+                { status: 409 }
+            );
+        }
+
         return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
     }
 }
