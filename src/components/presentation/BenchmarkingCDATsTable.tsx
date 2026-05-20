@@ -83,19 +83,20 @@ export default function BenchmarkingCDATsTable() {
     };
 
     // Calculate position dynamically
-    const getPosition = (key: string, value: number | null) => {
+    const getPosition = (groupName: string, key: string, value: number | null) => {
         if (value === null || value === undefined) return '-';
 
-        // Collect all rates for this specific column (key) from ALL entities in ALL groups
+        // Collect all rates for this specific column (key) from ONLY this group
         const allRates: number[] = [];
-        data.groups.forEach((group: any) => {
+        const group = data.groups.find((g: any) => g.name === groupName);
+        if (group) {
             group.entities.forEach((entity: any) => {
                 const rate = entity[key];
                 if (rate !== null && rate !== undefined && typeof rate === 'number') {
                     allRates.push(rate);
                 }
             });
-        });
+        }
 
         if (allRates.length === 0) return '-';
 
@@ -218,7 +219,7 @@ export default function BenchmarkingCDATsTable() {
                                                 </td>
                                                 <td className="p-0 border border-white/10 bg-black/20">
                                                     <div className="text-center py-1 text-slate-500 font-black">
-                                                        {getPosition(col.key, (row as any)[col.key])}
+                                                        {getPosition(group.name, col.key, (row as any)[col.key])}
                                                     </div>
                                                 </td>
                                             </React.Fragment>
