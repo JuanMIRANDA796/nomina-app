@@ -64,6 +64,7 @@ import benchmarkingConsumo6To12MarzoDefault from '@/data/benchmarking_consumo_6_
 import benchmarkingConsumo12To25MarzoDefault from '@/data/benchmarking_consumo_12_to_25_marzo.json';
 import benchmarkingConsumoTodosMarzoDefault from '@/data/benchmarking_consumo_todos_marzo.json';
 import benchmarkingViviendaVisHasta20MarzoDefault from '@/data/benchmarking_vivienda_vis_hasta_20_marzo.json';
+import benchmarkingViviendaVisHasta20AbrilDefault from '@/data/benchmarking_vivienda_vis_hasta_20_abril.json';
 import benchmarkingViviendaVisSup20MarzoDefault from '@/data/benchmarking_vivienda_vis_sup_20_marzo.json';
 import benchmarkingViviendaNoVisHasta20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_hasta_20_marzo.json';
 import benchmarkingViviendaNoVisSup20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_sup_20_marzo.json';
@@ -166,6 +167,7 @@ const ALL_DEFAULTS = {
     benchmarkingViviendaVisUvrHasta20Marzo: benchmarkingViviendaVisUvrHasta20MarzoDefault,
     benchmarkingViviendaVisUvrSup20Marzo: benchmarkingViviendaVisUvrSup20MarzoDefault,
     benchmarkingViviendaVisHasta20Marzo: benchmarkingViviendaVisHasta20MarzoDefault,
+    benchmarkingViviendaVisHasta20Abril: benchmarkingViviendaVisHasta20AbrilDefault,
     benchmarkingViviendaVisSup20Marzo: benchmarkingViviendaVisSup20MarzoDefault,
     benchmarkingConsumoHasta1Marzo: benchmarkingConsumoHasta1MarzoDefault,
     benchmarkingConsumo1To3Marzo: benchmarkingConsumo1To3MarzoDefault,
