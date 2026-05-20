@@ -67,6 +67,7 @@ import benchmarkingViviendaVisHasta20MarzoDefault from '@/data/benchmarking_vivi
 import benchmarkingViviendaVisHasta20AbrilDefault from '@/data/benchmarking_vivienda_vis_hasta_20_abril.json';
 import benchmarkingViviendaVisSup20MarzoDefault from '@/data/benchmarking_vivienda_vis_sup_20_marzo.json';
 import benchmarkingViviendaNoVisHasta20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_hasta_20_marzo.json';
+import benchmarkingViviendaNoVisHasta20AbrilDefault from '@/data/benchmarking_vivienda_no_vis_hasta_20_abril.json';
 import benchmarkingViviendaNoVisSup20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_sup_20_marzo.json';
 import benchmarkingViviendaNoVisUvrHasta20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_uvr_hasta_20_marzo.json';
 import benchmarkingViviendaNoVisUvrSup20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_uvr_sup_20_marzo.json';
@@ -161,6 +162,7 @@ const ALL_DEFAULTS = {
     benchmarkingCDATsMarzo: benchmarkingCDATsMarzoDefault,
     benchmarkingCreditsMarzo: benchmarkingCreditsMarzoDefault,
     benchmarkingViviendaNoVisHasta20Marzo: benchmarkingViviendaNoVisHasta20MarzoDefault,
+    benchmarkingViviendaNoVisHasta20Abril: benchmarkingViviendaNoVisHasta20AbrilDefault,
     benchmarkingViviendaNoVisSup20Marzo: benchmarkingViviendaNoVisSup20MarzoDefault,
     benchmarkingViviendaNoVisUvrHasta20Marzo: benchmarkingViviendaNoVisUvrHasta20MarzoDefault,
     benchmarkingViviendaNoVisUvrSup20Marzo: benchmarkingViviendaNoVisUvrSup20MarzoDefault,
