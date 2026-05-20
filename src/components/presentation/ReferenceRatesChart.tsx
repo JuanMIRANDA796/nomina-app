@@ -28,7 +28,7 @@ export default function ReferenceRatesChart() {
         const newData = [...data];
         newData[index] = {
             ...newData[index],
-            [field]: parseFloat(value) || 0
+            [field]: field === 'month' ? value : (parseFloat(value) || 0)
         };
         updateSection('referenceRates', newData);
     };
