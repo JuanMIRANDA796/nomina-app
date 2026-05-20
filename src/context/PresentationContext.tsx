@@ -230,7 +230,14 @@ const applyForcedOverrides = (merged: any) => {
 
     // 3. REMOVED FORCE OVERRIDE for March 2026 benchmarking data to allow edits
 
-    // 4. REMOVED FORCE OVERRIDE summary table to allow edits
+    // 4. Migration: Ensure Abril rows exist in benchmarkingSummaryData
+    if (merged.benchmarkingSummaryData && Array.isArray(merged.benchmarkingSummaryData)) {
+        const hasAbril = merged.benchmarkingSummaryData.some((r: any) => r.mes === 'Abril');
+        if (!hasAbril) {
+            const abrilDefaults = ALL_DEFAULTS.benchmarkingSummaryData.filter((r: any) => r.mes === 'Abril');
+            merged.benchmarkingSummaryData = [...merged.benchmarkingSummaryData, ...abrilDefaults];
+        }
+    }
     merged.financialLeaderAttributions = merged.financialLeaderAttributions || ALL_DEFAULTS.financialLeaderAttributions;
     merged.cdatTextProposal = merged.cdatTextProposal || ALL_DEFAULTS.cdatTextProposal;
 
