@@ -242,6 +242,15 @@ const applyForcedOverrides = (merged: any) => {
             merged.benchmarkingSummaryData = [...merged.benchmarkingSummaryData, ...abrilDefaults];
         }
     }
+
+    // 5. Migration: Ensure Mayo rows exist in benchmarkingSummaryData
+    if (merged.benchmarkingSummaryData && Array.isArray(merged.benchmarkingSummaryData)) {
+        const hasMayo = merged.benchmarkingSummaryData.some((r: any) => r.mes === 'Mayo');
+        if (!hasMayo) {
+            const mayoDefaults = ALL_DEFAULTS.benchmarkingSummaryData.filter((r: any) => r.mes === 'Mayo');
+            merged.benchmarkingSummaryData = [...merged.benchmarkingSummaryData, ...mayoDefaults];
+        }
+    }
     merged.financialLeaderAttributions = merged.financialLeaderAttributions || ALL_DEFAULTS.financialLeaderAttributions;
     merged.cdatTextProposal = merged.cdatTextProposal || ALL_DEFAULTS.cdatTextProposal;
 

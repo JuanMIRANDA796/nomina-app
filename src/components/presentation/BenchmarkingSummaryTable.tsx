@@ -5,7 +5,7 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingSummaryTable() {
     const { data, updateSection, setGlobalEditing } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState('Abril');
+    const [selectedMonth, setSelectedMonth] = useState('Mayo');
     const [isEditing, setIsEditing] = useState(false);
     
     const globalData = data?.benchmarkingSummaryData || [];
@@ -72,7 +72,7 @@ export default function BenchmarkingSummaryTable() {
                 </div>
 
                 <div className="flex bg-slate-800 p-1 rounded-xl border border-white/10">
-                    {['Diciembre', 'Enero', 'Febrero', 'Marzo', 'Abril'].map((month) => (
+                    {['Diciembre', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'].map((month) => (
                         <button
                             key={month}
                             onClick={() => setSelectedMonth(month)}
