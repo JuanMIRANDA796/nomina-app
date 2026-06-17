@@ -6,7 +6,7 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCreditsTable() {
     const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo' | 'abril'>('abril');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo' | 'abril' | 'mayo'>('mayo');
     const [isEditing, setIsEditing] = useState(false);
 
     // Sync editing state with global provider to prevent polling overwrites
@@ -22,7 +22,9 @@ export default function BenchmarkingCreditsTable() {
                 ? globalData.benchmarkingCreditsFebrero
                 : selectedMonth === 'marzo'
                     ? globalData.benchmarkingCreditsMarzo
-                    : globalData.benchmarkingCreditsAbril;
+                    : selectedMonth === 'abril'
+                        ? globalData.benchmarkingCreditsAbril
+                        : globalData.benchmarkingCreditsMayo;
 
     const sectionKey = selectedMonth === 'diciembre'
         ? 'benchmarkingCredits'
@@ -32,7 +34,9 @@ export default function BenchmarkingCreditsTable() {
                 ? 'benchmarkingCreditsFebrero'
                 : selectedMonth === 'marzo'
                     ? 'benchmarkingCreditsMarzo'
-                    : 'benchmarkingCreditsAbril';
+                    : selectedMonth === 'abril'
+                        ? 'benchmarkingCreditsAbril'
+                        : 'benchmarkingCreditsMayo';
 
     const handleUpdate = (type: 'banks' | 'cooperatives', index: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(data));
@@ -59,7 +63,7 @@ export default function BenchmarkingCreditsTable() {
 
     const getVariation = (type: 'banks' | 'cooperatives', entityName: string, field: string, currentVal: number | null) => {
         if (selectedMonth === 'diciembre' || currentVal === null) return null;
-        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCredits : selectedMonth === 'febrero' ? globalData.benchmarkingCreditsEnero : selectedMonth === 'marzo' ? globalData.benchmarkingCreditsFebrero : globalData.benchmarkingCreditsMarzo;
+        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCredits : selectedMonth === 'febrero' ? globalData.benchmarkingCreditsEnero : selectedMonth === 'marzo' ? globalData.benchmarkingCreditsFebrero : selectedMonth === 'abril' ? globalData.benchmarkingCreditsMarzo : globalData.benchmarkingCreditsAbril;
         if (!prevData) return null;
         const section = (prevData as any)[type];
         if (!section) return null;
@@ -193,12 +197,12 @@ export default function BenchmarkingCreditsTable() {
                         Benchmarking Vivienda y Consumo
                     </h3>
                     <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">
-                        Tasas de cartelera al {selectedMonth === 'marzo' ? '16/04/2026' : selectedMonth === 'febrero' ? '16/03/2026' : selectedMonth === 'enero' ? '10/01/2026' : selectedMonth === 'diciembre' ? '10/12/2025' : '15/05/2026'}
+                        Tasas de cartelera al {selectedMonth === 'marzo' ? '16/04/2026' : selectedMonth === 'febrero' ? '16/03/2026' : selectedMonth === 'enero' ? '10/01/2026' : selectedMonth === 'diciembre' ? '10/12/2025' : selectedMonth === 'abril' ? '15/05/2026' : '15/06/2026'}
                     </p>
                 </div>
                 <div className="flex gap-4 items-center">
                     <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner">
-                        {(['diciembre', 'enero', 'febrero', 'marzo', 'abril'] as const).map(m => (
+                        {(['diciembre', 'enero', 'febrero', 'marzo', 'abril', 'mayo'] as const).map(m => (
                             <button
                                 key={m}
                                 onClick={() => setSelectedMonth(m)}

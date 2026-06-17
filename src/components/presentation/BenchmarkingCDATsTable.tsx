@@ -6,7 +6,7 @@ import { usePresentation } from '@/context/PresentationContext';
 
 export default function BenchmarkingCDATsTable() {
     const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo' | 'abril'>('abril');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo' | 'abril' | 'mayo'>('mayo');
     const [isEditing, setIsEditing] = useState(false);
 
     // Sync editing state with global provider to prevent polling overwrites
@@ -22,7 +22,9 @@ export default function BenchmarkingCDATsTable() {
                 ? globalData.benchmarkingCDATsFebrero
                 : selectedMonth === 'marzo'
                     ? globalData.benchmarkingCDATsMarzo
-                    : globalData.benchmarkingCDATsAbril;
+                    : selectedMonth === 'abril'
+                        ? globalData.benchmarkingCDATsAbril
+                        : globalData.benchmarkingCDATsMayo;
 
     const sectionKey = selectedMonth === 'diciembre'
         ? 'benchmarkingCDATs'
@@ -32,7 +34,9 @@ export default function BenchmarkingCDATsTable() {
                 ? 'benchmarkingCDATsFebrero'
                 : selectedMonth === 'marzo'
                     ? 'benchmarkingCDATsMarzo'
-                    : 'benchmarkingCDATsAbril';
+                    : selectedMonth === 'abril'
+                        ? 'benchmarkingCDATsAbril'
+                        : 'benchmarkingCDATsMayo';
 
     const handleUpdate = (groupIdx: number, entIdx: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(data));
@@ -68,7 +72,7 @@ export default function BenchmarkingCDATsTable() {
         if (selectedMonth === 'diciembre' || currentVal === null) return null;
 
         // Find previous month data
-        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCDATs : selectedMonth === 'febrero' ? globalData.benchmarkingCDATsEnero : selectedMonth === 'marzo' ? globalData.benchmarkingCDATsFebrero : globalData.benchmarkingCDATsMarzo;
+        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCDATs : selectedMonth === 'febrero' ? globalData.benchmarkingCDATsEnero : selectedMonth === 'marzo' ? globalData.benchmarkingCDATsFebrero : selectedMonth === 'abril' ? globalData.benchmarkingCDATsMarzo : globalData.benchmarkingCDATsAbril;
         if (!prevData) return null;
         const group = prevData.groups.find((g: any) => g.name === groupName);
         if (!group) return null;
@@ -114,9 +118,9 @@ export default function BenchmarkingCDATsTable() {
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-4">
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-indigo-400 bg-clip-text text-transparent">
-                        Benchmarking CDATs <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : selectedMonth === 'febrero' ? 'Febrero' : selectedMonth === 'marzo' ? 'Marzo' : 'Abril'}</span>
+                        Benchmarking CDATs <span className="text-pink-400 opacity-80">{selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : selectedMonth === 'febrero' ? 'Febrero' : selectedMonth === 'marzo' ? 'Marzo' : selectedMonth === 'abril' ? 'Abril' : 'Mayo'}</span>
                     </h3>
-                    <p className="text-slate-400 text-sm font-medium">Tasas de cartelera al {selectedMonth === 'diciembre' ? '10/12/2025' : selectedMonth === 'enero' ? '10/01/2026' : selectedMonth === 'febrero' ? '19/03/2026' : selectedMonth === 'marzo' ? '16/04/2026' : '15/05/2026'}</p>
+                    <p className="text-slate-400 text-sm font-medium">Tasas de cartelera al {selectedMonth === 'diciembre' ? '10/12/2025' : selectedMonth === 'enero' ? '10/01/2026' : selectedMonth === 'febrero' ? '19/03/2026' : selectedMonth === 'marzo' ? '16/04/2026' : selectedMonth === 'abril' ? '15/05/2026' : '15/06/2026'}</p>
                 </div>
                 <div className="flex gap-4 items-center">
                     <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner">
@@ -149,6 +153,12 @@ export default function BenchmarkingCDATsTable() {
                             className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'abril' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
                         >
                             Abr
+                        </button>
+                        <button
+                            onClick={() => setSelectedMonth('mayo')}
+                            className={`px-4 py-1.5 text-xs font-bold transition-all duration-300 rounded-lg ${selectedMonth === 'mayo' ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
+                        >
+                            May
                         </button>
                     </div>
                     <button

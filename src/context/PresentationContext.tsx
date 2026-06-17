@@ -77,8 +77,10 @@ import benchmarkingViviendaVisUvrHasta20MarzoDefault from '@/data/benchmarking_v
 import benchmarkingViviendaVisUvrSup20MarzoDefault from '@/data/benchmarking_vivienda_vis_uvr_sup_20_marzo.json';
 import benchmarkingCDATsMarzoDefault from '@/data/benchmarking_cdats_marzo.json';
 import benchmarkingCDATsAbrilDefault from '@/data/benchmarking_cdats_abril.json';
+import benchmarkingCDATsMayoDefault from '@/data/benchmarking_cdats_mayo.json';
 import benchmarkingCreditsMarzoDefault from '@/data/benchmarking_credits_marzo.json';
 import benchmarkingCreditsAbrilDefault from '@/data/benchmarking_credits_abril.json';
+import benchmarkingCreditsMayoDefault from '@/data/benchmarking_credits_mayo.json';
 import totalLiabilitiesBalanceDefault from '@/data/total_liabilities_balance.json';
 import earlyCancellationsDefault from '@/data/early_cancellations.json';
 import tppCaptacionSaldosDefault from '@/data/tpp_captacion_saldos.json';
@@ -165,8 +167,10 @@ const ALL_DEFAULTS = {
     benchmarkingCDATsFebrero: benchmarkingCDATsFebreroDefault,
     benchmarkingCDATsMarzo: benchmarkingCDATsMarzoDefault,
     benchmarkingCDATsAbril: benchmarkingCDATsAbrilDefault,
+    benchmarkingCDATsMayo: benchmarkingCDATsMayoDefault,
     benchmarkingCreditsMarzo: benchmarkingCreditsMarzoDefault,
     benchmarkingCreditsAbril: benchmarkingCreditsAbrilDefault,
+    benchmarkingCreditsMayo: benchmarkingCreditsMayoDefault,
     benchmarkingViviendaNoVisHasta20Marzo: benchmarkingViviendaNoVisHasta20MarzoDefault,
     benchmarkingViviendaNoVisHasta20Abril: benchmarkingViviendaNoVisHasta20AbrilDefault,
     benchmarkingViviendaNoVisHasta20Mayo: benchmarkingViviendaNoVisHasta20MayoDefault,
@@ -262,6 +266,14 @@ const applyForcedOverrides = (merged: any) => {
     }
     if (!merged.benchmarkingViviendaNoVisHasta20Mayo) {
         merged.benchmarkingViviendaNoVisHasta20Mayo = ALL_DEFAULTS.benchmarkingViviendaNoVisHasta20Mayo;
+    }
+
+    // 7. Migration: Ensure Mayo CDATs and Credits defaults exist in merged snapshot
+    if (!merged.benchmarkingCDATsMayo) {
+        merged.benchmarkingCDATsMayo = ALL_DEFAULTS.benchmarkingCDATsMayo;
+    }
+    if (!merged.benchmarkingCreditsMayo) {
+        merged.benchmarkingCreditsMayo = ALL_DEFAULTS.benchmarkingCreditsMayo;
     }
 
     merged.financialLeaderAttributions = merged.financialLeaderAttributions || ALL_DEFAULTS.financialLeaderAttributions;

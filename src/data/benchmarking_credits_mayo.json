@@ -1,0 +1,174 @@
+{
+    "banks": [
+        {
+            "entity": "PRESENTE",
+            "vis_tasa": 12.26,
+            "vis_rank": 1,
+            "novis_tasa": 11.79,
+            "novis_rank": 1,
+            "vehiculo_tasa": 16.63,
+            "vehiculo_rank": 1,
+            "cc_desde": 16.63,
+            "cc_hasta": 20.15,
+            "cc_rank": 3
+        },
+        {
+            "entity": "Banco Davivienda",
+            "vis_tasa": 14.10,
+            "vis_rank": 4,
+            "novis_tasa": 14.10,
+            "novis_rank": 3,
+            "vehiculo_tasa": 17.18,
+            "vehiculo_rank": 2,
+            "cc_desde": 17.73,
+            "cc_hasta": null,
+            "cc_rank": 6
+        },
+        {
+            "entity": "Banco de Occidente",
+            "vis_tasa": 14.67,
+            "vis_rank": 8,
+            "novis_tasa": null,
+            "novis_rank": null,
+            "vehiculo_tasa": 18.33,
+            "vehiculo_rank": 5,
+            "cc_desde": 17.46,
+            "cc_hasta": 28.02,
+            "cc_rank": 5
+        },
+        {
+            "entity": "Banco Caja Social S.A.",
+            "vis_tasa": 13.20,
+            "vis_rank": 2,
+            "novis_tasa": 13.50,
+            "novis_rank": 2,
+            "vehiculo_tasa": 18.02,
+            "vehiculo_rank": 4,
+            "cc_desde": 16.05,
+            "cc_hasta": 23.95,
+            "cc_rank": 1
+        },
+        {
+            "entity": "Bancolombia",
+            "vis_tasa": 14.40,
+            "vis_rank": 6,
+            "novis_tasa": 14.50,
+            "novis_rank": 4,
+            "vehiculo_tasa": 19.28,
+            "vehiculo_rank": 6,
+            "cc_desde": 17.09,
+            "cc_hasta": 28.77,
+            "cc_rank": 4
+        },
+        {
+            "entity": "AV Villas",
+            "vis_tasa": 14.30,
+            "vis_rank": 5,
+            "novis_tasa": 15.60,
+            "novis_rank": 6,
+            "vehiculo_tasa": null,
+            "vehiculo_rank": null,
+            "cc_desde": 16.55,
+            "cc_hasta": 28.17,
+            "cc_rank": 2
+        },
+        {
+            "entity": "Scotiabank Colpatria S.A.",
+            "vis_tasa": 14.59,
+            "vis_rank": 7,
+            "novis_tasa": 14.90,
+            "novis_rank": 5,
+            "vehiculo_tasa": null,
+            "vehiculo_rank": null,
+            "cc_desde": null,
+            "cc_hasta": null,
+            "cc_rank": null
+        },
+        {
+            "entity": "Itaú",
+            "vis_tasa": 14.00,
+            "vis_rank": 3,
+            "novis_tasa": null,
+            "novis_rank": null,
+            "vehiculo_tasa": null,
+            "vehiculo_rank": null,
+            "cc_desde": 20.98,
+            "cc_hasta": null,
+            "cc_rank": 8
+        },
+        {
+            "entity": "Banco de Bogotá",
+            "vis_tasa": 16.08,
+            "vis_rank": 9,
+            "novis_tasa": 17.78,
+            "novis_rank": 7,
+            "vehiculo_tasa": 17.74,
+            "vehiculo_rank": 3,
+            "cc_desde": 25.29,
+            "cc_hasta": null,
+            "cc_rank": 10
+        },
+        {
+            "entity": "Banco Popular",
+            "vis_tasa": 17.05,
+            "vis_rank": 10,
+            "novis_tasa": null,
+            "novis_rank": null,
+            "vehiculo_tasa": null,
+            "vehiculo_rank": null,
+            "cc_desde": 24.61,
+            "cc_hasta": 25.23,
+            "cc_rank": 9
+        }
+    ],
+    "cooperatives": [
+        {
+            "entity": "PRESENTE",
+            "vis_tasa": 12.26,
+            "vis_rank": 2,
+            "novis_tasa": 11.79,
+            "novis_rank": 1,
+            "vehiculo_tasa": 16.63,
+            "vehiculo_rank": 2,
+            "cc_desde": 17.00,
+            "cc_hasta": null,
+            "cc_rank": 1
+        },
+        {
+            "entity": "Cotrafa",
+            "vis_tasa": 12.73,
+            "vis_rank": 3,
+            "novis_tasa": 15.60,
+            "novis_rank": 4,
+            "vehiculo_tasa": null,
+            "vehiculo_rank": null,
+            "cc_desde": null,
+            "cc_hasta": null,
+            "cc_rank": null
+        },
+        {
+            "entity": "Confiar",
+            "vis_tasa": 11.95,
+            "vis_rank": 1,
+            "novis_tasa": 12.85,
+            "novis_rank": 2,
+            "vehiculo_tasa": null,
+            "vehiculo_rank": null,
+            "cc_desde": null,
+            "cc_hasta": null,
+            "cc_rank": null
+        },
+        {
+            "entity": "Coopetraban",
+            "vis_tasa": 14.71,
+            "vis_rank": 4,
+            "novis_tasa": 14.71,
+            "novis_rank": 3,
+            "vehiculo_tasa": 14.98,
+            "vehiculo_rank": 1,
+            "cc_desde": null,
+            "cc_hasta": null,
+            "cc_rank": null
+        }
+    ]
+}
