@@ -65,9 +65,11 @@ import benchmarkingConsumo12To25MarzoDefault from '@/data/benchmarking_consumo_1
 import benchmarkingConsumoTodosMarzoDefault from '@/data/benchmarking_consumo_todos_marzo.json';
 import benchmarkingViviendaVisHasta20MarzoDefault from '@/data/benchmarking_vivienda_vis_hasta_20_marzo.json';
 import benchmarkingViviendaVisHasta20AbrilDefault from '@/data/benchmarking_vivienda_vis_hasta_20_abril.json';
+import benchmarkingViviendaVisHasta20MayoDefault from '@/data/benchmarking_vivienda_vis_hasta_20_mayo.json';
 import benchmarkingViviendaVisSup20MarzoDefault from '@/data/benchmarking_vivienda_vis_sup_20_marzo.json';
 import benchmarkingViviendaNoVisHasta20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_hasta_20_marzo.json';
 import benchmarkingViviendaNoVisHasta20AbrilDefault from '@/data/benchmarking_vivienda_no_vis_hasta_20_abril.json';
+import benchmarkingViviendaNoVisHasta20MayoDefault from '@/data/benchmarking_vivienda_no_vis_hasta_20_mayo.json';
 import benchmarkingViviendaNoVisSup20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_sup_20_marzo.json';
 import benchmarkingViviendaNoVisUvrHasta20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_uvr_hasta_20_marzo.json';
 import benchmarkingViviendaNoVisUvrSup20MarzoDefault from '@/data/benchmarking_vivienda_no_vis_uvr_sup_20_marzo.json';
@@ -167,6 +169,7 @@ const ALL_DEFAULTS = {
     benchmarkingCreditsAbril: benchmarkingCreditsAbrilDefault,
     benchmarkingViviendaNoVisHasta20Marzo: benchmarkingViviendaNoVisHasta20MarzoDefault,
     benchmarkingViviendaNoVisHasta20Abril: benchmarkingViviendaNoVisHasta20AbrilDefault,
+    benchmarkingViviendaNoVisHasta20Mayo: benchmarkingViviendaNoVisHasta20MayoDefault,
     benchmarkingViviendaNoVisSup20Marzo: benchmarkingViviendaNoVisSup20MarzoDefault,
     benchmarkingViviendaNoVisUvrHasta20Marzo: benchmarkingViviendaNoVisUvrHasta20MarzoDefault,
     benchmarkingViviendaNoVisUvrSup20Marzo: benchmarkingViviendaNoVisUvrSup20MarzoDefault,
@@ -174,6 +177,7 @@ const ALL_DEFAULTS = {
     benchmarkingViviendaVisUvrSup20Marzo: benchmarkingViviendaVisUvrSup20MarzoDefault,
     benchmarkingViviendaVisHasta20Marzo: benchmarkingViviendaVisHasta20MarzoDefault,
     benchmarkingViviendaVisHasta20Abril: benchmarkingViviendaVisHasta20AbrilDefault,
+    benchmarkingViviendaVisHasta20Mayo: benchmarkingViviendaVisHasta20MayoDefault,
     benchmarkingViviendaVisSup20Marzo: benchmarkingViviendaVisSup20MarzoDefault,
     benchmarkingConsumoHasta1Marzo: benchmarkingConsumoHasta1MarzoDefault,
     benchmarkingConsumo1To3Marzo: benchmarkingConsumo1To3MarzoDefault,
@@ -251,6 +255,15 @@ const applyForcedOverrides = (merged: any) => {
             merged.benchmarkingSummaryData = [...merged.benchmarkingSummaryData, ...mayoDefaults];
         }
     }
+
+    // 6. Migration: Ensure Mayo Vivienda defaults exist in merged snapshot
+    if (!merged.benchmarkingViviendaVisHasta20Mayo) {
+        merged.benchmarkingViviendaVisHasta20Mayo = ALL_DEFAULTS.benchmarkingViviendaVisHasta20Mayo;
+    }
+    if (!merged.benchmarkingViviendaNoVisHasta20Mayo) {
+        merged.benchmarkingViviendaNoVisHasta20Mayo = ALL_DEFAULTS.benchmarkingViviendaNoVisHasta20Mayo;
+    }
+
     merged.financialLeaderAttributions = merged.financialLeaderAttributions || ALL_DEFAULTS.financialLeaderAttributions;
     merged.cdatTextProposal = merged.cdatTextProposal || ALL_DEFAULTS.cdatTextProposal;
 

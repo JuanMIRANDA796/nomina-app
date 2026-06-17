@@ -20,7 +20,7 @@ import EditableStatsSidebar from './EditableStatsSidebar';
 
 export default function BenchmarkingViviendaNoVisHasta20Chart() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo' | 'abril'>('abril');
+    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo' | 'abril' | 'mayo'>('mayo');
     const [isEditing, setIsEditing] = useState(false);
 
     const data = selectedMonth === 'diciembre'
@@ -31,7 +31,9 @@ export default function BenchmarkingViviendaNoVisHasta20Chart() {
                 ? globalData.benchmarkingViviendaNoVisHasta20Febrero
                 : selectedMonth === 'marzo'
                     ? globalData.benchmarkingViviendaNoVisHasta20Marzo
-                    : globalData.benchmarkingViviendaNoVisHasta20Abril;
+                    : selectedMonth === 'abril'
+                        ? globalData.benchmarkingViviendaNoVisHasta20Abril
+                        : globalData.benchmarkingViviendaNoVisHasta20Mayo;
 
     const sectionKey = selectedMonth === 'diciembre'
         ? 'benchmarkingViviendaNoVisHasta20'
@@ -41,7 +43,9 @@ export default function BenchmarkingViviendaNoVisHasta20Chart() {
                 ? 'benchmarkingViviendaNoVisHasta20Febrero'
                 : selectedMonth === 'marzo'
                     ? 'benchmarkingViviendaNoVisHasta20Marzo'
-                    : 'benchmarkingViviendaNoVisHasta20Abril';
+                    : selectedMonth === 'abril'
+                        ? 'benchmarkingViviendaNoVisHasta20Abril'
+                        : 'benchmarkingViviendaNoVisHasta20Mayo';
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
@@ -62,7 +66,7 @@ export default function BenchmarkingViviendaNoVisHasta20Chart() {
                 <EditableChartTitle
                     mainTitle="Benchmarking - Compra de vivienda NO VIS pesos"
                     subtitle="Hasta 20 años"
-                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : selectedMonth === 'febrero' ? 'Febrero' : selectedMonth === 'marzo' ? 'Marzo' : 'Abril'}
+                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : selectedMonth === 'febrero' ? 'Febrero' : selectedMonth === 'marzo' ? 'Marzo' : selectedMonth === 'abril' ? 'Abril' : 'Mayo'}
                     subtitleColor="text-orange-500 font-semibold text-lg"
                 />
                 <div className="flex gap-3 items-center">
@@ -72,6 +76,7 @@ export default function BenchmarkingViviendaNoVisHasta20Chart() {
                         <button onClick={() => setSelectedMonth('febrero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'febrero' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}>Feb</button>
                         <button onClick={() => setSelectedMonth('marzo')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'marzo' ? 'bg-pink-600 text-white' : 'text-slate-400 hover:text-white'}`}>Mar</button>
                         <button onClick={() => setSelectedMonth('abril')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'abril' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}>Abr</button>
+                        <button onClick={() => setSelectedMonth('mayo')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'mayo' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}>May</button>
                     </div>
                     <RateBox 
                         presenteTpp={presenteTpp} 

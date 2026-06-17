@@ -1,0 +1,44 @@
+[
+    {
+        "entity": "17 entidades",
+        "disbursements_num": 8084,
+        "amount": 839730,
+        "tpp": 13.65
+    },
+    {
+        "entity": "Banco Davivienda",
+        "disbursements_num": 1914,
+        "amount": 211846,
+        "tpp": 14.07
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 1442,
+        "amount": 182784,
+        "tpp": 14.81
+    },
+    {
+        "entity": "Banco Caja Social S.A.",
+        "disbursements_num": 1527,
+        "amount": 113535,
+        "tpp": 12.75
+    },
+    {
+        "entity": "Banco de Bogotá",
+        "disbursements_num": 896,
+        "amount": 110334,
+        "tpp": 14.63
+    },
+    {
+        "entity": "Fondo Nacional del Ahorro",
+        "disbursements_num": 922,
+        "amount": 93628,
+        "tpp": 10.87
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": 6,
+        "amount": 597,
+        "tpp": 13.12
+    }
+]
