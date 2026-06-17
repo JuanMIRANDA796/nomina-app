@@ -18,7 +18,7 @@ import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2C
 // New Components for V2
 import BenchmarkingSummaryTable from '@/components/presentation/BenchmarkingSummaryTable';
 import BenchmarkingCreditsTable from '@/components/presentation/BenchmarkingCreditsTable';
-import CDATRateProposalSlide from '@/components/presentation/CDATRateProposalSlide';
+import DeficitFiscalChart from '@/components/presentation/DeficitFiscalChart';
 import TotalLiabilitiesBalanceChart from '@/components/presentation/TotalLiabilitiesBalanceChart';
 import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldosChart';
 import EarlyCancellationsChart from '@/components/presentation/EarlyCancellationsChart';
@@ -142,7 +142,7 @@ export default function PresentationV2Page() {
             </section>
 
             {/* CHART: TES & HISTORICAL */}
-            {[HistoricalRatesV2Chart, ReferenceRatesChart, InflationVsRepoChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart, PortfolioBalanceByLineChart].map((Chart, i) => (
+            {[HistoricalRatesV2Chart, ReferenceRatesChart, InflationVsRepoChart, DeficitFiscalChart, PortfolioStockRatesChart, DisbursementRatesChart, MonthlyDisbursementsChart, PortfolioBalanceByLineChart].map((Chart, i) => (
                 <section key={`chart-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                         <Chart />
@@ -188,14 +188,6 @@ export default function PresentationV2Page() {
                     </motion.div>
                 </section>
             ))}
-
-
-            {/* NEW: CDAT RATE PROPOSAL (Image 5) */}
-            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
-                <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
-                    <CDATRateProposalSlide />
-                </motion.div>
-            </section>
 
 
             <div className="fixed bottom-8 right-8 z-[100] flex gap-4">

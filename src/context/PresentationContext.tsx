@@ -94,6 +94,8 @@ import creditRateProposalsDefault from '@/data/credit_rate_proposal_data.json';
 import benchmarkingSummaryTableDefault from '@/data/benchmarking_summary_table.json';
 import financialLeaderAttributionsDefault from '@/data/financial_leader_attributions.json';
 import cdatTextProposalDefault from '@/data/cdat_text_proposal.json';
+import deficitFiscalDefault from '@/data/deficit_fiscal.json';
+
 
 const metadataDefault = {
     title: 'COMITÉ DE PRECIOS FEBRERO 2026',
@@ -198,6 +200,7 @@ const ALL_DEFAULTS = {
     benchmarkingSummaryData: benchmarkingSummaryTableDefault,
     financialLeaderAttributions: financialLeaderAttributionsDefault,
     cdatTextProposal: cdatTextProposalDefault,
+    deficitFiscal: deficitFiscalDefault,
     metadata: metadataDefault,
     macroAnalysis: macroAnalysisDefault,
 };
@@ -278,6 +281,10 @@ const applyForcedOverrides = (merged: any) => {
 
     merged.financialLeaderAttributions = merged.financialLeaderAttributions || ALL_DEFAULTS.financialLeaderAttributions;
     merged.cdatTextProposal = merged.cdatTextProposal || ALL_DEFAULTS.cdatTextProposal;
+
+    if (!merged.deficitFiscal) {
+        merged.deficitFiscal = ALL_DEFAULTS.deficitFiscal;
+    }
 
     return merged;
 };
