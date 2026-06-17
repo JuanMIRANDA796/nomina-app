@@ -271,10 +271,8 @@ const applyForcedOverrides = (merged: any) => {
         merged.benchmarkingViviendaNoVisHasta20Mayo = ALL_DEFAULTS.benchmarkingViviendaNoVisHasta20Mayo;
     }
 
-    // 7. Migration: Ensure Mayo CDATs and Credits defaults exist in merged snapshot
-    if (!merged.benchmarkingCDATsMayo) {
-        merged.benchmarkingCDATsMayo = ALL_DEFAULTS.benchmarkingCDATsMayo;
-    }
+    // 7. Migration: Ensure Mayo CDATs and Credits defaults exist in merged snapshot, and FORCE OVERRIDE CDATs Mayo to ensure correct values are loaded from the JSON file
+    merged.benchmarkingCDATsMayo = ALL_DEFAULTS.benchmarkingCDATsMayo;
     if (!merged.benchmarkingCreditsMayo) {
         merged.benchmarkingCreditsMayo = ALL_DEFAULTS.benchmarkingCreditsMayo;
     }
