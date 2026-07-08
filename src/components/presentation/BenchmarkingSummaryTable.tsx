@@ -3,13 +3,22 @@
 import React, { useState, useEffect } from 'react';
 import { usePresentation } from '@/context/PresentationContext';
 
+const MONTH_ORDER = ['Diciembre', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre'];
+
 export default function BenchmarkingSummaryTable() {
     const { data, updateSection, setGlobalEditing } = usePresentation();
     const [selectedMonth, setSelectedMonth] = useState('Mayo');
     const [isEditing, setIsEditing] = useState(false);
+    const [showAddMenu, setShowAddMenu] = useState(false);
     
     const globalData = data?.benchmarkingSummaryData || [];
     const [localData, setLocalData] = useState<any[]>(globalData);
+
+    const existingMonths = Array.from(new Set(globalData.map((d: any) => d.mes))).sort(
+        (a: any, b: any) => MONTH_ORDER.indexOf(a) - MONTH_ORDER.indexOf(b)
+    );
+
+    const remainingMonths = MONTH_ORDER.filter(m => !existingMonths.includes(m));
 
     useEffect(() => {
         if (!isEditing) {
@@ -33,6 +42,28 @@ export default function BenchmarkingSummaryTable() {
         setLocalData(globalData);
         setGlobalEditing(false);
         setIsEditing(false);
+    };
+
+    const handleAddMonth = (monthName: string) => {
+        const latestMonth = existingMonths[existingMonths.length - 1] || 'Mayo';
+        const templateRows = globalData.filter((d: any) => d.mes === latestMonth);
+        
+        const newRows = templateRows.map((row: any) => ({
+            ...row,
+            mes: monthName,
+            entidades: null,
+            monto: '',
+            desembolsos: '',
+            tasaProm: '',
+            tasaPresente: '',
+            variacion: '',
+            desembolsosPresente: ''
+        }));
+        
+        const updatedData = [...globalData, ...newRows];
+        updateSection('benchmarkingSummaryData', updatedData);
+        setSelectedMonth(monthName);
+        setShowAddMenu(false);
     };
 
     return (
@@ -71,19 +102,49 @@ export default function BenchmarkingSummaryTable() {
                     <p className="text-slate-400 mt-1">Comparativo de tasas y montos por segmento</p>
                 </div>
 
-                <div className="flex bg-slate-800 p-1 rounded-xl border border-white/10">
-                    {['Diciembre', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'].map((month) => (
-                        <button
-                            key={month}
-                            onClick={() => setSelectedMonth(month)}
-                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${selectedMonth === month
-                                ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/30'
-                                : 'text-slate-400 hover:text-white'
-                                }`}
-                        >
-                            {month}
-                        </button>
-                    ))}
+                <div className="flex items-center gap-3">
+                    <div className="flex bg-slate-800 p-1 rounded-xl border border-white/10 flex-wrap gap-0.5">
+                        {existingMonths.map((month: any) => (
+                            <button
+                                key={month}
+                                onClick={() => setSelectedMonth(month)}
+                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${selectedMonth === month
+                                    ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/30'
+                                    : 'text-slate-400 hover:text-white'
+                                    }`}
+                            >
+                                {month}
+                            </button>
+                        ))}
+                    </div>
+
+                    {isEditing && (
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowAddMenu(!showAddMenu)}
+                                className="px-3 py-1.5 bg-pink-600/20 hover:bg-pink-600/40 text-pink-400 rounded-lg text-xs font-bold transition-all border border-pink-500/20 flex items-center gap-1 shadow-lg"
+                            >
+                                + Agregar Mes
+                            </button>
+                            {showAddMenu && (
+                                <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-50 p-2 text-left">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 py-1 mb-1">Seleccionar Mes</p>
+                                    {remainingMonths.map((m: any) => (
+                                        <button
+                                            key={m}
+                                            onClick={() => handleAddMonth(m)}
+                                            className="w-full text-left px-3 py-2 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition-all"
+                                        >
+                                            {m}
+                                        </button>
+                                    ))}
+                                    {remainingMonths.length === 0 && (
+                                        <p className="text-xs text-slate-500 px-2 py-1">Todos los meses agregados</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
 

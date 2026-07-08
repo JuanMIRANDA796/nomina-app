@@ -4,39 +4,98 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 
+const MONTH_ORDER = ['diciembre', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre'];
+const MONTH_LABELS: { [key: string]: string } = {
+    diciembre: 'Dic',
+    enero: 'Ene',
+    febrero: 'Feb',
+    marzo: 'Mar',
+    abril: 'Abr',
+    mayo: 'May',
+    junio: 'Jun',
+    julio: 'Jul',
+    agosto: 'Ago',
+    septiembre: 'Sep',
+    octubre: 'Oct',
+    noviembre: 'Nov',
+};
+const MONTH_FULL_LABELS: { [key: string]: string } = {
+    diciembre: 'Diciembre',
+    enero: 'Enero',
+    febrero: 'Febrero',
+    marzo: 'Marzo',
+    abril: 'Abril',
+    mayo: 'Mayo',
+    junio: 'Junio',
+    julio: 'Julio',
+    agosto: 'Agosto',
+    septiembre: 'Septiembre',
+    octubre: 'Octubre',
+    noviembre: 'Noviembre',
+};
+const MONTH_TO_SUFFIX: { [key: string]: string } = {
+    diciembre: '',
+    enero: 'Enero',
+    febrero: 'Febrero',
+    marzo: 'Marzo',
+    abril: 'Abril',
+    mayo: 'Mayo',
+    junio: 'Junio',
+    julio: 'Julio',
+    agosto: 'Agosto',
+    septiembre: 'Septiembre',
+    octubre: 'Octubre',
+    noviembre: 'Noviembre',
+};
+const SUFFIX_TO_MONTH: { [key: string]: string } = {
+    '': 'diciembre',
+    'Enero': 'enero',
+    'Febrero': 'febrero',
+    'Marzo': 'marzo',
+    'Abril': 'abril',
+    'Mayo': 'mayo',
+    'Junio': 'junio',
+    'Julio': 'julio',
+    'Agosto': 'agosto',
+    'Septiembre': 'septiembre',
+    'Octubre': 'octubre',
+    'Noviembre': 'noviembre',
+};
+const MONTH_DATES: { [key: string]: string } = {
+    diciembre: '10/12/2025',
+    enero: '10/01/2026',
+    febrero: '16/03/2026',
+    marzo: '16/04/2026',
+    abril: '15/05/2026',
+    mayo: '15/06/2026',
+};
+
 export default function BenchmarkingCreditsTable() {
     const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo' | 'abril' | 'mayo'>('mayo');
+    const [selectedMonth, setSelectedMonth] = useState<string>('mayo');
     const [isEditing, setIsEditing] = useState(false);
+    const [showAddMenu, setShowAddMenu] = useState(false);
 
     // Sync editing state with global provider to prevent polling overwrites
     React.useEffect(() => {
         setGlobalEditing(isEditing);
     }, [isEditing, setGlobalEditing]);
 
-    const data = selectedMonth === 'diciembre'
-        ? globalData.benchmarkingCredits
-        : selectedMonth === 'enero'
-            ? globalData.benchmarkingCreditsEnero
-            : selectedMonth === 'febrero'
-                ? globalData.benchmarkingCreditsFebrero
-                : selectedMonth === 'marzo'
-                    ? globalData.benchmarkingCreditsMarzo
-                    : selectedMonth === 'abril'
-                        ? globalData.benchmarkingCreditsAbril
-                        : globalData.benchmarkingCreditsMayo;
+    const prefix = 'benchmarkingCredits';
+    const existingSuffixes = Object.keys(globalData)
+        .filter(k => k.startsWith(prefix))
+        .map(k => k.substring(prefix.length));
 
-    const sectionKey = selectedMonth === 'diciembre'
-        ? 'benchmarkingCredits'
-        : selectedMonth === 'enero'
-            ? 'benchmarkingCreditsEnero'
-            : selectedMonth === 'febrero'
-                ? 'benchmarkingCreditsFebrero'
-                : selectedMonth === 'marzo'
-                    ? 'benchmarkingCreditsMarzo'
-                    : selectedMonth === 'abril'
-                        ? 'benchmarkingCreditsAbril'
-                        : 'benchmarkingCreditsMayo';
+    const existingMonths = existingSuffixes
+        .map(suffix => SUFFIX_TO_MONTH[suffix] || suffix.toLowerCase())
+        .filter(m => MONTH_ORDER.includes(m))
+        .sort((a, b) => MONTH_ORDER.indexOf(a) - MONTH_ORDER.indexOf(b));
+
+    const remainingMonths = MONTH_ORDER.filter(m => !existingMonths.includes(m));
+
+    const suffix = MONTH_TO_SUFFIX[selectedMonth] !== undefined ? MONTH_TO_SUFFIX[selectedMonth] : (selectedMonth.charAt(0).toUpperCase() + selectedMonth.slice(1));
+    const sectionKey = `${prefix}${suffix}`;
+    const data = globalData[sectionKey] || { banks: [], cooperatives: [] };
 
     const handleUpdate = (type: 'banks' | 'cooperatives', index: number, field: string, value: string) => {
         const newData = JSON.parse(JSON.stringify(data));
@@ -58,12 +117,50 @@ export default function BenchmarkingCreditsTable() {
             });
         }
 
-        updateSection(sectionKey as any, newData);
+        updateSection(sectionKey, newData);
+    };
+
+    const handleAddMonth = (monthKey: string) => {
+        const latestMonth = existingMonths[existingMonths.length - 1] || 'mayo';
+        const latestSuffix = MONTH_TO_SUFFIX[latestMonth] !== undefined ? MONTH_TO_SUFFIX[latestMonth] : (latestMonth.charAt(0).toUpperCase() + latestMonth.slice(1));
+        const latestKey = `${prefix}${latestSuffix}`;
+        const latestData = globalData[latestKey];
+        
+        const newData = JSON.parse(JSON.stringify(latestData));
+        newData.banks.forEach((entity: any) => {
+            entity.vis_tasa = null;
+            entity.novis_tasa = null;
+            entity.vehiculo_tasa = null;
+            entity.cc_desde = null;
+            entity.cc_hasta = null;
+        });
+        newData.cooperatives.forEach((entity: any) => {
+            entity.vis_tasa = null;
+            entity.novis_tasa = null;
+            entity.vehiculo_tasa = null;
+            entity.cc_desde = null;
+            entity.cc_hasta = null;
+        });
+
+        const newSuffix = MONTH_TO_SUFFIX[monthKey] !== undefined ? MONTH_TO_SUFFIX[monthKey] : (monthKey.charAt(0).toUpperCase() + monthKey.slice(1));
+        const newKey = `${prefix}${newSuffix}`;
+
+        updateSection(newKey, newData);
+        setSelectedMonth(monthKey);
+        setShowAddMenu(false);
     };
 
     const getVariation = (type: 'banks' | 'cooperatives', entityName: string, field: string, currentVal: number | null) => {
-        if (selectedMonth === 'diciembre' || currentVal === null) return null;
-        const prevData = selectedMonth === 'enero' ? globalData.benchmarkingCredits : selectedMonth === 'febrero' ? globalData.benchmarkingCreditsEnero : selectedMonth === 'marzo' ? globalData.benchmarkingCreditsFebrero : selectedMonth === 'abril' ? globalData.benchmarkingCreditsMarzo : globalData.benchmarkingCreditsAbril;
+        if (currentVal === null) return null;
+        
+        const currentIndex = existingMonths.indexOf(selectedMonth);
+        if (currentIndex <= 0) return null; // first month has no variation
+        
+        const prevMonth = existingMonths[currentIndex - 1];
+        const prevSuffix = MONTH_TO_SUFFIX[prevMonth] !== undefined ? MONTH_TO_SUFFIX[prevMonth] : (prevMonth.charAt(0).toUpperCase() + prevMonth.slice(1));
+        const prevKey = `${prefix}${prevSuffix}`;
+        const prevData = globalData[prevKey];
+        
         if (!prevData) return null;
         const section = (prevData as any)[type];
         if (!section) return null;
@@ -197,21 +294,49 @@ export default function BenchmarkingCreditsTable() {
                         Benchmarking Vivienda y Consumo
                     </h3>
                     <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">
-                        Tasas de cartelera al {selectedMonth === 'marzo' ? '16/04/2026' : selectedMonth === 'febrero' ? '16/03/2026' : selectedMonth === 'enero' ? '10/01/2026' : selectedMonth === 'diciembre' ? '10/12/2025' : selectedMonth === 'abril' ? '15/05/2026' : '15/06/2026'}
+                        Tasas de cartelera {MONTH_DATES[selectedMonth] ? `al ${MONTH_DATES[selectedMonth]}` : `a ${MONTH_FULL_LABELS[selectedMonth] || selectedMonth}`}
                     </p>
                 </div>
                 <div className="flex gap-4 items-center">
-                    <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner">
-                        {(['diciembre', 'enero', 'febrero', 'marzo', 'abril', 'mayo'] as const).map(m => (
+                    <div className="flex bg-slate-800 rounded-xl border border-white/10 overflow-hidden p-1 shadow-inner flex-wrap gap-0.5">
+                        {existingMonths.map(m => (
                             <button
                                 key={m}
                                 onClick={() => setSelectedMonth(m)}
                                 className={`px-4 py-1.5 text-xs font-black transition-all duration-300 rounded-lg uppercase ${selectedMonth === m ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/20' : 'text-slate-400 hover:text-white'}`}
                             >
-                                {m.substring(0, 3)}
+                                {MONTH_LABELS[m] || m}
                             </button>
                         ))}
                     </div>
+
+                    {isEditing && (
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowAddMenu(!showAddMenu)}
+                                className="px-3 py-1.5 bg-pink-600/20 hover:bg-pink-600/40 text-pink-400 rounded-lg text-xs font-bold transition-all border border-pink-500/20 flex items-center gap-1 shadow-lg"
+                            >
+                                + Agregar Mes
+                            </button>
+                            {showAddMenu && (
+                                <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-50 p-2 text-left">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 py-1 mb-1">Seleccionar Mes</p>
+                                    {remainingMonths.map((m: any) => (
+                                        <button
+                                            key={m}
+                                            onClick={() => handleAddMonth(m)}
+                                            className="w-full text-left px-3 py-2 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition-all capitalize"
+                                        >
+                                            {MONTH_FULL_LABELS[m] || m}
+                                        </button>
+                                    ))}
+                                    {remainingMonths.length === 0 && (
+                                        <p className="text-xs text-slate-500 px-2 py-1">Todos los meses agregados</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
                     <button
                         onClick={() => setIsEditing(!isEditing)}
                         className={`px-6 py-2 rounded-xl text-xs font-black transition-all duration-300 uppercase ${isEditing ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10'}`}

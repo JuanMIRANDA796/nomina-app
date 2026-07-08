@@ -35,6 +35,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+.vercel_rodaflex
 
 # typescript
 *.tsbuildinfo
@@ -42,5 +43,45 @@ next-env.d.ts
 
 /src/generated/prisma
 
-.vercel
 .env*.local
+
+# Large data files and binaries
+*.zip
+*.parquet
+*.pkl
+*.joblib
+*.h5
+*.model
+
+# Data export directories
+/bases_consolidadas/
+/dataset_score/
+/descargas_masivas_pagar/
+/exportacion_para_excel/
+
+# Python scripts (not part of the web app)
+*.py
+consolidar_*.py
+exportar_*.py
+paso*.py
+find_*.py
+bot_*.py
+
+# R files
+*.Rhistory
+*.RData
+*.Rproj
+
+# Scratch/temp files
+/scratch/
+*.log
+error*.txt
+error*.log
+temp_*.txt
+DATASET_*.csv
+VISTA_*.csv
+fix_sequences.js
+
+# CSV datasets (large data files)
+DATASET_COMPLETO_EXCEL.csv
+VISTA_PREVIA_SCORE.csv

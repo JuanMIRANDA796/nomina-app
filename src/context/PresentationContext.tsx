@@ -205,11 +205,11 @@ const ALL_DEFAULTS = {
     macroAnalysis: macroAnalysisDefault,
 };
 
-type PresentationData = typeof ALL_DEFAULTS;
+type PresentationData = typeof ALL_DEFAULTS & { [key: string]: any };
 
 interface PresentationContextType {
     data: PresentationData;
-    updateSection: (section: keyof PresentationData, newData: any) => void;
+    updateSection: (section: string, newData: any) => void;
     resetData: () => void;
     isLoading: boolean;
     isSaving: boolean;
@@ -413,7 +413,7 @@ export function PresentationProvider({ children }: { children: React.ReactNode }
         }
     }, []);
 
-    const updateSection = useCallback((section: keyof PresentationData, newData: any) => {
+    const updateSection = useCallback((section: string, newData: any) => {
         manualChangeRef.current = true;
         setData(prev => ({ ...prev, [section]: newData }));
     }, []);

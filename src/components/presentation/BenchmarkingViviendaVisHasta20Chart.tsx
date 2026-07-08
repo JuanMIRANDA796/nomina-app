@@ -18,39 +18,111 @@ import RateBox from './RateBox';
 import EditableChartTitle from './EditableChartTitle';
 import EditableStatsSidebar from './EditableStatsSidebar';
 
+const MONTH_ORDER = ['diciembre', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre'];
+const MONTH_LABELS: { [key: string]: string } = {
+    diciembre: 'Dic',
+    enero: 'Ene',
+    febrero: 'Feb',
+    marzo: 'Mar',
+    abril: 'Abr',
+    mayo: 'May',
+    junio: 'Jun',
+    julio: 'Jul',
+    agosto: 'Ago',
+    septiembre: 'Sep',
+    octubre: 'Oct',
+    noviembre: 'Nov',
+};
+const MONTH_FULL_LABELS: { [key: string]: string } = {
+    diciembre: 'Diciembre',
+    enero: 'Enero',
+    febrero: 'Febrero',
+    marzo: 'Marzo',
+    abril: 'Abril',
+    mayo: 'Mayo',
+    junio: 'Junio',
+    julio: 'Julio',
+    agosto: 'Agosto',
+    septiembre: 'Septiembre',
+    octubre: 'Octubre',
+    noviembre: 'Noviembre',
+};
+const MONTH_TO_SUFFIX: { [key: string]: string } = {
+    diciembre: '',
+    enero: 'Enero',
+    febrero: 'Febrero',
+    marzo: 'Marzo',
+    abril: 'Abril',
+    mayo: 'Mayo',
+    junio: 'Junio',
+    julio: 'Julio',
+    agosto: 'Agosto',
+    septiembre: 'Septiembre',
+    octubre: 'Octubre',
+    noviembre: 'Noviembre',
+};
+const SUFFIX_TO_MONTH: { [key: string]: string } = {
+    '': 'diciembre',
+    'Enero': 'enero',
+    'Febrero': 'febrero',
+    'Marzo': 'marzo',
+    'Abril': 'abril',
+    'Mayo': 'mayo',
+    'Junio': 'junio',
+    'Julio': 'julio',
+    'Agosto': 'agosto',
+    'Septiembre': 'septiembre',
+    'Octubre': 'octubre',
+    'Noviembre': 'noviembre',
+};
+
 export default function BenchmarkingViviendaVisHasta20Chart() {
     const { data: globalData, updateSection } = usePresentation();
-    const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo' | 'abril' | 'mayo'>('mayo');
+    const [selectedMonth, setSelectedMonth] = useState<string>('mayo');
     const [isEditing, setIsEditing] = useState(false);
+    const [showAddMenu, setShowAddMenu] = useState(false);
 
-    const data = selectedMonth === 'diciembre'
-        ? globalData.benchmarkingViviendaVisHasta20
-        : selectedMonth === 'enero'
-            ? globalData.benchmarkingViviendaVisHasta20Enero
-            : selectedMonth === 'febrero'
-                ? globalData.benchmarkingViviendaVisHasta20Febrero
-                : selectedMonth === 'marzo'
-                    ? globalData.benchmarkingViviendaVisHasta20Marzo
-                    : selectedMonth === 'abril'
-                        ? globalData.benchmarkingViviendaVisHasta20Abril
-                        : globalData.benchmarkingViviendaVisHasta20Mayo;
+    const prefix = 'benchmarkingViviendaVisHasta20';
+    const existingSuffixes = Object.keys(globalData)
+        .filter(k => k.startsWith(prefix))
+        .map(k => k.substring(prefix.length));
 
-    const sectionKey = selectedMonth === 'diciembre' 
-        ? 'benchmarkingViviendaVisHasta20' 
-        : selectedMonth === 'enero' 
-            ? 'benchmarkingViviendaVisHasta20Enero' 
-            : selectedMonth === 'febrero'
-                ? 'benchmarkingViviendaVisHasta20Febrero'
-                : selectedMonth === 'marzo'
-                    ? 'benchmarkingViviendaVisHasta20Marzo'
-                    : selectedMonth === 'abril'
-                        ? 'benchmarkingViviendaVisHasta20Abril'
-                        : 'benchmarkingViviendaVisHasta20Mayo';
+    const existingMonths = existingSuffixes
+        .map(suffix => SUFFIX_TO_MONTH[suffix] || suffix.toLowerCase())
+        .filter(m => MONTH_ORDER.includes(m))
+        .sort((a, b) => MONTH_ORDER.indexOf(a) - MONTH_ORDER.indexOf(b));
+
+    const remainingMonths = MONTH_ORDER.filter(m => !existingMonths.includes(m));
+
+    const suffix = MONTH_TO_SUFFIX[selectedMonth] !== undefined ? MONTH_TO_SUFFIX[selectedMonth] : (selectedMonth.charAt(0).toUpperCase() + selectedMonth.slice(1));
+    const sectionKey = `${prefix}${suffix}`;
+    const data = globalData[sectionKey] || [];
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
         newData[index] = { ...newData[index], [field]: value === '' ? null : parseFloat(value) };
-        updateSection(sectionKey as any, newData);
+        updateSection(sectionKey, newData);
+    };
+
+    const handleAddMonth = (monthKey: string) => {
+        const latestMonth = existingMonths[existingMonths.length - 1] || 'mayo';
+        const latestSuffix = MONTH_TO_SUFFIX[latestMonth] !== undefined ? MONTH_TO_SUFFIX[latestMonth] : (latestMonth.charAt(0).toUpperCase() + latestMonth.slice(1));
+        const latestKey = `${prefix}${latestSuffix}`;
+        const latestData = globalData[latestKey];
+        
+        const newData = JSON.parse(JSON.stringify(latestData)).map((item: any) => ({
+            ...item,
+            disbursements_num: null,
+            amount: null,
+            tpp: null
+        }));
+
+        const newSuffix = MONTH_TO_SUFFIX[monthKey] !== undefined ? MONTH_TO_SUFFIX[monthKey] : (monthKey.charAt(0).toUpperCase() + monthKey.slice(1));
+        const newKey = `${prefix}${newSuffix}`;
+
+        updateSection(newKey, newData);
+        setSelectedMonth(monthKey);
+        setShowAddMenu(false);
     };
 
     const totals = data[0];
@@ -66,18 +138,49 @@ export default function BenchmarkingViviendaVisHasta20Chart() {
                 <EditableChartTitle
                     mainTitle="Benchmarking - Compra de vivienda VIS pesos"
                     subtitle="Hasta 20 años"
-                    monthLabel={selectedMonth === 'diciembre' ? 'Diciembre' : selectedMonth === 'enero' ? 'Enero' : selectedMonth === 'febrero' ? 'Febrero' : selectedMonth === 'marzo' ? 'Marzo' : selectedMonth === 'abril' ? 'Abril' : 'Mayo'}
+                    monthLabel={MONTH_FULL_LABELS[selectedMonth] || selectedMonth}
                     subtitleColor="text-emerald-500 font-semibold text-lg"
                 />
-                <div className="flex gap-3 items-center">
-                    <div className="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden">
-                        <button onClick={() => setSelectedMonth('diciembre')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'diciembre' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}>Dic</button>
-                        <button onClick={() => setSelectedMonth('enero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'enero' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}>Ene</button>
-                        <button onClick={() => setSelectedMonth('febrero')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'febrero' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}>Feb</button>
-                        <button onClick={() => setSelectedMonth('marzo')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'marzo' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}>Mar</button>
-                        <button onClick={() => setSelectedMonth('abril')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'abril' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}>Abr</button>
-                        <button onClick={() => setSelectedMonth('mayo')} className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === 'mayo' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}>May</button>
+                <div className="flex gap-3 items-center flex-wrap">
+                    <div className="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden flex-wrap">
+                        {existingMonths.map(m => (
+                            <button
+                                key={m}
+                                onClick={() => setSelectedMonth(m)}
+                                className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === m ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                            >
+                                {MONTH_LABELS[m] || m}
+                            </button>
+                        ))}
                     </div>
+
+                    {isEditing && (
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowAddMenu(!showAddMenu)}
+                                className="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 rounded-lg text-xs font-bold transition-all border border-emerald-500/20 flex items-center gap-1 shadow-lg"
+                            >
+                                + Agregar Mes
+                            </button>
+                            {showAddMenu && (
+                                <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-50 p-2 text-left">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 py-1 mb-1">Seleccionar Mes</p>
+                                    {remainingMonths.map((m: any) => (
+                                        <button
+                                            key={m}
+                                            onClick={() => handleAddMonth(m)}
+                                            className="w-full text-left px-3 py-2 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition-all capitalize"
+                                        >
+                                            {MONTH_FULL_LABELS[m] || m}
+                                        </button>
+                                    ))}
+                                    {remainingMonths.length === 0 && (
+                                        <p className="text-xs text-slate-500 px-2 py-1">Todos los meses agregados</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
                     <RateBox 
                         presenteTpp={presenteTpp} 
                         totalsTpp={totals?.tpp ?? null} 
