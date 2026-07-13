@@ -141,56 +141,35 @@ export default function BenchmarkingViviendaVisHasta20Chart() {
                     monthLabel={MONTH_FULL_LABELS[selectedMonth] || selectedMonth}
                     subtitleColor="text-emerald-500 font-semibold text-lg"
                 />
-                <div className="flex gap-3 items-center flex-wrap">
-                    <div className="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden flex-wrap">
-                        {existingMonths.map(m => (
-                            <button
-                                key={m}
-                                onClick={() => setSelectedMonth(m)}
-                                className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === m ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}
-                            >
-                                {MONTH_LABELS[m] || m}
-                            </button>
-                        ))}
-                    </div>
-
-                    {isEditing && (
-                        <div className="relative">
-                            <button
-                                onClick={() => setShowAddMenu(!showAddMenu)}
-                                className="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 rounded-lg text-xs font-bold transition-all border border-emerald-500/20 flex items-center gap-1 shadow-lg"
-                            >
-                                + Agregar Mes
-                            </button>
-                            {showAddMenu && (
-                                <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-50 p-2 text-left">
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 py-1 mb-1">Seleccionar Mes</p>
-                                    {remainingMonths.map((m: any) => (
-                                        <button
-                                            key={m}
-                                            onClick={() => handleAddMonth(m)}
-                                            className="w-full text-left px-3 py-2 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition-all capitalize"
-                                        >
-                                            {MONTH_FULL_LABELS[m] || m}
-                                        </button>
-                                    ))}
-                                    {remainingMonths.length === 0 && (
-                                        <p className="text-xs text-slate-500 px-2 py-1">Todos los meses agregados</p>
-                                    )}
-                                </div>
-                            )}
+                <div className="flex flex-col gap-2 items-end">
+                    <div className="flex gap-3 items-center">
+                        <div className="flex bg-slate-800 rounded-lg border border-white/10 overflow-hidden flex-wrap">
+                            {existingMonths.map(m => (
+                                <button
+                                    key={m}
+                                    onClick={() => setSelectedMonth(m)}
+                                    className={`px-3 py-1.5 text-xs font-bold transition-all ${selectedMonth === m ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                                >
+                                    {MONTH_LABELS[m] || m}
+                                </button>
+                            ))}
                         </div>
-                    )}
-                    <RateBox 
-                        presenteTpp={presenteTpp} 
-                        totalsTpp={totals?.tpp ?? null} 
-                        extraInfo={presenteMonto ? `$ ${presenteMonto.toLocaleString()}` : undefined}
-                        onUpdate={(newValue) => {
-                            const idx = data.findIndex((d: any) => d.entity === 'PRESENTE');
-                            if (idx !== -1) handleUpdate(idx, 'tpp', newValue.toString());
-                        }}
-                    />
-                    <button onClick={() => setIsEditing(true)} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-colors text-sm font-medium shadow-lg">Editar Datos</button>
+                        <RateBox 
+                            presenteTpp={presenteTpp} 
+                            totalsTpp={totals?.tpp ?? null} 
+                            extraInfo={presenteMonto ? `$ ${presenteMonto.toLocaleString()}` : undefined}
+                            onUpdate={(newValue) => {
+                                const idx = data.findIndex((d: any) => d.entity === 'PRESENTE');
+                                if (idx !== -1) handleUpdate(idx, 'tpp', newValue.toString());
+                            }}
+                        />
+                    </div>
+                    <button
+                        onClick={() => setIsEditing(true)}
+                        className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition-colors text-xs font-medium shadow-lg self-end"
+                    >
+                        Editar Datos
+                    </button>
                 </div>
             </div>
 
@@ -266,11 +245,38 @@ export default function BenchmarkingViviendaVisHasta20Chart() {
                     >
                         <div className="flex justify-between items-center mb-6">
                             <h4 className="text-xl font-semibold text-white">Editar Datos Vivienda VIS (Hasta 20)</h4>
-                            <button onClick={() => setIsEditing(false)} className="p-2 hover:bg-white/10 rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                            <div className="flex items-center gap-3">
+                                <div className="relative">
+                                    <button
+                                        onClick={() => setShowAddMenu(!showAddMenu)}
+                                        className="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 rounded-lg text-xs font-bold transition-all border border-emerald-500/20 flex items-center gap-1 shadow-lg"
+                                    >
+                                        + Agregar Mes
+                                    </button>
+                                    {showAddMenu && (
+                                        <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-[60] p-2 text-left">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 py-1 mb-1">Seleccionar Mes</p>
+                                            {remainingMonths.map((m: any) => (
+                                                <button
+                                                    key={m}
+                                                    onClick={() => handleAddMonth(m)}
+                                                    className="w-full text-left px-3 py-2 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition-all capitalize"
+                                                >
+                                                    {MONTH_FULL_LABELS[m] || m}
+                                                </button>
+                                            ))}
+                                            {remainingMonths.length === 0 && (
+                                                <p className="text-xs text-slate-500 px-2 py-1">Todos los meses agregados</p>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                                <button onClick={() => setIsEditing(false)} className="p-2 hover:bg-white/10 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <div className="flex-1 overflow-auto">
