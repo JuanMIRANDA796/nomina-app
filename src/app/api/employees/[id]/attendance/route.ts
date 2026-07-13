@@ -42,10 +42,6 @@ export async function GET(
             const start = startOfMonth(targetDate);
             const end = endOfMonth(targetDate);
 
-            // ---------------------------------------------------------
-            // AUTO-CORRECTION LOGIC (Run before fetch)
-            // ---------------------------------------------------------
-
             // Fetch raw records first
             let attendances = await prisma.attendance.findMany({
                 where: {
@@ -54,33 +50,6 @@ export async function GET(
                 },
                 orderBy: { date: 'asc' }
             });
-
-            const nowTime = new Date();
-            const staleThreshold = subHours(nowTime, 20);
-
-            // Iterate and Fix stale records
-            for (const att of attendances) {
-                let modified = false;
-                // Case 1: Entry + >20h + No Exit -> Exit = Entry + 8h
-                if (att.entryTime && !att.exitTime) {
-                    if (new Date(att.entryTime) < staleThreshold) {
-                        att.exitTime = addHours(new Date(att.entryTime), 8);
-                        modified = true;
-                    }
-                }
-                // Case 2: No Entry + Exit -> Entry = Exit - 8h
-                else if (!att.entryTime && att.exitTime) {
-                    att.entryTime = subHours(new Date(att.exitTime), 8);
-                    modified = true;
-                }
-
-                if (modified) {
-                    await prisma.attendance.update({
-                        where: { id: att.id },
-                        data: { entryTime: att.entryTime, exitTime: att.exitTime }
-                    });
-                }
-            }
 
             // ---------------------------------------------------------
             // MERGE WITH FULL DAYS (Visual Alignment Fix)
@@ -242,6 +211,7 @@ export async function DELETE(
             }
 
             // ROBUST DELETE: Find the canonical date
+            const targetDay = parseISO(json.date);
             const year = targetDay.getUTCFullYear();
             const month = targetDay.getUTCMonth();
             const day = targetDay.getUTCDate();

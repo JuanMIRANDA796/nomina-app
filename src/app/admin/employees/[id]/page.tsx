@@ -78,7 +78,14 @@ export default function EmployeeHistoryPage() {
                 const dayDate = new Date(year, month, d);
 
                 const match = validRecords.find(r => {
-                    const checkDate = r.entryTime ? parseISO(r.entryTime) : parseISO(r.date);
+                    const checkDate = r.entryTime ? parseISO(r.entryTime) : (r.exitTime ? parseISO(r.exitTime) : parseISO(r.date));
+                    
+                    // If we had to fallback to r.date (which is 00:00 UTC), in UTC-5 it shifts to previous day.
+                    // To prevent this, we should add 12 hours to r.date if we have to use it.
+                    if (!r.entryTime && !r.exitTime) {
+                        checkDate.setUTCHours(12);
+                    }
+
                     return checkDate.getDate() === d &&
                         checkDate.getMonth() === month &&
                         checkDate.getFullYear() === year;
@@ -255,6 +262,7 @@ export default function EmployeeHistoryPage() {
                                         <td className="py-4 px-6">
                                             <div className="flex flex-col gap-1">
                                                 <input
+                                                    key={`date-entry-${record.entryTime || 'null'}`}
                                                     type="date"
                                                     defaultValue={getInputDate(record.entryTime, record.date)}
                                                     className="p-1 text-xs border border-gray-100 rounded text-gray-500 w-32 focus:border-blue-500 outline-none"
@@ -264,6 +272,7 @@ export default function EmployeeHistoryPage() {
                                                     }}
                                                 />
                                                 <input
+                                                    key={`time-entry-${record.entryTime || 'null'}`}
                                                     id={`time-entry-${record.date}`}
                                                     type="time"
                                                     defaultValue={getInputTime(record.entryTime)}
@@ -285,6 +294,7 @@ export default function EmployeeHistoryPage() {
                                         <td className="py-4 px-6">
                                             <div className="flex flex-col gap-1">
                                                 <input
+                                                    key={`date-exit-${record.exitTime || 'null'}`}
                                                     type="date"
                                                     defaultValue={getInputDate(record.exitTime, record.date)}
                                                     className="p-1 text-xs border border-gray-100 rounded text-gray-500 w-32 focus:border-blue-500 outline-none"
@@ -294,6 +304,7 @@ export default function EmployeeHistoryPage() {
                                                     }}
                                                 />
                                                 <input
+                                                    key={`time-exit-${record.exitTime || 'null'}`}
                                                     id={`time-exit-${record.date}`}
                                                     type="time"
                                                     defaultValue={getInputTime(record.exitTime)}

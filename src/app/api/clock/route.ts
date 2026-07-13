@@ -133,24 +133,37 @@ export async function POST(request: Request) {
                         : 'Hora de salida registrada';
                     return NextResponse.json({ message: msg, time: now });
                 } else {
-                    // No entry found today — upsert with estimated 8-hour entry
-                    const estimatedEntry = subHours(now, 8);
-                    await prisma.attendance.upsert({
-                        where: {
-                            employeeId_date: { employeeId: employee.id, date: today },
-                        },
-                        update: { exitTime: now },
-                        create: {
-                            employeeId: employee.id,
-                            date: today,
-                            entryTime: estimatedEntry,
-                            exitTime: now,
-                        },
-                    });
+                    // No entry found today — upsert with null entry
+                    try {
+                        await prisma.attendance.upsert({
+                            where: {
+                                employeeId_date: { employeeId: employee.id, date: today },
+                            },
+                            update: { exitTime: now },
+                            create: {
+                                employeeId: employee.id,
+                                date: today,
+                                entryTime: null,
+                                exitTime: now,
+                            },
+                        });
+                    } catch (upsertError: any) {
+                        // If a concurrent request just created the record (double click race condition),
+                        // Prisma upsert might throw P2002. We catch it and fallback to a direct update.
+                        if (upsertError?.code === 'P2002') {
+                            await prisma.attendance.update({
+                                where: { employeeId_date: { employeeId: employee.id, date: today } },
+                                data: { exitTime: now }
+                            });
+                        } else {
+                            throw upsertError;
+                        }
+                    }
+
                     return NextResponse.json({
-                        message: 'Salida registrada (Entrada estimada hace 8h)',
+                        message: 'Salida registrada sin hora de entrada',
                         time: now,
-                        warning: 'Se asumió turno de 8 horas.',
+                        warning: 'No se encontró hora de entrada.',
                     });
                 }
             }

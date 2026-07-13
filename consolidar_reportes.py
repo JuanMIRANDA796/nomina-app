@@ -53,8 +53,8 @@ def consolidar():
                 elif "310030" in excel_name or excel_name.startswith("3_"): matched_id = "3"
                 elif "520000" in excel_name or excel_name.startswith("5_"): matched_id = "5"
                 elif "800010" in excel_name or excel_name.startswith("8_"): matched_id = "8"
-                elif "110000" in excel_name: matched_id = "14" # Pasivos
-                elif "210000" in excel_name: matched_id = "16" # Activos/Cartera
+                elif "801100" in excel_name or "pagar" in excel_name.lower(): matched_id = "14" # Pasivos/Pagar
+                elif "801000" in excel_name or "cobrar" in excel_name.lower(): matched_id = "16" # Activos/Cartera
                 
                 if matched_id and matched_id in data_stacks:
                     try:
@@ -73,7 +73,7 @@ def consolidar():
                         print(f"    [!] Error leyendo {excel_name}: {e}")
 
     # 2. Consolidar y guardar en Parquet
-    print("\n📦 Guardando bases de datos finales...")
+    print("\nGuardando bases de datos finales...")
     for report_id, df_list in data_stacks.items():
         name = REPORT_MAP[report_id]
         if df_list:
@@ -83,18 +83,23 @@ def consolidar():
             # Limpiar nombres de columnas (quitar espacios raros)
             final_df.columns = [str(c).strip().replace('\n', ' ') for c in final_df.columns]
             
+            # --- CORRECCION PARA PYARROW ---
+            # Forzar columnas de tipo 'object' a ser strings para evitar errores de tipos mezclados
+            for col in final_df.select_dtypes(include=['object']).columns:
+                final_df[col] = final_df[col].astype(str)
+            
             # Guardar en Parquet
             parquet_path = os.path.join(OUTPUT_DIR, f"{name}.parquet")
-            final_df.to_parquet(parquet_path, index=False)
+            final_df.to_parquet(parquet_path, index=False, engine='pyarrow')
             
             # Tambien guardamos una version CSV pequeña para vista previa
             final_df.head(100).to_csv(os.path.join(OUTPUT_DIR, f"{name}_preview.csv"), index=False)
             
-            print(f"    ✅ Guardado: {name}.parquet (Filas: {len(final_df)})")
+            print(f"    [OK] Guardado: {name}.parquet (Filas: {len(final_df)})")
         else:
             print(f"    [?] No se encontraron archivos para {name}.")
 
-    print(f"\n¡PROCESO COMPLETADO! Revisa la carpeta: {OUTPUT_DIR}")
+    print(f"\nPROCESO COMPLETADO! Revisa la carpeta: {OUTPUT_DIR}")
 
 if __name__ == "__main__":
     # Asegurarnos de tener las librerias necesarias
