@@ -100,7 +100,11 @@ export default function BenchmarkingViviendaNoVisHasta20Chart() {
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
-        newData[index] = { ...newData[index], [field]: value === '' ? null : parseFloat(value) };
+        if (field === 'entity') {
+            newData[index] = { ...newData[index], [field]: value };
+        } else {
+            newData[index] = { ...newData[index], [field]: value === '' ? null : parseFloat(value) };
+        }
         updateSection(sectionKey, newData);
     };
 
@@ -292,7 +296,14 @@ export default function BenchmarkingViviendaNoVisHasta20Chart() {
                                 <tbody>
                                     {data.map((row: any, index: number) => (
                                         <tr key={index} className="border-b border-slate-800 hover:bg-white/5">
-                                            <td className="px-4 py-2 font-medium text-slate-200">{row.entity}</td>
+                                            <td className="px-4 py-2">
+                                                <input
+                                                    type="text"
+                                                    value={row.entity ?? ''}
+                                                    onChange={(e) => handleUpdate(index, 'entity', e.target.value)}
+                                                    className="bg-transparent border border-slate-700 rounded px-2 py-1 w-full min-w-[140px] outline-none text-white font-medium focus:border-cyan-500"
+                                                />
+                                            </td>
                                             <td>
                                                 <input
                                                     type="number"
