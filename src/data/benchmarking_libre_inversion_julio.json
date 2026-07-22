@@ -1,0 +1,68 @@
+[
+    {
+        "entity": "31 Entidades",
+        "disbursements_num": 89646,
+        "amount": 1540000,
+        "tpp": 23.07
+    },
+    {
+        "entity": "Bancolombia",
+        "disbursements_num": 15362,
+        "amount": 342527,
+        "tpp": 22.74
+    },
+    {
+        "entity": "Banco Davivienda",
+        "disbursements_num": 14991,
+        "amount": 284497,
+        "tpp": 23.46
+    },
+    {
+        "entity": "Banco de Bogotá",
+        "disbursements_num": 18377,
+        "amount": 225877,
+        "tpp": 24.28
+    },
+    {
+        "entity": "BBVA Colombia",
+        "disbursements_num": 9488,
+        "amount": 149256,
+        "tpp": 23.19
+    },
+    {
+        "entity": "Banco Davibank",
+        "disbursements_num": 3066,
+        "amount": 106129,
+        "tpp": 24.06
+    },
+    {
+        "entity": "Banco Falabella S.A.",
+        "disbursements_num": 7898,
+        "amount": 88322,
+        "tpp": 23.60
+    },
+    {
+        "entity": "Banco de Occidente",
+        "disbursements_num": 1003,
+        "amount": 64612,
+        "tpp": 20.87
+    },
+    {
+        "entity": "AV Villas",
+        "disbursements_num": 1568,
+        "amount": 52998,
+        "tpp": 20.60
+    },
+    {
+        "entity": "Itaú",
+        "disbursements_num": 532,
+        "amount": 37168,
+        "tpp": 19.17
+    },
+    {
+        "entity": "PRESENTE",
+        "disbursements_num": null,
+        "amount": null,
+        "tpp": null
+    }
+]

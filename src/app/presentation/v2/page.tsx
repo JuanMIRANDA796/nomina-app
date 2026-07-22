@@ -11,6 +11,7 @@ import MonthlyDisbursementsChart from '@/components/presentation/MonthlyDisburse
 import PortfolioBalanceByLineChart from '@/components/presentation/PortfolioBalanceByLineChart';
 import BenchmarkingViviendaVisHasta20Chart from '@/components/presentation/BenchmarkingViviendaVisHasta20Chart';
 import BenchmarkingViviendaNoVisHasta20Chart from '@/components/presentation/BenchmarkingViviendaNoVisHasta20Chart';
+import BenchmarkingLibreInversionChart from '@/components/presentation/BenchmarkingLibreInversionChart';
 import BenchmarkingCDATsTable from '@/components/presentation/BenchmarkingCDATsTable';
 import MacroeconomicAnalysisSlide from '@/components/presentation/MacroeconomicAnalysisSlide';
 import HistoricalRatesV2Chart from '@/components/presentation/HistoricalRatesV2Chart';
@@ -158,7 +159,7 @@ export default function PresentationV2Page() {
             </section>
 
             {/* BENCHMARKING VIVIENDA PESOS (KEPT) */}
-            {[BenchmarkingViviendaVisHasta20Chart, BenchmarkingViviendaNoVisHasta20Chart].map((Chart, i) => (
+            {[BenchmarkingViviendaVisHasta20Chart, BenchmarkingViviendaNoVisHasta20Chart, BenchmarkingLibreInversionChart].map((Chart, i) => (
                 <section key={`viv-p-${i}`} className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                     <motion.div initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                         <Chart />

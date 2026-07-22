@@ -15,6 +15,7 @@ import BenchmarkingConsumo3To6Chart from '@/components/presentation/Benchmarking
 import BenchmarkingConsumo6To12Chart from '@/components/presentation/BenchmarkingConsumo6To12Chart';
 import BenchmarkingConsumo12To25Chart from '@/components/presentation/BenchmarkingConsumo12To25Chart';
 import BenchmarkingConsumoTodosChart from '@/components/presentation/BenchmarkingConsumoTodosChart';
+import BenchmarkingLibreInversionChart from '@/components/presentation/BenchmarkingLibreInversionChart';
 import BenchmarkingViviendaVisHasta20Chart from '@/components/presentation/BenchmarkingViviendaVisHasta20Chart';
 import BenchmarkingViviendaVisSup20Chart from '@/components/presentation/BenchmarkingViviendaVisSup20Chart';
 import BenchmarkingViviendaNoVisHasta20Chart from '@/components/presentation/BenchmarkingViviendaNoVisHasta20Chart';
@@ -68,6 +69,7 @@ export default function PresentationContent() {
         { id: 'benchmarking-consumo-4', component: <BenchmarkingConsumo6To12Chart /> },
         { id: 'benchmarking-consumo-5', component: <BenchmarkingConsumo12To25Chart /> },
         { id: 'benchmarking-consumo-6', component: <BenchmarkingConsumoTodosChart /> },
+        { id: 'benchmarking-libre-inversion', component: <BenchmarkingLibreInversionChart /> },
 
         // BENCHMARKING VIVIENDA PESOS
         { id: 'benchmarking-viv-p1', component: <BenchmarkingViviendaVisHasta20Chart /> },
