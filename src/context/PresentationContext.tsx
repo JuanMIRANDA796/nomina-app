@@ -82,6 +82,7 @@ import benchmarkingCreditsMarzoDefault from '@/data/benchmarking_credits_marzo.j
 import benchmarkingCreditsAbrilDefault from '@/data/benchmarking_credits_abril.json';
 import benchmarkingCreditsMayoDefault from '@/data/benchmarking_credits_mayo.json';
 import benchmarkingLibreInversionJulioDefault from '@/data/benchmarking_libre_inversion_julio.json';
+import tppLibreInversionHistoricoDefault from '@/data/tpp_libre_inversion_historico.json';
 import totalLiabilitiesBalanceDefault from '@/data/total_liabilities_balance.json';
 import earlyCancellationsDefault from '@/data/early_cancellations.json';
 import tppCaptacionSaldosDefault from '@/data/tpp_captacion_saldos.json';
@@ -204,6 +205,7 @@ const ALL_DEFAULTS = {
     deficitFiscal: deficitFiscalDefault,
     benchmarkingLibreInversionJulio: benchmarkingLibreInversionJulioDefault,
     benchmarkingLibreInversion: benchmarkingLibreInversionJulioDefault,
+    tppLibreInversionHistorico: tppLibreInversionHistoricoDefault,
     metadata: metadataDefault,
     macroAnalysis: macroAnalysisDefault,
 };
@@ -289,6 +291,10 @@ const applyForcedOverrides = (merged: any) => {
 
     if (!merged.benchmarkingLibreInversionJulio) {
         merged.benchmarkingLibreInversionJulio = ALL_DEFAULTS.benchmarkingLibreInversionJulio;
+    }
+
+    if (!merged.tppLibreInversionHistorico) {
+        merged.tppLibreInversionHistorico = ALL_DEFAULTS.tppLibreInversionHistorico;
     }
 
     return merged;
