@@ -5,9 +5,13 @@ import { motion } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function FSGProposalTable() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const data = globalData.fsgProposal;
     const [isEditing, setIsEditing] = useState(false);
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     const handleUpdate = (type: 'hoy' | 'propuesta', index: number, field: string, value: string) => {
         const newData = { ...data };

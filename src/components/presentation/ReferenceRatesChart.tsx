@@ -20,9 +20,13 @@ const initialData = referenceRatesData;
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function ReferenceRatesChart() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const data = globalData.referenceRates;
     const [isEditing, setIsEditing] = useState(false);
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];

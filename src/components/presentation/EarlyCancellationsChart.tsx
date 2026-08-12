@@ -16,16 +16,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function EarlyCancellationsChart() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const data = globalData.earlyCancellations;
     const [isEditing, setIsEditing] = useState(false);
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     const handleUpdate = (index: number, field: string, value: string) => {
         const newData = [...data];
         if (field === 'month') {
             newData[index] = { ...newData[index], month: value };
         } else {
-            newData[index] = { ...newData[index], [field]: value === '' ? 0 : parseFloat(value) };
+            newData[index] = { ...newData[index], [field]: value === '' ? null : parseFloat(value) };
         }
         updateSection('earlyCancellations', newData);
     };

@@ -77,10 +77,14 @@ const SUFFIX_TO_MONTH: { [key: string]: string } = {
 };
 
 export default function BenchmarkingViviendaVisHasta20Chart() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const [selectedMonth, setSelectedMonth] = useState<string>('mayo');
     const [isEditing, setIsEditing] = useState(false);
     const [showAddMenu, setShowAddMenu] = useState(false);
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     const prefix = 'benchmarkingViviendaVisHasta20';
     const existingSuffixes = Object.keys(globalData)

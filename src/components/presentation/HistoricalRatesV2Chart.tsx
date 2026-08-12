@@ -16,11 +16,15 @@ import initialData from '@/data/historical_rates_v2.json';
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function HistoricalRatesV2Chart() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     // Default to initialData if section doesn't exist yet
     const data = globalData.historicalRatesV2 || initialData;
     const [isEditing, setIsEditing] = useState(false);
     const [chartWidth, setChartWidth] = useState('100%');
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     // Dynamic width for scrollability if data is large
     useEffect(() => {

@@ -77,10 +77,14 @@ const SUFFIX_TO_MONTH: { [key: string]: string } = {
 };
 
 export default function BenchmarkingLibreInversionChart() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const [selectedMonth, setSelectedMonth] = useState<string>('julio');
     const [isEditing, setIsEditing] = useState(false);
     const [showAddMenu, setShowAddMenu] = useState(false);
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     const prefix = 'benchmarkingLibreInversion';
     const existingSuffixes = Object.keys(globalData)

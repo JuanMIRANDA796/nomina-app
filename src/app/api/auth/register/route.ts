@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
     try {
-        const { name, password } = await req.json();
+        const { name, password, email, phone } = await req.json();
 
         if (!name || name.length < 3) {
             return NextResponse.json({ error: 'El nombre debe tener al menos 3 caracteres' }, { status: 400 });
@@ -29,6 +29,8 @@ export async function POST(req: Request) {
             data: {
                 name,
                 password,
+                email: email || null,
+                phone: phone || null,
                 configs: {
                     create: [
                         { key: 'AUX_TRANSPORTE', value: '162000', description: 'Auxilio de transporte legal 2024' },

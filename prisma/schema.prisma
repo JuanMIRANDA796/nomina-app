@@ -19,6 +19,7 @@ model Company {
   documentType   String?
   documentNumber String?
   phone          String?
+  email          String?
   plan           String  @default("SEMILLA")
   extraEmployees Int     @default(0)
 

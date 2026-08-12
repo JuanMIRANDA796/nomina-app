@@ -19,9 +19,13 @@ import EditableChartTitle from './EditableChartTitle';
 import EditableStatsSidebar from './EditableStatsSidebar';
 
 export default function BenchmarkingConsumoHasta1Chart() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const [selectedMonth, setSelectedMonth] = useState<'diciembre' | 'enero' | 'febrero' | 'marzo'>('marzo');
     const [isEditing, setIsEditing] = useState(false);
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
 
     const data = selectedMonth === 'diciembre'
         ? globalData.benchmarkingConsumoHasta1

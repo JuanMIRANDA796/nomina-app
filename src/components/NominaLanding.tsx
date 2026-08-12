@@ -19,6 +19,8 @@ export default function NominaLanding() {
     const [authMode, setAuthMode] = useState<'LOGIN' | 'SIGNUP'>(isSignupMode ? 'SIGNUP' : 'LOGIN');
     const [companyName, setCompanyName] = useState('');
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [showPlanNotice, setShowPlanNotice] = useState(!isSignupMode);
 
@@ -31,7 +33,11 @@ export default function NominaLanding() {
             const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: companyName, password })
+                body: JSON.stringify({
+                    name: companyName,
+                    password,
+                    ...(authMode === 'SIGNUP' && { email: email || undefined, phone: phone || undefined })
+                })
             });
 
             const data = await res.json();
@@ -39,9 +45,14 @@ export default function NominaLanding() {
             if (res.ok) {
                 localStorage.setItem('company_id', data.companyId.toString());
                 localStorage.setItem('company_name', data.companyName);
-                localStorage.setItem('auth_token', 'true'); // Simple auth
+                localStorage.setItem('auth_token', 'true');
+                localStorage.setItem('user_role', data.role || 'COMPANY');
                 toast.success(authMode === 'LOGIN' ? `Bienvenido, ${data.companyName}` : 'Cuenta creada con éxito');
-                router.push('/clock');
+                if (data.role === 'SUPERADMIN') {
+                    router.push('/superadmin');
+                } else {
+                    router.push('/clock');
+                }
             } else {
                 toast.error(data.error || 'Error en la autenticación');
             }
@@ -226,7 +237,7 @@ export default function NominaLanding() {
                                             onSubmit={handleAuth}
                                             className="space-y-6"
                                         >
-                                            <div className="space-y-4">
+                                            <div className="space-y-3">
                                                 <div className="relative">
                                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                         <User className="h-5 w-5 text-gray-500" />
@@ -252,6 +263,34 @@ export default function NominaLanding() {
                                                         onChange={(e) => setPassword(e.target.value)}
                                                     />
                                                 </div>
+                                                {authMode === 'SIGNUP' && (
+                                                    <>
+                                                        <div className="relative">
+                                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                                <ShieldCheck className="h-5 w-5 text-gray-500" />
+                                                            </div>
+                                                            <input
+                                                                type="email"
+                                                                placeholder="Correo electrónico (opcional)"
+                                                                className="w-full bg-[#0f1014] border border-gray-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
+                                                                value={email}
+                                                                onChange={(e) => setEmail(e.target.value)}
+                                                            />
+                                                        </div>
+                                                        <div className="relative">
+                                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                                <BarChart3 className="h-5 w-5 text-gray-500" />
+                                                            </div>
+                                                            <input
+                                                                type="tel"
+                                                                placeholder="Número de celular (opcional)"
+                                                                className="w-full bg-[#0f1014] border border-gray-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
+                                                                value={phone}
+                                                                onChange={(e) => setPhone(e.target.value)}
+                                                            />
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
 
                                             <button

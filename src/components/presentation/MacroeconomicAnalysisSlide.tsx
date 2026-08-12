@@ -5,8 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentation } from '@/context/PresentationContext';
 
 export default function MacroeconomicAnalysisSlide() {
-    const { data: globalData, updateSection } = usePresentation();
+    const { data: globalData, updateSection, setGlobalEditing } = usePresentation();
     const [isEditing, setIsEditing] = useState(false);
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditing);
+    }, [isEditing, setGlobalEditing]);
     // Safety guard for data structure changes
     const rawParagraphs = globalData.macroAnalysis;
     const paragraphs = Array.isArray(rawParagraphs) ? rawParagraphs : [];

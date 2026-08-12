@@ -27,8 +27,12 @@ import SyncStatusIndicator from '@/components/presentation/SyncStatusIndicator';
 import TppLibreInversionHistoricoChart from '@/components/presentation/TppLibreInversionHistoricoChart';
 
 export default function PresentationV2Page() {
-    const { data, updateSection, resetData, isLoading } = usePresentation();
+    const { data, updateSection, resetData, isLoading, setGlobalEditing } = usePresentation();
     const [isEditingCover, setIsEditingCover] = useState(false);
+
+    React.useEffect(() => {
+        setGlobalEditing(isEditingCover);
+    }, [isEditingCover, setGlobalEditing]);
 
     if (isLoading) return (
         <div className="w-full h-screen bg-slate-950 flex items-center justify-center">
