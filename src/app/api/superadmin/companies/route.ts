@@ -1,32 +1,40 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma, withRetry } from '@/lib/prisma';
+import { isSuperAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(req: Request) {
-    // Very simple protection: only callable from server context
-    // In a real app this would use a proper auth token
-    const authHeader = req.headers.get('x-superadmin-key');
-    if (authHeader !== 'NominaX') {
+export async function GET() {
+    // Hasta agosto de 2026 esta ruta se "protegía" comparando el header
+    // `x-superadmin-key` contra un texto fijo. Ese texto estaba escrito en
+    // src/app/superadmin/page.tsx, un componente de cliente, así que viajaba
+    // en el JavaScript que descarga cualquier visitante: bastaba leerlo del
+    // bundle para obtener el nombre, correo y teléfono de todas las empresas.
+    //
+    // Ahora exige una sesión firmada con rol de superadministrador. El header
+    // heredado sin firma nunca alcanza ese rol.
+    if (!(await isSuperAdmin())) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     try {
-        const companies = await prisma.company.findMany({
-            select: {
-                id: true,
-                name: true,
-                companyName: true,
-                email: true,
-                phone: true,
-                plan: true,
-                createdAt: true,
-                _count: {
-                    select: { employees: true }
-                }
-            },
-            orderBy: { createdAt: 'desc' }
-        });
+        const companies = await withRetry(() =>
+            prisma.company.findMany({
+                select: {
+                    id: true,
+                    name: true,
+                    companyName: true,
+                    email: true,
+                    phone: true,
+                    plan: true,
+                    createdAt: true,
+                    _count: {
+                        select: { employees: true }
+                    }
+                },
+                orderBy: { createdAt: 'desc' }
+            })
+        );
 
         return NextResponse.json({ companies });
     } catch (error) {

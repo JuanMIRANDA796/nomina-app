@@ -36,9 +36,14 @@ export default function SuperAdminPage() {
     const fetchCompanies = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/superadmin/companies', {
-                headers: { 'x-superadmin-key': 'NominaX' }
-            });
+            // La cookie de sesión viaja sola. Aquí antes se mandaba una clave
+            // fija que, por estar en un componente de cliente, terminaba dentro
+            // del JavaScript que descarga cualquier visitante.
+            const res = await fetch('/api/superadmin/companies');
+            if (res.status === 401) {
+                router.replace('/');
+                return;
+            }
             const data = await res.json();
             if (res.ok) {
                 setCompanies(data.companies);
@@ -51,7 +56,14 @@ export default function SuperAdminPage() {
         }
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        // La cookie de sesión es httpOnly: limpiar localStorage ya no basta,
+        // hay que pedirle al servidor que la borre.
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch {
+            // Aunque falle la red, se limpia el lado del cliente igual.
+        }
         localStorage.removeItem('company_id');
         localStorage.removeItem('company_name');
         localStorage.removeItem('user_role');

@@ -210,7 +210,13 @@ export default function TimeClock() {
                     Panel Administrativo
                 </button>
                 <button 
-                    onClick={() => { localStorage.clear(); router.push('/'); }} 
+                    onClick={async () => {
+                        // La cookie de sesión es httpOnly y solo el servidor
+                        // puede borrarla; localStorage.clear() no la toca.
+                        try { await fetch('/api/auth/logout', { method: 'POST' }); } catch { }
+                        localStorage.clear();
+                        router.push('/');
+                    }}
                     className="text-slate-700 text-xs hover:text-red-400 transition-colors mt-2"
                 >
                     Cerrar Sesión de Empresa
