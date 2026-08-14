@@ -14,7 +14,16 @@ SaaS de gestión de nómina para PyMEs colombianas. Next.js 15 + Prisma + Postgr
 | Vercel | proyecto `nomina-app` (`prj_ypS2Wr97Sl7u2BNCxZcEMk2e6o4w`) |
 | Supabase | https://supabase.com/dashboard/project/yeguvhnuenrpaiuqvmkx |
 
-El despliegue es **por CLI, no por Git**: `git push` no publica nada. Se publica con `npx vercel --prod` desde esta carpeta, que está enlazada al proyecto correcto vía `.vercel/project.json`.
+Hay **dos** caminos a producción, y esto importa:
+
+1. `npx vercel --prod` desde esta carpeta, que está enlazada al proyecto vía `.vercel/project.json`.
+2. **Un `git push` a `main` despliega solo.** El repositorio de GitHub tiene integración con Vercel.
+
+Hasta el 14 de agosto de 2026 había **tres** proyectos de Vercel conectados a este mismo repositorio: `nomina-app`, `presentacion-comite-2025` y `web`. Un push a `main` con el código ya separado desplegó NominaX encima de `presentacion-comite-2025.vercel.app` y tumbó la presentación del Comité durante unos 25 minutos. Los otros dos proyectos quedaron desconectados ese mismo día, así que hoy un push a `main` solo despliega `nomina-app`. Si algún día vuelve a aparecer un despliegue inesperado en otro dominio, empezar por ahí:
+
+```bash
+npx vercel project ls
+```
 
 ## Historia reciente
 
