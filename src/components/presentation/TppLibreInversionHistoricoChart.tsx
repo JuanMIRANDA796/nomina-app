@@ -96,13 +96,13 @@ export default function TppLibreInversionHistoricoChart() {
             <div className="relative flex justify-between items-start mb-6">
                 <div>
                     <h3 className="text-3xl font-black text-white tracking-tighter leading-tight">
-                        TPP{' '}
+                        Margen de intermediación.{' '}
                         <span className="bg-gradient-to-r from-indigo-400 to-orange-400 bg-clip-text text-transparent">
-                            Libre Inversión
+                            Evolución historica mensual
                         </span>
                     </h3>
                     <p className="text-slate-400 text-sm mt-1 font-medium tracking-wide">
-                        Evolución histórica mensual · Tasa de Interés EA (%)
+                        Tasa de Interés EA (%)
                     </p>
                 </div>
                 <div className="flex items-center gap-4">

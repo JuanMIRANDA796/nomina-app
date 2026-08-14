@@ -25,6 +25,7 @@ import TPPCaptacionSaldosChart from '@/components/presentation/TPPCaptacionSaldo
 import EarlyCancellationsChart from '@/components/presentation/EarlyCancellationsChart';
 import SyncStatusIndicator from '@/components/presentation/SyncStatusIndicator';
 import TppLibreInversionHistoricoChart from '@/components/presentation/TppLibreInversionHistoricoChart';
+import ServicioCreditoCostoAhorroChart from '@/components/presentation/ServicioCreditoCostoAhorroChart';
 
 export default function PresentationV2Page() {
     const { data, updateSection, resetData, isLoading, setGlobalEditing } = usePresentation();
@@ -199,6 +200,13 @@ export default function PresentationV2Page() {
             <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
                 <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
                     <TppLibreInversionHistoricoChart />
+                </motion.div>
+            </section>
+
+            {/* SERVICIO DEL CRÉDITO Y COSTO DEL AHORRO */}
+            <section className="snap-start w-full h-screen flex items-center justify-center p-4 md:p-8 bg-slate-950 overflow-hidden">
+                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="w-full max-w-7xl h-[85vh]">
+                    <ServicioCreditoCostoAhorroChart />
                 </motion.div>
             </section>
 
