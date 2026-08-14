@@ -1,5 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Esquema de NominaX.
+//
+// Los modelos de la presentación del Comité de Precios y los de Rodaflex
+// vivían aquí porque los tres proyectos compartían repositorio. Se retiraron
+// el 14 de agosto de 2026, cuando se separaron. Sus tablas siguen existiendo
+// vacías en Supabase; se pueden borrar a mano cuando se quiera, pero no hay
+// prisa: no las lee nadie. La presentación se mudó a su propio repositorio y
+// a su propia base de datos.
 
 generator client {
   provider = "prisma-client-js"
@@ -30,10 +36,10 @@ model Company {
   cityCode          String?
   taxResponsibility String?
 
-  dianEnabled       Boolean @default(false)
-  dianTestSetId     String?
-  dianPrefix        String?
-  dianStartNumber   String?
+  dianEnabled     Boolean @default(false)
+  dianTestSetId   String?
+  dianPrefix      String?
+  dianStartNumber String?
 
   employees          Employee[]
   holidays           Holiday[]
@@ -101,9 +107,9 @@ model Absence {
 }
 
 model Holiday {
-  id        Int      @id @default(autoincrement())
-  companyId Int      @default(1)
-  company   Company  @relation(fields: [companyId], references: [id])
+  id        Int     @id @default(autoincrement())
+  companyId Int     @default(1)
+  company   Company @relation(fields: [companyId], references: [id])
   date      DateTime
   name      String
 
@@ -119,24 +125,6 @@ model PayrollConfig {
   description String?
 
   @@unique([companyId, key])
-}
-
-model PresentationSlide {
-  id        Int      @id @default(autoincrement())
-  slug      String   @unique // e.g. "slide-1-intro", "slide-2-history"
-  title     String
-  type      String // "text", "chart-bar", "chart-line", "heatmap"
-  content   String? // Markdown text for text slides
-  data      Json? // Flexible JSON structure for charts: [{ name: "2020", value: 100 }]
-  order     Int      @default(0)
-  updatedAt DateTime @updatedAt
-}
-
-model PresentationSnapshot {
-  id        String   @id @default(cuid())
-  data      Json // Aggregated data for all slides
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model PayrollSubmission {
@@ -156,74 +144,3 @@ model PayrollSubmission {
 
   @@index([companyId, employeeId, date])
 }
-
-model RodaflexProduction {
-  id           String    @id @default(cuid())
-  startDate    DateTime  // Fecha Inicial
-  client       String    // Cliente
-  ocNumber     String    // Número O.C
-  product      String    @default("Sello") // Producto (e.g. Sello, Vaselina, Limpiadores, etc.)
-  reference    String    // Referencia
-  quantity     Int       // Cantidad Unidad
-  dispatchDate DateTime? // Fecha Despacho
-  lot          String?   // Lote
-  invoiceNumber String?  // Número de Factura
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-
-  @@index([reference])
-  @@index([startDate])
-}
-
-model RodaflexMonthlyGoal {
-  id        String   @id @default(cuid())
-  year      Int
-  month     Int      // 1-12
-  product   String   @default("Sellos")
-  goal      Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([year, month, product])
-}
-
-model RodaflexProductCategory {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-}
-
-model RodaflexAccount {
-  id               String    @id @default(cuid())
-  subtab           String    @default("Clientes/Proveedores") // Account category sub-tab
-  type             String    // "PAGAR" o "COBRAR"
-  description      String
-  clientOrSupplier String
-  amount           Float
-  issueDate        DateTime
-  dueDate          DateTime
-  status           String    @default("PENDIENTE") // "PENDIENTE", "PAGADO", "ANULADO"
-  paymentDate      DateTime?
-  retefuente       Float?    @default(0) // Retención en la fuente (applies when PAGADO)
-  referenceNumber  String?
-  notes            String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-
-  @@index([type])
-  @@index([status])
-  @@index([subtab])
-  @@index([dueDate])
-}
-
-model RodaflexReference {
-  id             String   @id @default(cuid())
-  name           String   @unique
-  product        String   @default("Sello") // Associated product category
-  productionCost Float    @default(0)
-  salePrice      Float    @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-}
-
-

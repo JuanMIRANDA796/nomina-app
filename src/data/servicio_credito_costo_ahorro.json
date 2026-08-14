@@ -1,9 +1,0 @@
-[
-  { "periodo": "ene-25", "servicio": 5431, "costo": 2264 },
-  { "periodo": "feb-25", "servicio": 5559, "costo": 1440 },
-  { "periodo": "mar-25", "servicio": 5817, "costo": 2633 },
-  { "periodo": "abr-25", "servicio": 5859, "costo": 1599 },
-  { "periodo": "may-25", "servicio": 5991, "costo": 1696 },
-  { "periodo": "jun-25", "servicio": 6061, "costo": 1660 },
-  { "periodo": "jul-25", "servicio": 6221, "costo": 1713 }
-]
