@@ -93,3 +93,13 @@ npm run build
 ```bash
 npx vercel --prod
 ```
+
+### El autor del commit tiene que ser Juan
+
+Vercel mira el correo del autor del commit que está en HEAD —también en los despliegues por CLI, porque la CLI adjunta los datos de git de la carpeta— y **bloquea el despliegue si ese correo no pertenece a alguien del equipo**. El estado que aparece en el panel es `Blocked`, y la CLI lo reporta como un `read ECONNRESET` confuso, esperando un build que nunca arranca.
+
+El 14 de agosto de 2026 esto bloqueó varias horas de despliegues: los commits salían como `Nomina Admin <admin@nomina.com>`, una identidad heredada del repositorio original. Verificar antes de desplegar:
+
+```bash
+git log -1 --format="%an <%ae>"
+```
