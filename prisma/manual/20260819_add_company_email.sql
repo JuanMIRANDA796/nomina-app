@@ -1,0 +1,11 @@
+-- La columna Company.email desapareció de la base entre el 14 y el 19 de agosto
+-- de 2026, mientras seguía declarada en schema.prisma. Eso rompía TODA consulta
+-- a Company con el error P2022, y con ella el inicio de sesión: el login es la
+-- primera ruta que toca esa tabla.
+--
+-- Se restituye tal como la declara el esquema: texto, admite nulos, sin valor
+-- por defecto. No modifica ninguna fila existente.
+--
+-- IF NOT EXISTS la hace idempotente, por si alguien la aplica sobre una base
+-- que ya la tiene.
+ALTER TABLE "Company" ADD COLUMN IF NOT EXISTS "email" TEXT;
